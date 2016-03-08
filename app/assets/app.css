@@ -1,0 +1,49 @@
+
+body { background: #E9E9E9; }
+
+/* Toolbar area */
+
+
+/* Sidenav area */
+
+md-sidenav a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+md-sidenav > md-toolbar {
+  height: 200px;
+}
+
+md-sidenav > md-toolbar h1 {
+  font-size: 32px; 
+  font-weight: normal;
+  line-height: 48px;
+  text-align: center;
+  text-transform: none;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+md-sidenav > md-toolbar img {
+  width: 96px; height: 96px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: absolute; left: calc(50% - 48px); bottom: -44px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.56);
+}
+
+md-sidenav > section {
+  padding-top: 50px;
+}
+
+md-sidenav > md-toolbar, md-sidenav > section md-content {
+  cursor: pointer;
+}
+
+/* Primary content area */
+
+/* Utils */
+
+/* Typography support coming in 0.8.0 */
+

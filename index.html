@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="reddmeetApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <title>Reddmeet - Meet Redditors</title>
+
+    <base href="/">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link rel="stylesheet" href="/node_modules/angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="/app/assets/app.css"/>
+
+    <style>[ng-cloak], .ng-cloak { display: none !important; }</style>
+  </head>
+
+  <body ng-cloak layout="row" ng-controller="MainController as mainctrl">
+
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+      <md-toolbar ng-href="#/profile" md-ink-ripple class="md-tall md-hue-2">
+        <img ng-cloak src="https://i.imgur.com/1ZD6kw3.jpg">
+        <h1>someUser</h1>
+        <span flex></span>
+      </md-toolbar>
+
+      <section layout="column" flex>
+        <div>
+          <md-content ng-repeat="item in mainctrl.sidebarItems" >
+            <a ng-href="{{item.href}}" layout="row" layout-align="start center" md-ink-ripple>
+              <div class="inset"><md-icon>{{item.icon}}</md-icon></div>
+              <div class="inset">{{item.title}}</div>
+            </a>
+          </md-content>
+        </div>
+
+        <div flex></div>
+
+        <div>
+          <md-content ng-href="logout/" layout="row" layout-align="start center" md-ink-ripple>
+            <div class="inset"><md-icon>exit_to_app</md-icon></div>
+            <div class="inset">logout</div>
+          </md-content>
+        </div>
+      </section>
+    </md-sidenav>
+
+    <div role="main" flex layout="column" tabIndex="-1">
+      <md-toolbar class="md-whiteframe-z1">
+        <div class="md-toolbar-tools" tabIndex="-1">
+          <md-button aria-label="open sidebar" class="md-icon-button" hide-gt-md ng-click="mainctrl.toggleSidebar()">
+            <md-icon md-font-set="material-icons">menu</md-icon>
+          </md-button>
+
+          <h2 aria-label="open sidebar" hide-xs ng-click="mainctrl.toggleSidebar()">
+            <md-tooltip md-autohide md-direction="down">Find redditors to meet</md-tooltip>
+            <a ng-href="results">reddmeet</a>
+          </h2>
+
+          <span flex></span>
+
+          <div class="md-toolbar-item docs-tools" layout="row">
+            <md-button class="md-icon-button" ng-href="#/results" aria-label="upvotes inbox">
+              <md-tooltip md-autohide md-direction="down">search results</md-tooltip>
+              <md-icon>search</md-icon>
+            </md-button>
+
+            <md-button class="md-icon-button" ng-href="#/upvotes_inbox" aria-label="upvotes inbox">
+              <md-tooltip md-autohide md-direction="down">upvotes inbox</md-tooltip>
+              <md-icon md-font-set="material-icons">inbox</md-icon>
+            </md-button>
+            
+            <md-button class="md-icon-button" ng-href="#/matches" aria-label="upvote matches">
+              <md-tooltip md-autohide md-direction="down">upvote matches</md-tooltip>
+              <md-icon md-font-set="material-icons">folder_special</md-icon>
+            </md-button>
+
+            <md-button class="md-icon-button" ng-href="#/visitors" aria-label="visited you">
+              <md-tooltip md-autohide md-direction="down">visited you</md-tooltip>
+              <md-icon md-font-set="material-icons">group</md-icon>
+            </md-button>
+          </div>
+        </div>
+      </md-toolbar>
+
+      <ng-view class="main-content" flex></ng-view>
+    </div>
+
+  </body>
+
+  <script type="text/ng-template" id="src/views/settings.html">
+    <h1>{{vm.title}}</h1>
+    <p>User settings. Its {{vm.ts}} ...</p>
+  </script>
+
+  <script type="text/ng-template" id="src/views/profile.html">
+    <h1>{{vm.title}}</h1>
+    <p>User profile. Its {{vm.ts}} ...</p>
+  </script>
+
+  <script type="text/ng-template" id="src/views/map.html">
+    <h1>{{vm.title}}</h1>
+    <p>Map with users. Its {{vm.ts}} ...</p>
+  </script>
+
+  <script type="text/ng-template" id="src/views/stats.html">
+    <h1>{{vm.title}}</h1>
+    <p>Site statistics. Its {{vm.ts}} ...</p>
+  </script>
+
+  <script src="/node_modules/angular/angular.js"></script>
+  <script src="/node_modules/angular-animate/angular-animate.js"></script>
+  <script src="/node_modules/angular-route/angular-route.js"></script>
+  <script src="/node_modules/angular-aria/angular-aria.js"></script>
+  <script src="/node_modules/angular-messages/angular-messages.js"></script>
+  <script src="/node_modules/angular-material/angular-material.js"></script>
+
+  <script src="/app/src/main.js"></script>
+  <script src="/app/src/controllers.js"></script>
+  <script src="/app/src/services.js"></script>
+</html>
