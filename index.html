@@ -20,7 +20,7 @@
 
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
       <md-toolbar ng-href="#/profile" md-ink-ripple class="md-tall md-hue-2">
-        <img ng-cloak src="https://i.imgur.com/1ZD6kw3.jpg">
+        <img ng-src="https://i.imgur.com/1ZD6kw3.jpg">
         <h1>someUser</h1>
         <span flex></span>
       </md-toolbar>
@@ -47,7 +47,7 @@
     </md-sidenav>
 
     <div role="main" flex layout="column" tabIndex="-1">
-      <md-toolbar class="md-whiteframe-z1">
+      <md-toolbar>
         <div class="md-toolbar-tools" tabIndex="-1">
           <md-button aria-label="open sidebar" class="md-icon-button" hide-gt-md ng-click="mainctrl.toggleSidebar()">
             <md-icon md-font-set="material-icons">menu</md-icon>
@@ -65,21 +65,38 @@
               <md-tooltip md-autohide md-direction="down">search results</md-tooltip>
               <md-icon>search</md-icon>
             </md-button>
-
-            <md-button class="md-icon-button" ng-href="#/upvotes_inbox" aria-label="upvotes inbox">
-              <md-tooltip md-autohide md-direction="down">upvotes inbox</md-tooltip>
-              <md-icon md-font-set="material-icons">inbox</md-icon>
-            </md-button>
             
             <md-button class="md-icon-button" ng-href="#/matches" aria-label="upvote matches">
               <md-tooltip md-autohide md-direction="down">upvote matches</md-tooltip>
-              <md-icon md-font-set="material-icons">folder_special</md-icon>
+              <md-icon>folder_special</md-icon>
             </md-button>
 
             <md-button class="md-icon-button" ng-href="#/visitors" aria-label="visited you">
               <md-tooltip md-autohide md-direction="down">visited you</md-tooltip>
-              <md-icon md-font-set="material-icons">group</md-icon>
+              <md-icon>group</md-icon>
             </md-button>
+
+            <md-menu>
+              <md-button aria-label="overflow menu" class="md-icon-button" ng-click="mainctrl.openMenu($mdOpenMenu, $event)">
+                <md-icon md-menu-origin>more_vert</md-icon>
+              </md-button>
+              <md-menu-content width="4">
+                <md-menu-item ng-repeat="item in mainctrl.sidebarItems">
+                  <md-button ng-href="{{item.href}}">
+                    <md-icon md-menu-align-target>{{item.icon}}</md-icon>
+                    {{item.title}}
+                  </md-button>
+                </md-menu-item>
+                <md-menu-divider></md-menu-divider>
+                <md-menu-item>
+                  <md-button ng-href="#/logout">
+                    <md-icon md-menu-align-target>exit_to_app</md-icon>
+                    logout
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+
           </div>
         </div>
       </md-toolbar>

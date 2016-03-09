@@ -11,8 +11,8 @@
 	function reddmeetAppConfig($routeProvider, $locationProvider, $mdThemingProvider) {
     $mdThemingProvider
     	.theme('default')
-      .primaryPalette('red')
-      .accentPalette('yellow');
+      .primaryPalette('indigo')
+      .accentPalette('amber');
 
 		$locationProvider.html5Mode({
 		  enabled: false,
@@ -45,12 +45,12 @@
 	    .when('/visitors', {
         controller: 'VisitsController',
         controllerAs: 'vm',
-        templateUrl: '/app/views/results.html'
+        templateUrl: '/app/views/visits.html'
 	    })
 	    .when('/visited', {
         controller: 'VisitsController',
         controllerAs: 'vm',
-        templateUrl: '/app/views/results.html'
+        templateUrl: '/app/views/visits.html'
 	    })
 
 	    .when('/r/:subreddit/', {

@@ -1,11 +1,10 @@
-
 <md-tabs md-selected="tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-primary" md-swipe-content md-no-pagination>
 
   <md-tab id="tab1" md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
     <md-tab-label>
-      <md-icon>inbox</md-icon>
-      <span hide-xs>upvotes inbox</span>
-      <md-tooltip hide-gt-xs>upvotes inbox</md-tooltip>
+      <md-icon>people</md-icon>
+      <span hide-xs>visited you</span>
+      <md-tooltip hide-gt-xs>visited you</md-tooltip>
     </md-tab-label>
     <md-tab-body>
       <md-content layout-padding>
@@ -24,9 +23,9 @@
 
   <md-tab id="tab2">
     <md-tab-label>
-      <md-icon>folder_special</md-icon>
-      <span hide-xs>matches</span>
-      <md-tooltip hide-gt-xs>matches</md-tooltip>
+      <md-icon>people_outline</md-icon>
+      <span hide-xs>visits</span>
+      <md-tooltip hide-gt-xs>visit history</md-tooltip>
     </md-tab-label>
     <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
       <md-content flex layout-padding>
@@ -35,19 +34,4 @@
     </md-tab-body>
   </md-tab>
 
-  <md-tab id="tab3">
-    <md-tab-label>
-      <md-icon>arrow_upward</md-icon>
-      <span hide-xs>upvotes sent</span>
-      <md-tooltip hide-gt-xs>upvotes sent</md-tooltip>
-    </md-tab-label>
-    <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
-      <md-card flex layout-padding>
-        <md-card-content>
-          <h2>upvotes sent</h2>
-          <p>Wellllll theeeeeeeeeeen...</p>
-        </md-card-content>
-      </md-card>
-    </md-tab-body>
-  </md-tab>
 </md-tabs>
