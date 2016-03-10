@@ -1,5 +1,4 @@
-(function(){
-  'use strict';
+(function(){ 'use strict';
 
 	angular.module('reddmeetApp', ['ngMaterial', 'ngRoute']);
 
@@ -55,38 +54,58 @@
         templateUrl: '/app/views/visits.html'
 	    })
 
-	    .when('/r/:subreddit/', {
-        controller: 'SrController',
-        controllerAs: 'vm',
-        templateUrl: '/app/views/results.html'
-	    }) 
-
 	    .when('/hidden', {
         controller: 'DownvotesController',
         controllerAs: 'vm',
         templateUrl: '/app/views/results.html'
 	    })
 
-	    .when('/me', { 
-        controller: 'SettingsController',
+	    .when('/r/:subreddit/', {
+        controller: 'SrController',
         controllerAs: 'vm',
-        templateUrl: 'src/views/settings.html'
-	    })
+        templateUrl: '/app/views/results.html'
+	    }) 
 	    .when('/u/:username', {
         controller: 'ProfileController',
         controllerAs: 'vm',
         templateUrl: 'src/views/profile.html'
 	    })
 
+	    .when('/me/profile', { 
+        controller: 'SettingsProfileController',
+        controllerAs: 'vm',
+        templateUrl: '/app/views/settings-profile.html'
+	    })
+	    .when('/me/pictures', { 
+        controller: 'SettingsPicturesController',
+        controllerAs: 'vm',
+        templateUrl: '/app/views/settings-pictures.html'
+	    })
+	    .when('/me/location', { 
+        controller: 'SettingsLocationController',
+        controllerAs: 'vm',
+        templateUrl: '/app/views/settings-location.html'
+	    })
+	    .when('/me/subs', { 
+        controller: 'SettingsSubredditsController',
+        controllerAs: 'vm',
+        templateUrl: '/app/views/settings-subreddits.html'
+	    })
+	    .when('/me/account', { 
+        controller: 'SettingsAccountController',
+        controllerAs: 'vm',
+        templateUrl: '/app/views/settings-account.html'
+	    })
+
 	    .when('/map', {
         controller: 'MapController',
         controllerAs: 'vm',
-        templateUrl: 'src/views/map.html'
+        templateUrl: '/app/views/map.html'
 	    })
 	    .when('/stats', {
         controller: 'StatsController',
         controllerAs: 'vm',
-        templateUrl: 'src/views/stats.html'
+        templateUrl: '/app/views/stats.html'
 	    })
 
 			.otherwise({
@@ -101,8 +120,10 @@
     $log.debug('Runnning...');
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	//
 	// Cookie helper functions
-
+	//
 	function set_cookie(name, value, days){
 	    if (days) {
 	        var date = new Date();

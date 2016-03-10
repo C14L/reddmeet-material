@@ -1,13 +1,15 @@
-(function(){
+(function(){ 'use strict';
 
   angular.module('reddmeetApp')
     .controller('MainController', 
       ['$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 
       MainController])
 
-    .controller('ResultsController', ['$log', '$mdDialog', '$mdBottomSheet', ResultsController])
+    .controller('ResultsController', 
+      ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', 
+      ResultsController])
     .controller('UpvotesController', ['$log', '$location', '$scope', UpvotesController])
-    .controller('VisitsController', ['$log', ResultsController])
+    .controller('VisitsController', ['$log', VisitsController])
     .controller('SrController', ['$log', SrController])
     .controller('DownvotesController', ['$log', DownvotesController])
     .controller('SettingsController', ['$log', SettingsController])
@@ -28,12 +30,29 @@
   /**
    * Display a list of users found with the current search settings.
    */
-  function ResultsController($log, $mdDialog, $mdBottomSheet) {
+  function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory) {
     var vm = this;
     vm.title = "search results";
+    vm.results = [];
     vm.ts = new Date( ).toISOString( );
 
     $log.debug('ResultsController called: ' + vm.ts);
+
+    /**
+     * Reads the current state of the search settings and fetches
+     * new search results from the SearchResults service.
+     * 
+     * Called every time a search setting is updated, to reflect the
+     * new setting in real-time.
+     */
+    vm.refreshResults = function() {
+      SearchResultsFactory.getUserList().then(function(li) {
+        vm.results = li;
+        $scope.$digest();
+      });
+    }
+
+    vm.refreshResults(); // First call to populate search results page.
 
     vm.editSearch = function(ev) {
       $log.debug('ResultsController.editSearch() called!!!');
@@ -322,25 +341,42 @@
     };
 
     vm.overflowItems = [
-      { href: '#/map', title: 'redditors map', icon: 'dashboard' },
-      { href: '#/', title: 'reddit mailbox', icon: 'email' },
-      { href: '#/upvotes_sent', title: 'upvotes you sent', icon: 'arrow_upward' },
-      { href: '#/hidden', title: 'hidden profiles', icon: 'arrow_downward'} ];
+      { href: '#/map', 
+        title: 'redditors map', 
+        icon: 'dashboard' },
+      { href: '#/', 
+        title: 'reddit mailbox', 
+        icon: 'email' },
+      { href: '#/upvotes_sent', 
+        title: 'upvotes you sent', 
+        icon: 'arrow_upward' },
+      { href: '#/hidden', 
+        title: 'hidden profiles', 
+        icon: 'arrow_downward'},
+      { href: '#/stats', 
+        title: 'site statistics', 
+        icon: 'assessment'} ];
     vm.sidebarItems = [
-      { href: '#', title: 'update profile basics', icon: 'assignment_ind' },
-      { href: '#', title: 'update pictures', icon: 'add_a_photo' },
-      { href: '#', title: 'update your location', icon: 'my_location' },
-      { href: '#', title: 'update your subreddit list', icon: 'playlist_add_check' },
-      { href: '#', title: 'account settings', icon: 'settings' } ];
+      { href: '#/me/profile', 
+        title: 'update profile basics', 
+        icon: 'assignment_ind' },
+      { href: '#/me/pictures', 
+        title: 'update pictures', 
+        icon: 'add_a_photo' },
+      { href: '#/me/location', 
+        title: 'update your location', 
+        icon: 'my_location' },
+      { href: '#/me/subs', 
+        title: 'update your subreddit list', 
+        icon: 'playlist_add_check' },
+      { href: '#/me/account', 
+        title: 'account settings', 
+        icon: 'settings' } ];
 
     function openMenu($mdOpenMenu, ev) {
-      originatorEv = ev;
+      var originatorEv = ev;
       $mdOpenMenu(ev);
     };
-
-    function toggleUsersList() {
-      $mdSidenav('left').toggle();
-    }
 
     function userLogout() {
       $log.debug('Would now logout user.');
