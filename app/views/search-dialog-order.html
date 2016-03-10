@@ -1,0 +1,16 @@
+<md-dialog aria-label="search settings">
+	<div class="inset"></div>
+
+	<md-dialog-content layout="column" class="opts-selector">
+	  <div class="opts-list">
+  	 	<md-content md-ink-ripple flex ng-repeat="opt in vmForm.fOrderOpts">
+  	 		{{opt.label}}
+  	 	</md-content>
+	  </div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button ng-click="vmForm.answer('done!')" class="md-primary">Done</md-button>
+	</md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,26 @@
+<md-dialog aria-label="search settings">
+	<div class="inset"></div>
+
+	<md-dialog-content layout="column" class="active-sr-selector">
+	  <div class="sr-list">
+  	 	<md-content md-ink-ripple flex ng-class="{active: opt.active}" ng-repeat="opt in vmForm.fSrOpts">
+  	 		{{opt.label}}
+  	 	</md-content>
+	  </div>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+    <div layout="row">
+	    <md-button class="md-icon-button" ng-click="vmForm.selectAll()">
+	    	<md-icon>done_all</md-icon>
+	    	<md-tooltip md-autohide md-direction="up">select all</md-tooltip>
+	    </md-button>
+	    <md-button class="md-icon-button" ng-click="vmForm.selectNone()">
+	    	<md-icon>clear</md-icon>
+	    	<md-tooltip md-autohide md-direction="up">select none</md-tooltip>
+	    </md-button>
+	  </div>
+
+		<span flex></span>
+		<md-button ng-click="vmForm.answer('done!')" class="md-primary">Done</md-button>
+	</md-dialog-actions>
+</md-dialog>

@@ -4,11 +4,11 @@
 	angular.module('reddmeetApp', ['ngMaterial', 'ngRoute']);
 
 	angular.module('reddmeetApp')
-		.config(['$routeProvider', '$locationProvider', '$mdThemingProvider', reddmeetAppConfig])
+		.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider', reddmeetAppConfig])
 		.run(['$http', '$log', reddmeetAppRun]);
 
 
-	function reddmeetAppConfig($routeProvider, $locationProvider, $mdThemingProvider) {
+	function reddmeetAppConfig($routeProvider, $locationProvider, $httpProvider, $mdThemingProvider) {
     $mdThemingProvider
     	.theme('default')
       .primaryPalette('indigo')
@@ -18,6 +18,8 @@
 		  enabled: false,
 		  requireBase: false
 		});
+
+		$httpProvider.useApplyAsync(true);  // pool xhrs promises for digesting
 
     $routeProvider
 	    .when('/results', {
@@ -93,10 +95,40 @@
 	}
 
 	function reddmeetAppRun($http, $log) {
-    //$http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
-    //$http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
-    //$http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };
+    $http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
+    $http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
+    $http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };
     $log.debug('Runnning...');
 	}
 
+	// Cookie helper functions
+
+	function set_cookie(name, value, days){
+	    if (days) {
+	        var date = new Date();
+	        date.setTime(date.getTime()+(days*24*60*60*1000));
+	        var expires = "; expires="+date.toGMTString();
+	    }
+	    else var expires = "";
+	    // Replace any ";" in value with something else
+	    value = ('' + value).replace(/;/g, ',');
+	    document.cookie = urlencode(name) + "=" + urlencode(value) + expires + "; path=/";
+	}
+	function get_cookie(name){
+	    var nameEQ = name + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i = 0; i < ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1, c.length);
+	        if (c.indexOf(nameEQ) == 0)
+	            return urldecode(c.substring(nameEQ.length, c.length));
+	    }
+	    return null;
+	}
+	function delete_cookie(name){
+	    setCookie(name, "", -1);
+	}
+
 })();
+
+

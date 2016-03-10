@@ -26,37 +26,25 @@
       </md-toolbar>
 
       <section layout="column" flex>
-        <div>
-          <md-content ng-repeat="item in mainctrl.sidebarItems" >
-            <a ng-href="{{item.href}}" layout="row" layout-align="start center" md-ink-ripple>
+        <div flex="none">
+          <md-content ng-repeat="item in mainctrl.sidebarItems" md-ink-ripple>
+            <a ng-href="{{item.href}}" layout="row" layout-align="start center">
               <div class="inset"><md-icon>{{item.icon}}</md-icon></div>
               <div class="inset">{{item.title}}</div>
             </a>
           </md-content>
         </div>
-
-        <div flex></div>
-
-        <div>
-          <md-content ng-href="logout/" layout="row" layout-align="start center" md-ink-ripple>
-            <div class="inset"><md-icon>exit_to_app</md-icon></div>
-            <div class="inset">logout</div>
-          </md-content>
-        </div>
       </section>
     </md-sidenav>
 
-    <div role="main" flex layout="column" tabIndex="-1">
+    <div flex role="main" layout="column" tabIndex="-1">
       <md-toolbar>
         <div class="md-toolbar-tools" tabIndex="-1">
           <md-button aria-label="open sidebar" class="md-icon-button" hide-gt-md ng-click="mainctrl.toggleSidebar()">
             <md-icon md-font-set="material-icons">menu</md-icon>
           </md-button>
 
-          <h2 aria-label="open sidebar" hide-xs ng-click="mainctrl.toggleSidebar()">
-            <md-tooltip md-autohide md-direction="down">Find redditors to meet</md-tooltip>
-            <a ng-href="results">reddmeet</a>
-          </h2>
+          <h2 aria-label="open sidebar" hide-xs>reddmeet</h2>
 
           <span flex></span>
 
@@ -81,7 +69,7 @@
                 <md-icon md-menu-origin>more_vert</md-icon>
               </md-button>
               <md-menu-content width="4">
-                <md-menu-item ng-repeat="item in mainctrl.sidebarItems">
+                <md-menu-item ng-repeat="item in mainctrl.overflowItems">
                   <md-button ng-href="{{item.href}}">
                     <md-icon md-menu-align-target>{{item.icon}}</md-icon>
                     {{item.title}}
@@ -100,8 +88,9 @@
           </div>
         </div>
       </md-toolbar>
-
-      <ng-view class="main-content" flex></ng-view>
+      <md-content flex>
+        <ng-view ></ng-view>
+      </md-content>
     </div>
 
   </body>

@@ -1,0 +1,48 @@
+<md-dialog aria-label="search settings" flex>
+	<md-content class="md-padding">
+		<form name="searchForm" id="id_search_form" method="POST" action="/search/">
+			<input type="hidden" name="next" value="/results/">
+			<div layout="colum">
+
+				<div flex layout="column" layout-gt-sm="row">
+					<md-input-container flex>
+					  <label>Find</label>
+					  <md-select ng-model="vmForm.fSex">
+					    <md-option ng-repeat="opt in vmForm.fSexOpts" value="{{opt.id}}">
+					      {{opt.label}}
+					    </md-option>
+					  </md-select>
+					</md-input-container>
+
+					<md-input-container flex>
+					  <label>worldwide</label>
+					  <md-select ng-model="vmForm.fDistance">
+					    <md-option ng-repeat="opt in vmForm.fDistanceOpts" value="{{opt.id}}">
+					      {{opt.label}}
+					    </md-option>
+					  </md-select>
+					</md-input-container>
+				</div>
+
+				<div md-scroll-y layout="column" class="active-sr-selector" data-count="70">
+				  <div class="title">
+				    <b>include</b>&emsp;
+				    <span class="switch all">all</span>&ensp;|&ensp;
+				    <span class="switch none">none</span>
+				  </div>
+				  <div class="sr-list">
+				  	<span ng-repeat="opt in vmForm.fSrOpts">{{opt}}</span>
+				  </div>
+				</div>
+
+
+			</div>
+		</form>
+	</md-content>
+
+	<md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button ng-click="vmForm.answer('not useful')"> Cancel </md-button>
+		<md-button ng-click="vmForm.answer('useful')" class="md-primary"> Search </md-button>
+	</md-dialog-actions>
+</md-dialog>

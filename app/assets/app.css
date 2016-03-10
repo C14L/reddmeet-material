@@ -1,5 +1,5 @@
 
-body { background: #E9E9E9; }
+html, body { background: #E9E9E9; }
 
 /* Toolbar area */
 
@@ -19,26 +19,27 @@ md-sidenav > md-toolbar h1 {
   font-size: 32px; 
   font-weight: normal;
   line-height: 48px;
-  text-align: center;
-  text-transform: none;
   max-width: 100%;
   overflow: hidden;
+  text-align: center;
+  text-transform: none;
 }
 
 md-sidenav > md-toolbar img {
-  width: 96px; height: 96px;
-  overflow: hidden;
   border-radius: 50%;
-  position: absolute; left: calc(50% - 48px); bottom: -44px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.56);
+  overflow: hidden;
+  position: absolute; left: calc(50% - 50px); bottom: -48px;
+  width: 100px; height: 100px;
 }
 
 md-sidenav > section {
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
-md-sidenav > md-toolbar, md-sidenav > section md-content {
+md-sidenav > md-toolbar, md-sidenav > section a {
   cursor: pointer;
+  outline: 0;
 }
 
 /* Primary content area */
@@ -47,3 +48,71 @@ md-sidenav > md-toolbar, md-sidenav > section md-content {
 
 /* Typography support coming in 0.8.0 */
 
+
+/* Select what Subreddits to include in search */
+.active-sr-selector .sr-list {
+    display: flex; 
+    flex-wrap: wrap;
+    font-size: 1rem;
+}
+.active-sr-selector .sr-list md-content {
+    background: #3F51B5 /* -> Indigo500 */;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    flex: 1 0 auto;
+    margin: 0.5px; padding: 8px;
+    text-align: center;
+}
+.active-sr-selector .sr-list md-content::not(.active) {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+/* Above results display main Search options */
+.search-options-overview {
+    background-color: white;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    padding: 8px 0;
+}
+.search-options-overview > div {
+    color: rgba(0,0,0,0.56);
+    font-size: 0;
+}
+.search-options-overview > div > md-content {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    outline: 0;
+    padding: 8px;
+}
+
+/* Any list of users with a grid layout of cards */
+md-card.user-card {
+    width: 150px;
+}
+md-card.user-card img {
+    width: 150px; height: 150px;
+}
+md-card.user-card md-card-content {
+}
+md-card.user-card md-card-content h2 {
+    font-size: 1.5rem; line-height: 1em;
+    margin: 0; padding: 0;
+}
+md-card.user-card md-card-content p {
+    font-size: 1rem; line-height: 1em;
+    margin: 0; padding: 8px 0 0 0;
+}
+md-card.user-card md-card-content p:nth-of-type(2) {
+    font-size: 0.845rem;
+}
+
+@media (min-width:600px) { /* gt-xs */
+  md-card.user-card {
+      width: 200px;
+  }
+  md-card.user-card img {
+      width: 200px; height: 200px;
+  }
+}
