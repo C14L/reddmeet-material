@@ -6,8 +6,6 @@
     <meta name="description" content="">
     <title>Reddmeet - Meet Redditors</title>
 
-    <base href="/">
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
     <link rel="stylesheet" href="/node_modules/angular-material/angular-material.css"/>
@@ -38,7 +36,7 @@
     </md-sidenav>
 
     <div flex role="main" layout="column" tabIndex="-1">
-      <md-toolbar>
+      <md-toolbar class="main-toolbar">
         <div class="md-toolbar-tools" tabIndex="-1">
           <md-button aria-label="open sidebar" class="md-icon-button" hide-gt-md ng-click="mainctrl.toggleSidebar()">
             <md-icon md-font-set="material-icons">menu</md-icon>
@@ -88,8 +86,8 @@
           </div>
         </div>
       </md-toolbar>
-      <md-content flex>
-        <ng-view ></ng-view>
+      <md-content class="main-content" flex>
+        <ng-view></ng-view>
       </md-content>
     </div>
 

@@ -1,14 +1,12 @@
-<md-card class="user-list-card" ng-href="/u/{{ $ctrl.username }}" ng-click="$ctrl.transitionToProfile($event)">
-
-	<md-content md-ink-ripple>
-
-		<img ng-src="{{ $ctrl.imgUrl }}">
-
-	  <md-card-content>
-			<h2>{{ $ctrl.username }}</h2>
-			<p>{{ $ctrl.age }}, {{ $ctrl.gender }}</p>
-	  	<p>{{ $ctrl.distance }} away</p>
-  	</md-card-content>
-	</md-content>
-
+<md-card class="user-list-card" ng-click="$ctrl.transitionToProfile($event)">
+	<a href="#/u/{{ $ctrl.username }}">
+		<md-content md-ink-ripple>
+			<img ng-src="/m/{{ $ctrl.username }}.jpg">
+		  <md-card-content>
+				<h2>{{ $ctrl.username }}</h2>
+				<p>{{ $ctrl.age }}, {{ $ctrl.gender }}</p>
+		  	<p>{{ $ctrl.distance }} away</p>
+	  	</md-card-content>
+		</md-content>
+	</a>
 </md-card>

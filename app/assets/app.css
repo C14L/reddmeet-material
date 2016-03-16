@@ -1,8 +1,12 @@
 
 html, body { background: #E9E9E9; }
+a { color: inherit; text-decoration: inherit; }
 
 /* Toolbar area */
 
+.main-toolbar {
+  z-index: 1001;
+}
 
 /* Sidenav area */
 
@@ -92,10 +96,15 @@ md-sidenav > md-toolbar, md-sidenav > section a {
 }
 
 /* Any list of users with a grid layout of cards */
+.user-card-list {
+  background-color: #EEE;
+  min-height: 100vh;
+}
 md-card.user-list-card {
     width: 140px;  /* 2 cards per row on "mobile S" 320px screen */
     overflow: hidden;
     cursor: pointer;
+    outline: 0;
 }
 md-card.user-list-card img {
     width: 140px; height: 140px;
@@ -140,3 +149,113 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
       width: 200px; height: 200px;
   }
 }
+
+
+/* 
+
+  User profile view 
+
+*/
+
+.user-profile {
+}
+.user-profile > .pnasl {
+  position: relative;
+  width: 100vw; height: 100vw;
+}
+.user-profile > .pnasl > img {
+  position: absolute; left: 0; top: 0;
+  width: 100vw; height: 100vw;
+}
+.user-profile > .pnasl > .nasl {
+  color: white; text-shadow: 0 0 4px rgba(0,0,0,0.82);
+  margin: 0; padding: 16px;
+  position: absolute; left: 0; right: 0; bottom: 0;
+}
+.user-profile > .pnasl > .nasl > .username {
+  font-size: 34px;
+}
+.user-profile > .pnasl > .nasl > .asl {
+  font-size: 20px;
+}
+
+@media (min-width:600px) {
+  .user-profile {
+    margin: 0 auto;
+    max-width: 980px;
+    overflow: hidden;
+  }
+  .user-profile > .pnasl {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 300px;
+    margin: 0; padding: 0;
+  }
+  .user-profile > .pnasl > img {
+    position: static; left: auto; top: auto;
+    width: 300px; height: 300px;
+    flex-grow: 0
+  }
+  .user-profile > .pnasl > .nasl {
+    position: static; left: auto; top: auto;
+    color: black; 
+    margin: 0; padding: 0;
+    text-shadow: none;
+    flex-grow: 1
+  }
+}
+
+
+/*
+
+  Subreddit link chips
+
+*/
+
+sr-chips {
+  display: flex; 
+  flex-flow: row;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  opacity: 1;
+  margin: 0; padding: 0;
+}
+sr-chips > sr-chip {
+  background: #3F51B5 /* -> Indigo500 */;
+  color: white;
+  cursor: pointer;
+  display: block;
+  flex: 1 0 auto;
+  margin: 0.5px; padding: 0;
+  opacity: 1;
+  text-align: center;
+}
+sr-chips > sr-chip a {
+  background: #3F51B5 /* -> Indigo500 */;
+  color: inherit;
+  display: block;
+  font-size: 1rem; line-height: 1.5rem;
+  margin: 0; padding: 8px;
+  opacity: 1;
+  position: relative;
+  text-decoration: inherit;
+  text-shadow: none;
+}
+sr-chips > sr-chip .banned-tag,
+sr-chips > sr-chip .muted-tag,
+sr-chips > sr-chip .mod-tag,
+sr-chips > sr-chip .nsfw-tag {
+  opacity: 0.75;
+}
+sr-chips > sr-chip .mod-tag {
+  color: red;
+}
+sr-chips.smaller > sr-chip a {
+  font-size: 1rem; line-height: 2rem;
+}
+sr-chips.smaller > sr-chip .mod-tag {
+  font-size: 1rem; line-height: 2rem;
+}
+

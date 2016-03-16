@@ -1,42 +1,27 @@
 (function(){ 'use strict';
 
-  angular.module('reddmeetApp')
-    .controller('MainController', 
-      ['$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 
-      MainController])
+  var app = angular.module('reddmeetApp');
 
-    .controller('ResultsController', 
-      ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', 
-      ResultsController])
+  app
     .controller('UpvotesController', ['$log', '$location', '$scope', UpvotesController])
     .controller('VisitsController', ['$log', VisitsController])
-    .controller('SrController', ['$log', SrController])
     .controller('DownvotesController', ['$log', DownvotesController])
     .controller('SettingsController', ['$log', SettingsController])
-    .controller('ProfileController', ['$log', ProfileController])
     .controller('MapController', ['$log', MapController])
     .controller('StatsController', ['$log', StatsController])
-
-    .controller('SearchOptionGenderDialogController',
-        ['$mdDialog', SearchOptionGenderDialogController])
-    .controller('SearchOptionDistanceDialogController',
-        ['$mdDialog', SearchOptionDistanceDialogController])
-    .controller('SearchOptionSubredditsDialogController',
-        ['$mdDialog', SearchOptionSubredditsDialogController])
-    .controller('SearchOptionOrderDialogController',
-        ['$mdDialog', SearchOptionOrderDialogController])
+    .controller('SearchOptionGenderDialogController', ['$mdDialog', SearchOptionGenderDialogController])
+    .controller('SearchOptionDistanceDialogController', ['$mdDialog', SearchOptionDistanceDialogController])
+    .controller('SearchOptionOrderDialogController', ['$mdDialog', SearchOptionOrderDialogController])
     ;
 
   /**
    * Display a list of users found with the current search settings.
    */
-  function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory) {
+  app.controller('ResultsController', ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory) {
+
     var vm = this;
     vm.title = "search results";
     vm.results = [];
-    vm.ts = new Date( ).toISOString( );
-
-    $log.debug('ResultsController called: ' + vm.ts);
 
     /**
      * Reads the current state of the search settings and fetches
@@ -113,7 +98,8 @@
       });
     };
 
-  }
+  }]);
+
 
   function SearchOptionGenderDialogController($mdDialog) {
     var vm = this;
@@ -172,7 +158,8 @@
     };
   }
 
-  function SearchOptionSubredditsDialogController($mdDialog) {
+  app.controller('SearchOptionSubredditsDialogController', ['$mdDialog', 'AuthUserFactory', function SearchOptionSubredditsDialogController($mdDialog, AuthUserFactory) {
+
     var vm = this;
     vm.fSrOpts = [{label: "600euro", active: true}, {label: "Arianespace", active: true}, {label: "AskEurope", active: true}, {label: "askscience", active: true}, {label: "AskSocialScience", active: true}, {label: "berlin", active: true}, {label: "bestof", active: true}, {label: "bestofhn", active: true}, {label: "Bitcoin", active: true}, {label: "blackhat", active: true}, {label: "ChineseReddit", active: true}, {label: "Colonizemars", active: true}, {label: "DarwinAwards", active: true}, {label: "dataisbeautiful", active: true}, {label: "datasets", active: true}, {label: "de", active: true}, {label: "DiePartei", active: true}, {label: "diginomads", active: true}, {label: "digitalnomad", active: true}, {label: "educationalgifs", active: true}, {label: "EuropeanFederalists", active: true}, {label: "europeanparliament", active: true}, {label: "europes", active: true}, {label: "FragReddit", active: true}, {label: "france", active: true}, {label: "free_images", active: true}, {label: "FreeTrialsOnline", active: true}, {label: "Futurology", active: true}, {label: "geopolitics", active: true}, {label: "googleearth", active: true}, {label: "hamburg", active: true}, {label: "hwstartups", active: true}, {label: "hybridapps", active: true}, {label: "hyperloop", active: true}, {label: "intdev", active: true}, {label: "InternetIsBeautiful", active: true}, {label: "Inventions", active: true}, {label: "MannausSachsen", active: true}, {label: "MapPorn", active: true}, {label: "mobile", active: true}, {label: "naturstein", active: true}, {label: "NeutralPolitics", active: true}, {label: "NichtDiePartei", active: true}, {label: "nottheonion", active: true}, {label: "OutOfTheLoop", active: true}, {label: "PeaceAndConflict", active: true}, {label: "privacy", active: true}, {label: "redddate", active: true}, {label: "science", active: true}, {label: "selfserve", active: true}, {label: "selinux", active: true}, {label: "socialmediaanalytics", active: true}, {label: "space", active: true}, {label: "Space_Colonization", active: true}, {label: "spacex", active: true}, {label: "talesfromtechsupport", active: true}, {label: "technology", active: true}, {label: "TechNomad", active: true}, {label: "TheoryOfReddit", active: true}, {label: "tinycode", active: true}, {label: "trichotillomania", active: true}, {label: "Trichsters", active: true}, {label: "Unexpected", active: true}, {label: "UsefulWebsites", active: true}, {label: "vpnreviews", active: true}, {label: "WikiLeaks", active: true}, {label: "WorldDevelopment", active: true}, {label: "worldevents", active: true}, {label: "worldnews", active: true}, {label: "worldpolitics", active: true}];
 
@@ -197,7 +184,9 @@
       console.log('SearchSettingsDialogController dialog returned: "'+answer+'".')
       $mdDialog.hide(answer);
     };
-  }
+
+  }]);
+
 
   function SearchOptionOrderDialogController($mdDialog) {
     var vm = this;
@@ -251,13 +240,16 @@
   /**
    * Display a subreddit's user list.
    */
-  function SrController($log) {
+  app.controller('SrController', ['$log', function SrController($log) {
+
     var vm = this;
     vm.title = "subreddit";
     vm.ts = new Date( ).toISOString( );
 
     $log.debug('SrController called: ' + vm.ts);
-  }
+    angular.element(".transition-helper").fadeOut();
+
+  }]);
 
 
   /**
@@ -288,13 +280,34 @@
    * add "edit" buttons to different parts, and have popups
    * with forms to change the values.
    */
-  function ProfileController($log) {
+  app.controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', function ProfileController($log, $http, $scope, $timeout, $routeParams) {
+
     var vm = this;
-    vm.title = "profile for username";
-    vm.ts = new Date( ).toISOString( );
+    var apiUrl = '/api/v1/u/' + $routeParams.username + '.json';
+
+    $log.debug('Loading profile at: ', apiUrl);
+
+    $http.get(apiUrl).then(
+      function successCallback(response) {
+        $log.debug('Received response: ', response);
+        vm.data = response.data;
+
+        setTimeout(function() {
+          angular.element(".transition-helper").fadeOut();
+          $scope.$digest();
+        }, 300);
+
+        console.log('Response received for viewUser ' + vm.data.view_user.username);
+      },
+      function errorCallback(response) {
+        console.log('Error ' + response.status + ': ' + response.statusText);
+        angular.element(".transition-helper").remove();
+      }
+    );
 
     $log.debug('ProfileController called: ' + vm.ts);
-  }
+
+  }]);
 
 
   /**
@@ -324,9 +337,9 @@
   /**
    * Control most of the app logig that happens independently of the current view.
    */
-  function MainController($mdDialog, $mdSidenav, $mdBottomSheet, $location, $log) {
+  app.controller('MainController', ['$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', function MainController($mdDialog, $mdSidenav, $mdBottomSheet, $location, $log) {
+
     var vm = this;
-    
     vm.userLogout = userLogout;
     vm.toggleSidebar = toggleSidebar;
     vm.openMenu = openMenu;
@@ -415,6 +428,7 @@
         };
       }
     }
-  }
+
+  }]);
 
 })();

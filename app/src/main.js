@@ -1,3 +1,10 @@
+
+/* Global constants */
+
+window.API_BASE = "";
+
+/* Angular */
+
 (function(){ 'use strict';
 
 	angular.module('reddmeetApp', ['ngMaterial', 'ngRoute']);
@@ -60,15 +67,15 @@
         templateUrl: '/app/views/results.html'
 	    })
 
-	    .when('/r/:subreddit/', {
+	    .when('/r/:subreddit', {
         controller: 'SrController',
         controllerAs: 'vm',
-        templateUrl: '/app/views/results.html'
+        templateUrl: '/app/views/sr.html'
 	    }) 
 	    .when('/u/:username', {
         controller: 'ProfileController',
         controllerAs: 'vm',
-        templateUrl: 'src/views/profile.html'
+        templateUrl: '/app/views/profile.html'
 	    })
 
 	    .when('/me/profile', { 
@@ -117,6 +124,7 @@
     $http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
     $http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
     $http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };
+
     $log.debug('Runnning...');
 	}
 
@@ -149,7 +157,12 @@
 	function delete_cookie(name){
 	    setCookie(name, "", -1);
 	}
-
+	function urlencode(str){
+	    return encodeURIComponent(str);
+	}
+	function urldecode(str){
+	    return decodeURIComponent( ( str+'' ).replace( /\+/g, '%20' ) );
+	}
 })();
 
 

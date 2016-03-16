@@ -1,3 +1,6 @@
+
+<!-- TODO: use <md-grid-list/> -->
+
 <div layout="column" layout-gt-xs="row" layout-align="center center" class="search-options-overview">
 
 	<div>
@@ -18,6 +21,12 @@
 	</div>
 </div>
 
-<div ng-show="!vm.results.length" layout="row" layout-align="center center"><md-progress-circular md-mode='indeterminate'></md-progress-circular></div>
+<div ng-show="!vm.results.length" layout="row" layout-align="center center">
+	<md-progress-circular md-mode='indeterminate'>
+	</md-progress-circular>
+</div>
 
-<div ng-show="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill style="background-color: #EEE; min-height: 100vh;"><user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" img-url="{{ item.profile.pics[0].url }}" age="{{ item.profile.age }}" gender="{{ item.profile.gender }}" distance="{{ item.distance }}"></user-list-card></div>
+<div ng-show="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list">
+	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" img-url="{{ item.profile.pics[0].url }}" age="{{ item.profile.age }}" gender="{{ item.profile.gender }}" distance="{{ item.distance }}">
+	</user-list-card>
+</div>
