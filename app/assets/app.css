@@ -2,11 +2,17 @@
 html, body { background: #E9E9E9; }
 a { color: inherit; text-decoration: inherit; }
 
+/* http://www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html { box-sizing: border-box; } 
+*, *:before, *:after { box-sizing: inherit; }
+
+/* Fix color inherit for icons */
+
+md-icon { color: inherit; }
+
 /* Toolbar area */
 
-.main-toolbar {
-  z-index: 1001;
-}
+.main-toolbar { z-index: 1001; }
 
 /* Sidenav area */
 
@@ -96,6 +102,7 @@ md-sidenav > md-toolbar, md-sidenav > section a {
 }
 
 /* Any list of users with a grid layout of cards */
+
 .user-card-list {
   background-color: #EEE;
   min-height: 100vh;
@@ -163,20 +170,39 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
   position: relative;
   width: 100vw; height: 100vw;
 }
-.user-profile > .pnasl > img {
+.user-profile > .pnasl img {
   position: absolute; left: 0; top: 0;
   width: 100vw; height: 100vw;
 }
 .user-profile > .pnasl > .nasl {
-  color: white; text-shadow: 0 0 4px rgba(0,0,0,0.82);
+  color: white;
   margin: 0; padding: 16px;
   position: absolute; left: 0; right: 0; bottom: 0;
+  text-shadow: 0 0 4px rgba(0,0,0,0.82);
 }
-.user-profile > .pnasl > .nasl > .username {
+.user-profile > .pnasl .username {
   font-size: 34px;
 }
-.user-profile > .pnasl > .nasl > .asl {
+.user-profile > .pnasl .age-gender {
   font-size: 20px;
+}
+.user-profile > .pnasl .location {
+  color: white;
+  font-size: 14px;
+  padding: 16px;
+  position: absolute; top: 0; right: 0;
+}
+.user-profile > .pnasl .common-subs-count {
+  background-color: rgba(63,81,181, 0.56); /* -> Indigo500 #3F51B5 */
+  color: white;
+  font-size: 14px;
+  margin: -16px; padding: 16px; margin-top: 16px;
+}
+.user-profile > .pnasl .created {
+  color: white;
+  font-size: 14px;
+  padding: 16px;
+  position: absolute; top: 0; left: 0;
 }
 
 @media (min-width:600px) {
@@ -186,24 +212,41 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
     overflow: hidden;
   }
   .user-profile > .pnasl {
-    position: static;
+    align-items: flex-start;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     height: 300px;
-    margin: 0; padding: 0;
+    position: static;
+    margin: 1px 0 0 0; padding: 0;
   }
-  .user-profile > .pnasl > img {
+  .user-profile > .pnasl img {
     position: static; left: auto; top: auto;
     width: 300px; height: 300px;
-    flex-grow: 0
   }
   .user-profile > .pnasl > .nasl {
-    position: static; left: auto; top: auto;
-    color: black; 
+    color: black;
     margin: 0; padding: 0;
+    position: static; left: auto; top: auto;
     text-shadow: none;
-    flex-grow: 1
+  }
+  .user-profile > .pnasl .username {
+  }
+  .user-profile > .pnasl .age-gender {
+  }
+  .user-profile > .pnasl .location {
+  }
+  .user-profile > .pnasl .common-subs-count {
+    background-color: inherit;
+    color: black;
+    position: static; top: auto; right: auto;
+    margin: 0; padding: 0;
+  }
+  .user-profile > .pnasl .created {
+    color: black;
+    font-size: 16px;
+    padding: 16px;
+    position: static; top: auto; left: auto;
   }
 }
 
@@ -223,7 +266,7 @@ sr-chips {
   margin: 0; padding: 0;
 }
 sr-chips > sr-chip {
-  background: #3F51B5 /* -> Indigo500 */;
+  background: #3F51B5; /* -> Indigo500 */
   color: white;
   cursor: pointer;
   display: block;
@@ -258,4 +301,3 @@ sr-chips.smaller > sr-chip a {
 sr-chips.smaller > sr-chip .mod-tag {
   font-size: 1rem; line-height: 2rem;
 }
-

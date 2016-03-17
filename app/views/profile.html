@@ -2,14 +2,31 @@
 
 	<div class="pnasl">
 		<div class="votebox"></div>
-		<img src="/m/{{ vm.data.view_user.username }}.jpg">
+		<div class="pic">
+			<img src="/m/{{ vm.data.view_user.username }}.jpg">
+		</div>
 		<div class="nasl">
 			<div class="username">{{ vm.data.view_user.username }}</div>
-			<div class="asl">
-				<span class="age">{{ vm.data.view_user.profile.age }}</span>
+			<div class="age-gender">
+				<span class="age">{{ vm.data.view_user.profile.age }}</span>,
 				<span class="gender">{{ vm.data.view_user.profile.gender }}</span>
-				<span class="distance">{{ vm.data.view_user.profile.distance_km }}</span>
 			</div>
+			<div class="common-subs-count">
+				{{ vm.data.common_subs.length }} subs in common
+			</div>
+		</div>
+		<div class="location">
+			<a ng-href="#/map" class="distance">
+				{{ vm.data.view_user.profile.distance_km }}
+				<md-icon>location_on</md-icon>
+			</a>
+		</div>
+		<div class="created">
+			<a ng-href="https://www.reddit.com/user/{{ vm.data.view_user.username }}" class="reddit-profile-link">
+				<md-icon>link</md-icon>
+				a redditor for 
+				<span am-time-ago="vm.data.view_user.profile.created | amParse:'YYYY-MM-DD'"></span>
+			</a>
 		</div>
 	</div>
 
@@ -17,8 +34,11 @@
 		<sr-chip ng-repeat="sub in vm.data.common_subs" name="{{ sub.sr }}" subscribers="{{ sub.subscribers }}" subscribers-here="{{ sub.subscribers_here }}"></sr-chip>
 	</sr-chips>
 
-	<div class="title">Other subs</div>
-	<sr-chips>
+	<md-button ng-click="showNotCommonSubs = !showNotCommonSubs">
+		Show other subs
+		<md-icon>keyboard_arrow_down</md-icon>
+	</md-button>
+	<sr-chips ng-show="showNotCommonSubs">
 		<sr-chip ng-repeat="sub in vm.data.not_common_subs" name="{{ sub.sr }}" subscribers="{{ sub.subscribers }}" subscribers-here="{{ sub.subscribers_here }}"></sr-chip>
 	</sr-chips>
 

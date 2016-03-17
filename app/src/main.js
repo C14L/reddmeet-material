@@ -7,14 +7,11 @@ window.API_BASE = "";
 
 (function(){ 'use strict';
 
-	angular.module('reddmeetApp', ['ngMaterial', 'ngRoute']);
-
-	angular.module('reddmeetApp')
-		.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider', reddmeetAppConfig])
-		.run(['$http', '$log', reddmeetAppRun]);
+	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment']);
 
 
-	function reddmeetAppConfig($routeProvider, $locationProvider, $httpProvider, $mdThemingProvider) {
+	app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider', 'amTimeAgoConfig', function reddmeetAppConfig($routeProvider, $locationProvider, $httpProvider, $mdThemingProvider, amTimeAgoConfig) {
+
     $mdThemingProvider
     	.theme('default')
       .primaryPalette('indigo')
@@ -26,6 +23,8 @@ window.API_BASE = "";
 		});
 
 		$httpProvider.useApplyAsync(true);  // pool xhrs promises for digesting
+
+		amTimeAgoConfig['withoutSuffix'] = true;
 
     $routeProvider
 	    .when('/results', {
@@ -118,15 +117,19 @@ window.API_BASE = "";
 			.otherwise({
 				redirectTo: '/results',
 			})
-	}
 
-	function reddmeetAppRun($http, $log) {
+	}]);
+
+
+	app.run(['$http', '$log', function reddmeetAppRun($http, $log) {
+
     $http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
     $http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
     $http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };
 
     $log.debug('Runnning...');
-	}
+
+	}]);
 
 	//////////////////////////////////////////////////////////////////////////////
 	//
