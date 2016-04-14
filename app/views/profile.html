@@ -28,6 +28,14 @@
 				<span am-time-ago="vm.data.view_user.profile.created | amParse:'YYYY-MM-DD'"></span>
 			</a>
 		</div>
+		<md-fab class="profilefab">
+	    <md-button ng-if="!vm.data.is_like" aria-label="menu" class="md-fab md-warn">
+		    <md-icon>arrow_upward</md-icon>
+	    </md-button>
+	    <md-button ng-if="vm.data.is_like" aria-label="menu" class="md-fab md-warn">
+		    <md-icon>mail_outline</md-icon>
+	    </md-button>
+		</md-fab>
 	</div>
 
 	<sr-chips>

@@ -2,3 +2,6 @@
 
 --under development--
 
+
+~$ nvm use node
+~$ 

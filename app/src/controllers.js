@@ -14,6 +14,7 @@
     .controller('SearchOptionOrderDialogController', ['$mdDialog', SearchOptionOrderDialogController])
     ;
 
+
   /**
    * Display a list of users found with the current search settings.
    */
@@ -284,6 +285,8 @@
 
     var vm = this;
     var apiUrl = '/api/v1/u/' + $routeParams.username + '.json';
+
+    vm.fabOpen = false;
 
     $log.debug('Loading profile at: ', apiUrl);
 
