@@ -1,32 +1,32 @@
 
-<!-- TODO: use <md-grid-list/> -->
-
-<div layout="column" layout-gt-xs="row" layout-align="center center" class="search-options-overview">
-
-	<div>
-		<md-content md-ink-ripple ng-click="vm.showSearchOptionGender($event)">
-			everybody
-		</md-content>
-		<md-content md-ink-ripple ng-click="vm.showSearchOptionDistance($event)">
-			worldwide
-		</md-content> 
-	</div>
-	<div>
-		<md-content md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionSubreddits($event)">
-			from all subs
-		</md-content>
-		<md-content md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionOrder($event)">
-			by best match
-		</md-content> 
-	</div>
-</div>
+<md-grid-list md-cols="2" md-gutter="0" md-row-height="fit" style="height: 96px; border-bottom: 1px solid rgba(0,0,0,0.12);">
+	<md-grid-tile md-ink-ripple ng-click="vm.showSearchOptionGender($event)" style="border-right: 1px solid rgba(0,0,0,0.12); border-bottom: 1px solid rgba(0,0,0,0.12);">
+		everybody
+	</md-grid-tile>
+	<md-grid-tile md-ink-ripple ng-click="vm.showSearchOptionDistance($event)" style="border-bottom: 1px solid rgba(0,0,0,0.12);">
+		worldwide
+	</md-grid-tile>
+	<md-grid-tile md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionSubreddits($event)" style="border-right: 1px solid rgba(0,0,0,0.12);">
+		from all subs
+	</md-grid-tile>
+	<md-grid-tile md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionOrder($event)">
+		by best match
+	</md-grid-tile>
+</md-grid-list>
 
 <div ng-show="!vm.results.length" layout="row" layout-align="center center">
-	<md-progress-circular md-mode='indeterminate'>
-	</md-progress-circular>
+	<div ng-if="vm.isFirstRun">
+		<md-content style="padding: 16px; padding-top: 36px; font-size: 1.35rem; color: rgba(0,0,0,0.28); text-align: center; line-height: 1.35em;">
+			Filter search results by gender, distance, subreddits, and sort them the way you want. 
+		</md-content>
+		<md-content md-show="!vm.isLoading && !vm.results.length" style="text-align: center;">
+			<md-button ng-click="vm.refreshResults()" class="md-raised md-primary">show results</md-button>
+		</md-content>
+	</div>
+	<md-progress-circular ng-show="vm.isLoading" md-mode='indeterminate'></md-progress-circular>
 </div>
 
 <div ng-show="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list">
-	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" img-url="{{ item.profile.pics[0].url }}" age="{{ item.profile.age }}" gender="{{ item.profile.gender }}" distance="{{ item.distance }}">
+	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.age }}" gender="{{ item.gender_symbol }}" distance="{{ item.distance_km }}">
 	</user-list-card>
 </div>

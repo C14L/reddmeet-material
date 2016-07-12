@@ -16,7 +16,7 @@
 
 
 	app.component('userListCard', {
-		bindings: { username: '@', age: '@', gender: '@', distance: '@', imgUrl: '@' },
+		bindings: { username: '@', age: '@', gender: '@', distance: '@' },
 		controller: ['$location', UserListCardComponentController],
 		templateUrl: '/app/views/component-user-list-card.html',
 	});

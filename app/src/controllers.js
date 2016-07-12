@@ -18,7 +18,9 @@
   /**
    * Display a list of users found with the current search settings.
    */
-  app.controller('ResultsController', ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory) {
+  app.controller('ResultsController', 
+    ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', 
+    function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory) {
 
     var vm = this;
     vm.title = "search results";
@@ -32,12 +34,12 @@
      * new setting in real-time.
      */
     vm.refreshResults = function() {
-      SearchResultsFactory.getUserList().then(function(li) {
-        vm.results = li;
-        $scope.$digest();
+      SearchResultsFactory.getUserList().then(function(user_list) {
+        vm.results = user_list;
       });
     }
 
+    vm.isFirstRun = mpLocalStorageGetItem('isFirstRun', true);
     vm.refreshResults(); // First call to populate search results page.
 
     vm.editSearch = function(ev) {
@@ -284,14 +286,14 @@
   app.controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', function ProfileController($log, $http, $scope, $timeout, $routeParams) {
 
     var vm = this;
-    var apiUrl = '/api/v1/u/' + $routeParams.username + '.json';
+    var apiUrl = API_BASE + '/api/v1/u/' + $routeParams.username + '.json';
 
     vm.fabOpen = false;
 
-    $log.debug('Loading profile at: ', apiUrl);
+    $log.debug('Profile: ', apiUrl);
 
-    $http.get(apiUrl).then(
-      function successCallback(response) {
+    $http.get(apiUrl)
+    .then(function(response) {
         $log.debug('Received response: ', response);
         vm.data = response.data;
 
@@ -301,9 +303,9 @@
         }, 300);
 
         console.log('Response received for viewUser ' + vm.data.view_user.username);
-      },
-      function errorCallback(response) {
-        console.log('Error ' + response.status + ': ' + response.statusText);
+      })
+      .catch(function errorCallback(response) {
+        console.error(response.status, response.statusText);
         angular.element(".transition-helper").remove();
       }
     );

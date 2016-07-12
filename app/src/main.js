@@ -167,5 +167,3 @@ window.API_BASE = "";
 	    return decodeURIComponent( ( str+'' ).replace( /\+/g, '%20' ) );
 	}
 })();
-
-
