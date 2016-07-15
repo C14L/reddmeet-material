@@ -1,5 +1,4 @@
-
-<md-grid-list md-cols="2" md-gutter="0" md-row-height="fit" style="height: 96px; border-bottom: 1px solid rgba(0,0,0,0.12);">
+<md-grid-list md-cols="2" md-gutter="0" md-row-height="fit" style="height: 96px;">
 	<md-grid-tile md-ink-ripple ng-click="vm.showSearchOptionGender($event)" style="border-right: 1px solid rgba(0,0,0,0.12); border-bottom: 1px solid rgba(0,0,0,0.12);">
 		everybody
 	</md-grid-tile>
@@ -14,19 +13,28 @@
 	</md-grid-tile>
 </md-grid-list>
 
-<div ng-show="!vm.results.length" layout="row" layout-align="center center">
+<div ng-if="!vm.results.length" layout="col" layout-align="center center">
 	<div ng-if="vm.isFirstRun">
 		<md-content style="padding: 16px; padding-top: 36px; font-size: 1.35rem; color: rgba(0,0,0,0.28); text-align: center; line-height: 1.35em;">
 			Filter search results by gender, distance, subreddits, and sort them the way you want. 
 		</md-content>
-		<md-content md-show="!vm.isLoading && !vm.results.length" style="text-align: center;">
+		<md-content ng-show="!vm.isLoading && !vm.results.length" style="text-align: center;">
 			<md-button ng-click="vm.refreshResults()" class="md-raised md-primary">show results</md-button>
 		</md-content>
 	</div>
-	<md-progress-circular ng-show="vm.isLoading" md-mode='indeterminate'></md-progress-circular>
+	<div ng-if="vm.isLoading">
+		<md-progress-circular md-mode='indeterminate'></md-progress-circular>
+	</div>
 </div>
 
-<div ng-show="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list">
-	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.age }}" gender="{{ item.gender_symbol }}" distance="{{ item.distance_km }}">
+<div ng-if="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list">
+	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.profile.age }}" gender="{{ item.profile.sex_symbol }}" distance="{{ vm.getDistance(item.profile.lat, item.profile.lng) }}">
 	</user-list-card>
+
+	<div ng-if="!vm.isLoading" style="clear: both; text-align: center; margin: 16px;">
+		<md-button ng-click="vm.refreshResults()" class="md-primary">more</md-button>
+	</div>
+	<div ng-if="vm.isLoading">
+		<md-progress-circular md-mode='indeterminate'></md-progress-circular>
+	</div>
 </div>

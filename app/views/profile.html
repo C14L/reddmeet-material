@@ -1,8 +1,7 @@
-<div class="user-profile">
-
+<div class="user-profile" ng-class="{'show-send-message': vm.isShowSendMessage}">
 	<div class="pnasl">
 		<div class="votebox"></div>
-		<div class="pic">
+		<div class="pic" md-swipe-left="vm.goPrevNext('next')" md-swipe-right="vm.goPrevNext('prev')">
 			<img src="/m/{{ vm.data.view_user.username }}.jpg">
 		</div>
 		<div class="nasl">
@@ -11,7 +10,10 @@
 				<span class="age">{{ vm.data.view_user.profile.age }}</span>,
 				<span class="gender">{{ vm.data.view_user.profile.gender }}</span>
 			</div>
-			<div class="common-subs-count">
+			<div class="close-messager" ng-click="vm.closeMessenger()">
+				<md-icon>close</md-icon>
+			</div>
+			<div class="common-subs-count" ng-click="vm.toggleRight()">
 				{{ vm.data.common_subs.length }} subs in common
 			</div>
 		</div>
@@ -24,30 +26,85 @@
 		<div class="created">
 			<a ng-href="https://www.reddit.com/user/{{ vm.data.view_user.username }}" class="reddit-profile-link">
 				<md-icon>link</md-icon>
-				a redditor for 
+				a redditor for
 				<span am-time-ago="vm.data.view_user.profile.created | amParse:'YYYY-MM-DD'"></span>
 			</a>
 		</div>
+		<!--
 		<md-fab class="profilefab">
-	    <md-button ng-if="!vm.data.is_like" aria-label="menu" class="md-fab md-warn">
-		    <md-icon>arrow_upward</md-icon>
-	    </md-button>
-	    <md-button ng-if="vm.data.is_like" aria-label="menu" class="md-fab md-warn">
-		    <md-icon>mail_outline</md-icon>
-	    </md-button>
+			<md-button ng-if="!vm.data.is_like" aria-label="menu" class="md-fab md-warn">
+				<md-icon>arrow_upward</md-icon>
+			</md-button>
+			<md-button ng-if="vm.data.is_like" aria-label="menu" class="md-fab md-warn">
+				<md-icon>mail_outline</md-icon>
+			</md-button>
 		</md-fab>
+		-->
 	</div>
 
-	<sr-chips>
-		<sr-chip ng-repeat="sub in vm.data.common_subs" name="{{ sub.sr }}" subscribers="{{ sub.subscribers }}" subscribers-here="{{ sub.subscribers_here }}"></sr-chip>
-	</sr-chips>
+	<div class="prev-next-up-down">
+		<div class="prev-next prev" ng-click="vm.goPrevNext('prev')">
+			<md-icon>arrow_left</md-icon>
+		</div>
+		<div ng-if="!vm.data.is_like && !vm.data.is_nope" class="up-down up">
+			<div class="btn btn-up" ng-click="vm.doVote('up')">
+				<md-icon>arrow_upward</md-icon>
+			</div>
+		</div>
+		<div ng-if="!vm.data.is_like && !vm.data.is_nope" class="up-down down">
+			<div class="btn btn-down" ng-click="vm.doVote('down')">
+				<md-icon>arrow_downward</md-icon>
+			</div>
+		</div>
+		<div ng-if="vm.data.is_like" class="up-down like">
+			upvoted!
+			<md-button class="md-raised md-primary" ng-click="vm.openMessenger()">send a message</md-button>
+		</div>
+		<div ng-if="vm.data.is_nope" class="up-down nope">
+			downvoted :(
+		</div>
+		<div ng-if="vm.data.is_match" class="up-down match">
+			<md-button ng-click="vm.openMessenger()">send a message</md-button>
+		</div>
+		<div class="prev-next next" ng-click="vm.goPrevNext('next')">
+			<md-icon>arrow_right</md-icon>
+		</div>
+	</div>
 
-	<md-button ng-click="showNotCommonSubs = !showNotCommonSubs">
-		Show other subs
-		<md-icon>keyboard_arrow_down</md-icon>
-	</md-button>
-	<sr-chips ng-show="showNotCommonSubs">
-		<sr-chip ng-repeat="sub in vm.data.not_common_subs" name="{{ sub.sr }}" subscribers="{{ sub.subscribers }}" subscribers-here="{{ sub.subscribers_here }}"></sr-chip>
-	</sr-chips>
+	<div class="more md-padding">
+		<md-content class="md-padding">
+			{{ vm.data.view_user.profile.about }}
+		</md-content>
+	</div>
 
+	<div class="messager">
+		<form>
+			<textarea ng-model="vm.messageText" placeholder="Write a message"></textarea>
+			<md-button ng-click="vm.doSendMessage()">send</md-button>
+		</form>
+		<div class="messages">
+			<div class="message" ng-repeat="message in vm.messages track by $index">
+				<div class="time">{{ message.time }}</div>
+				<div class="text">{{ message.text }}</div>
+			</div>
+		</div>
+	</div>
+
+	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="profile-right" md-is-locked-open="$mdMedia('gt-lg')">
+		<md-content>
+			<div ng-click="vm.toggleRight()" style="line-height: 48px; padding-left: 16px;">
+				your common subreddits:
+			</div>
+			<sr-chips>
+				<sr-chip ng-repeat="sub in vm.data.common_subs" name="{{ sub.sr }}" subscribers="{{ sub.subscribers }}" subscribers-here="{{ sub.subscribers_here }}"></sr-chip>
+			</sr-chips>
+
+			<div ng-click="vm.toggleRight()" style="line-height: 48px; padding-left: 16px;">
+				other subreddits:
+			</div>
+			<sr-chips>
+				<sr-chip ng-repeat="sub in vm.data.not_common_subs" name="{{ sub.sr }}" subscribers="{{ sub.subscribers }}" subscribers-here="{{ sub.subscribers_here }}"></sr-chip>
+			</sr-chips>
+		</md-content>
+	</md-sidenav>
 </div>

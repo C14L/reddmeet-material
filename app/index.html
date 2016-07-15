@@ -10,7 +10,6 @@
     <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
     <link rel="stylesheet" href="/node_modules/angular-material/angular-material.css"/>
     <link rel="stylesheet" href="/app/assets/app.css"/>
-
     <style>[ng-cloak], .ng-cloak { display: none !important; }</style>
   </head>
 
@@ -33,6 +32,12 @@
           </md-content>
         </div>
       </section>
+
+			<h2>Subreddits</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam doloremque odit nemo nisi assumenda, omnis ipsum voluptatum iusto placeat provident, fugit blanditiis molestias natus. Nulla dolores veritatis blanditiis, eum modi.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam doloremque odit nemo nisi assumenda, omnis ipsum voluptatum iusto placeat provident, fugit blanditiis molestias natus. Nulla dolores veritatis blanditiis, eum modi.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam doloremque odit nemo nisi assumenda, omnis ipsum voluptatum iusto placeat provident, fugit blanditiis molestias natus. Nulla dolores veritatis blanditiis, eum modi.</p>
+
     </md-sidenav>
 
     <div flex role="main" layout="column" tabIndex="-1">
@@ -90,7 +95,6 @@
         <ng-view></ng-view>
       </md-content>
     </div>
-
   </body>
 
   <script src="/node_modules/jquery/dist/jquery.min.js"></script>
@@ -103,9 +107,18 @@
   <script src="/node_modules/angular-material/angular-material.js"></script>
   <script src="/node_modules/angular-moment/angular-moment.min.js"></script>
 
-  <script src="/app/src/main.js"></script>
-  <script src="/app/src/controllers.js"></script>
-  <script src="/app/src/controllers-settings.js"></script>
+  <script src="/app/src/app.js"></script>
+
+  <script src="/app/src/controllers/MainController.js"></script>
+  <script src="/app/src/controllers/ProfileController.js"></script>
+  <script src="/app/src/controllers/SrController.js"></script>
+  <script src="/app/src/controllers/StatsController.js"></script>
+  <script src="/app/src/controllers/MapController.js"></script>
+  <script src="/app/src/controllers/ListControllers.js"></script>
+  <script src="/app/src/controllers/SettingsControllers.js"></script>
+  <script src="/app/src/controllers/SearchOptionDialogControllers.js"></script>
+  <script src="/app/src/controllers/ResultsController.js"></script>
+
   <script src="/app/src/services.js"></script>
   <script src="/app/src/components.js"></script>
   <script src="/app/src/filter.js"></script>
