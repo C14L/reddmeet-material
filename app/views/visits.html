@@ -1,16 +1,27 @@
-<md-tabs md-selected="tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-primary" md-swipe-content md-no-pagination>
+<md-tabs md-selected="tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-secondary" md-swipe-content md-no-pagination>
 
-  <md-tab id="tab1" md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
+  <md-tab id="tab1">
     <md-tab-label>
       <md-icon>people</md-icon>
       <span hide-xs>visited you</span>
       <md-tooltip hide-gt-xs>visited you</md-tooltip>
     </md-tab-label>
-    <md-tab-body>
-      <md-content layout-padding>
-        <p>upvotes inbox</p>
-        <p>{{vm.title}}</p>
-        <p>User results list. Use for all user list views. Its {{vm.ts}} ...</p>
+    <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
+      <md-content flex>
+        <md-subheader class="md-no-sticky">
+          <span>Redditors who visited your profile</span>
+        </md-subheader>
+        <md-divider></md-divider>
+        <md-list flex ng-if="vm.userLists.visitors.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.visitors track by $index" ng-click="mainctrl.go('/u/' + item.username)">
+            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.username }}</h3>
+              <h4>{{ item.profile.age }}</h4>
+              <p>{{ item.profile.accessed }}</p>
+            </div>
+          </md-list-item>
+        </md-list>
         <md-divider></md-divider>
         <md-item layout class="inset">
           <md-button layout layout-align="start center" class="md-primary">
@@ -24,14 +35,35 @@
   <md-tab id="tab2">
     <md-tab-label>
       <md-icon>people_outline</md-icon>
-      <span hide-xs>visits</span>
-      <md-tooltip hide-gt-xs>visit history</md-tooltip>
+      <span hide-xs>you visited</span>
+      <md-tooltip hide-gt-xs>you visited</md-tooltip>
     </md-tab-label>
     <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
-      <md-content flex layout-padding>
-        <p>Yoyoyoyo...</p>
+      <md-content flex>
+        <md-subheader class="md-no-sticky">
+          <span>You visited these profiles</span>
+        </md-subheader>
+        <md-divider></md-divider>
+        <md-list flex ng-if="vm.userLists.visits.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.visits track by $index" ng-click="mainctrl.go('/u/' + item.username)">
+            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.username }}</h3>
+              <h4>{{ item.profile.age }}</h4>
+              <p>{{ item.profile.accessed }}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+        <md-divider></md-divider>
+        <md-item layout class="inset">
+          <md-button layout layout-align="start center" class="md-primary">
+            More
+          </md-button>
+        </md-item>
       </md-content>
     </md-tab-body>
   </md-tab>
+
+
 
 </md-tabs>

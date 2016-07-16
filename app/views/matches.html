@@ -1,14 +1,14 @@
 
-<md-tabs md-selected="vm.tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-primary" md-swipe-content md-no-pagination>
+<md-tabs md-selected="vm.tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-secondary" md-swipe-content md-no-pagination>
 
-  <md-tab id="tab1" md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
+  <md-tab id="tab1">
     <md-tab-label>
       <md-icon>inbox</md-icon>
       <span hide-xs>upvotes</span>
       <md-tooltip hide-gt-xs>upvotes</md-tooltip>
     </md-tab-label>
-    <md-tab-body>
-      <md-content>
+    <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
+      <md-content flex>
         <md-subheader class="md-no-sticky">
           <span>Redditors who upvoted you</span>
         </md-subheader>
@@ -19,7 +19,7 @@
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
-              <p>{{ item.profile.accessed }}</p>
+              <p>{{ item.flag_created }}</p>
             </div>
           </md-list-item>
         </md-list>
@@ -40,7 +40,7 @@
       <md-tooltip hide-gt-xs>matches</md-tooltip>
     </md-tab-label>
     <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
-      <md-content>
+      <md-content flex>
         <md-subheader class="md-no-sticky">
           <span>Matches: you upvoted each other</span>
         </md-subheader>
@@ -51,7 +51,7 @@
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
-              <p>{{ item.profile.accessed }}</p>
+              <p>{{ item.flag_created }}</p>
             </div>
           </md-list-item>
         </md-list>
@@ -72,7 +72,7 @@
       <md-tooltip hide-gt-xs>upvoted by you</md-tooltip>
     </md-tab-label>
     <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
-      <md-content>
+      <md-content flex>
         <md-subheader class="md-no-sticky">
           <span>Upvoted by you</span>
         </md-subheader>
@@ -83,7 +83,7 @@
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
-              <p>{{ item.profile.accessed }}</p>
+              <p>{{ item.flag_created }}</p>
             </div>
           </md-list-item>
         </md-list>

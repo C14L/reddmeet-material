@@ -2,20 +2,19 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .controller('MatchesController', ['$log', '$location', '$scope', '$http', MatchesController])
-        .controller('VisitsController', ['$log', VisitsController])
-        .controller('DownvotesController', ['$log', DownvotesController])
+        .controller('MatchesController', ['$log', '$location', '$http', MatchesController])
+        .controller('VisitsController', ['$log', '$http', VisitsController])
+        .controller('DownvotesController', ['$log', '$http', DownvotesController])
         ;
 
     /**
      * Display three tabs with "upvotes received", "upvote matches", "upvotes sent".
      */
-    function MatchesController($log, $location, $scope, $http) {
+    function MatchesController($log, $location, $http) {
         var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
         vm.tabs = { selectedIndex: 1 };
         vm.title = "Upvotes and Matches";
-        vm.ts = new Date().toISOString();
         vm.userLists = { matches: [], upvotes_sent: [], upvotes_recv: [] };
 
         $location.search().recv && (vm.tabs.selectedIndex = 0);
@@ -35,23 +34,41 @@
     /**
      * Display two tabs with "viewed me" and "recently viewed".
      */
-    function VisitsController($log) {
+    function VisitsController($log, $http) {
+        var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
-        vm.title = "viewed me / recently viewed";
-        vm.ts = new Date().toISOString();
+        vm.tabs = { selectedIndex: 0 };
+        vm.title = "Visits";
+        vm.userLists = { visits: [], visitors: [] };
 
-        $log.debug('VisitsController called: ' + vm.ts);
+        for (let x in vm.userLists) {
+            $http.get(apiUrlTpl.replace('{}', x)).then(function(response){
+                $log.debug('API response: ', response);
+                vm.userLists[x] = response.data.user_list;
+            }).catch(function(error){
+                $log.error('Error: ', error);
+            });
+        };
     }
 
     /**
      * Display a list of users downvoted by authuser.
      */
-    function DownvotesController($log) {
+    function DownvotesController($log, $http) {
+        var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
-        vm.title = "hidden";
-        vm.ts = new Date().toISOString();
+        vm.tabs = { selectedIndex: 0 };
+        vm.title = "Visits";
+        vm.userLists = { downvoted: [] };
 
-        $log.debug('DownvotesController called: ' + vm.ts);
+        for (let x in vm.userLists) {
+            $http.get(apiUrlTpl.replace('{}', x)).then(function(response){
+                $log.debug('API response: ', response);
+                vm.userLists[x] = response.data.user_list;
+            }).catch(function(error){
+                $log.error('Error: ', error);
+            });
+        };
     }
 
 })();
