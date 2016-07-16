@@ -59,8 +59,8 @@
               <md-icon>search</md-icon>
             </md-button>
             
-            <md-button class="md-icon-button" ng-href="#/matches" aria-label="upvote matches">
-              <md-tooltip md-autohide md-direction="down">upvote matches</md-tooltip>
+            <md-button class="md-icon-button" ng-href="#/upvotes?matches" aria-label="upvotes">
+              <md-tooltip md-autohide md-direction="down">matches</md-tooltip>
               <md-icon>folder_special</md-icon>
             </md-button>
 
@@ -104,27 +104,27 @@
 
   <script src="/node_modules/angular/angular.js"></script>
   <script src="/node_modules/angular-animate/angular-animate.js"></script>
-  <script src="/node_modules/angular-route/angular-route.js"></script>
   <script src="/node_modules/angular-aria/angular-aria.js"></script>
-  <script src="/node_modules/angular-messages/angular-messages.js"></script>
   <script src="/node_modules/angular-material/angular-material.js"></script>
+  <script src="/node_modules/angular-messages/angular-messages.js"></script>
   <script src="/node_modules/angular-moment/angular-moment.min.js"></script>
+  <script src="/node_modules/angular-route/angular-route.js"></script>
 
   <script src="/app/src/app.js"></script>
 
   <script src="/app/src/controllers/MainController.js"></script>
-  <script src="/app/src/controllers/ProfileController.js"></script>
-  <script src="/app/src/controllers/SrController.js"></script>
-  <script src="/app/src/controllers/StatsController.js"></script>
   <script src="/app/src/controllers/MapController.js"></script>
-  <script src="/app/src/controllers/ListControllers.js"></script>
+  <script src="/app/src/controllers/MatchesControllers.js"></script>
+  <script src="/app/src/controllers/ProfileController.js"></script>
+  <script src="/app/src/controllers/ResultsController.js"></script>
   <script src="/app/src/controllers/SettingsControllers.js"></script>
   <script src="/app/src/controllers/SearchOptionDialogControllers.js"></script>
-  <script src="/app/src/controllers/ResultsController.js"></script>
+  <script src="/app/src/controllers/SrController.js"></script>
+  <script src="/app/src/controllers/StatsController.js"></script>
 
   <script src="/app/src/directives/FocusMe.js"></script>
-  <script src="/app/src/directives/UserListCardComponent.js"></script>
   <script src="/app/src/directives/SrChipComponent.js"></script>
+  <script src="/app/src/directives/UserListCardComponent.js"></script>
 
   <script src="/app/src/services/SearchResultsFactory.js"></script>
   <script src="/app/src/services/UserFactory.js"></script>

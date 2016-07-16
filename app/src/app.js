@@ -29,18 +29,8 @@ window.API_BASE = "";
 				templateUrl: '/app/views/results.html'
 			})
 
-			.when('/upvotes_recv', {
-				controller: 'UpvotesController',
-				controllerAs: 'vm',
-				templateUrl: '/app/views/matches.html'
-			})
-			.when('/matches', {
-				controller: 'UpvotesController',
-				controllerAs: 'vm',
-				templateUrl: '/app/views/matches.html'
-			})
-			.when('/upvotes_sent', {
-				controller: 'UpvotesController',
+			.when('/upvotes', {
+				controller: 'MatchesController',
 				controllerAs: 'vm',
 				templateUrl: '/app/views/matches.html'
 			})

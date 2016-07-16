@@ -1,5 +1,5 @@
 
-<md-tabs md-selected="tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-primary" md-swipe-content md-no-pagination>
+<md-tabs md-selected="vm.tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-primary" md-swipe-content md-no-pagination>
 
   <md-tab id="tab1" md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
     <md-tab-label>
@@ -13,9 +13,8 @@
           <span>Redditors who upvoted you</span>
         </md-subheader>
         <md-divider></md-divider>
-        <md-list flex ng-if="vm.userList.length">
-          <md-list-item class="md-3-line" ng-repeat="item in vm.userList track by $index" 
-          ng-click="mainctrl.go('/u/' + item.username)">
+        <md-list flex ng-if="vm.userLists.upvotes_recv.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.upvotes_recv track by $index" ng-click="mainctrl.go('/u/' + item.username)">
             <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
@@ -46,8 +45,8 @@
           <span>Matches: you upvoted each other</span>
         </md-subheader>
         <md-divider></md-divider>
-        <md-list flex ng-if="vm.userList.length">
-          <md-list-item class="md-3-line" ng-repeat="item in vm.userList track by $index">
+        <md-list flex ng-if="vm.userLists.matches.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.matches track by $index" ng-click="mainctrl.go('/u/' + item.username)">
             <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
@@ -78,8 +77,8 @@
           <span>Upvoted by you</span>
         </md-subheader>
         <md-divider></md-divider>
-        <md-list flex ng-if="vm.userList.length">
-          <md-list-item class="md-3-line" ng-repeat="item in vm.userList track by $index">
+        <md-list flex ng-if="vm.userLists.upvotes_sent.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.upvotes_sent track by $index" ng-click="mainctrl.go('/u/' + item.username)">
             <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>

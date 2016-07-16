@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .controller('UpvotesController', ['$log', '$location', '$scope', '$http', UpvotesController])
+        .controller('MatchesController', ['$log', '$location', '$scope', '$http', MatchesController])
         .controller('VisitsController', ['$log', VisitsController])
         .controller('DownvotesController', ['$log', DownvotesController])
         ;
@@ -10,23 +10,27 @@
     /**
      * Display three tabs with "upvotes received", "upvote matches", "upvotes sent".
      */
-    function UpvotesController($log, $location, $scope, $http) {
+    function MatchesController($log, $location, $scope, $http) {
+        var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
         vm.tabs = { selectedIndex: 1 };
-        vm.title = "upvotes / matches / upvoted by you";
+        vm.title = "Upvotes and Matches";
         vm.ts = new Date().toISOString();
-        vm.userList = [];
-        $log.debug('UpvotesController called: ' + vm.ts);
+        vm.userLists = { matches: [], upvotes_sent: [], upvotes_recv: [] };
 
-        var apiUrl = API_BASE + '/api/v1/upvotes_sent.json';
-        $http.get(apiUrl).then(function(response){
-            $log.debug('API response: ', response);
-            vm.userList = response.data.user_list;
-        }).catch(function(error){
-            $log.error('Error: ', error);
-        });
+        $location.search().recv && (vm.tabs.selectedIndex = 0);
+        $location.search().matches && (vm.tabs.selectedIndex = 1);
+        $location.search().sent && (vm.tabs.selectedIndex = 2);
+
+        for (let x in vm.userLists) {
+            $http.get(apiUrlTpl.replace('{}', x)).then(function(response){
+                $log.debug('API response: ', response);
+                vm.userLists[x] = response.data.user_list;
+            }).catch(function(error){
+                $log.error('Error: ', error);
+            });
+        };
     }
-
 
     /**
      * Display two tabs with "viewed me" and "recently viewed".

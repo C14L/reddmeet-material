@@ -35,12 +35,12 @@
                 icon: 'map'
             },
             {
-                href: '#/upvotes_sent',
+                href: '#/upvotes?sent',
                 title: 'upvoted by you',
                 icon: 'arrow_upward'
             },
             {
-                href: '#/hidden',
+                href: '#/downvotes',
                 title: 'downvoted by you',
                 icon: 'arrow_downward'
             },
