@@ -29,7 +29,7 @@ window.API_BASE = "";
 				templateUrl: '/app/views/results.html'
 			})
 
-			.when('/upvotes_inbox', {
+			.when('/upvotes_recv', {
 				controller: 'UpvotesController',
 				controllerAs: 'vm',
 				templateUrl: '/app/views/matches.html'
@@ -120,7 +120,6 @@ window.API_BASE = "";
 		$http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
 		$http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
 		$http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };
-
 		$log.debug('Runnning...');
 	}]);
 })();
@@ -171,7 +170,7 @@ function urldecode(str) {
 
 function getLocalStorageString(itemKey, defaultValue) {
 	// Add a "defaultValue" to localStorage.getItem()
-    let val = localStorage.getItem(itemKey);
+    var val = localStorage.getItem(itemKey);
 
     if (val === null && defaultValue !== undefined) {
         return defaultValue;

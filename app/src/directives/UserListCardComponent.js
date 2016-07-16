@@ -1,21 +1,7 @@
 (function(){ 'use strict';
 
-	var app = angular.module('reddmeetApp')
-
-
-	app.component('srChip', {
-		bindings: { name: '@', subscribersHere: '@', subscribers: '@' },
-		controller: ['$location', SrChipComponentController],
-		template: '<a href="#/r/{{ $ctrl.name }}" title="{{ $ctrl.subscribersHere }} subscribers here" md-ink-ripple>r/{{ $ctrl.name }}</a>'
-	});
-
-	function SrChipComponentController($location) {
-		return {
-		};
-	}
-
-
-	app.component('userListCard', {
+	angular.module('reddmeetApp')
+	.component('userListCard', {
 		bindings: { username: '@', age: '@', gender: '@', distance: '@' },
 		controller: ['$location', UserListCardComponentController],
 		templateUrl: '/app/views/component-user-list-card.html',
@@ -49,22 +35,22 @@
 
 				// User imiage moves from orig position in user list to its final 
 				// position on user's profile page.
-  			$('body').prepend(img);
-  			orig.css({ opacity: "0.1" });
-  			img.css(animInit).animate(animTarget, 300, 'swing', function() { orig.css({ opacity: "1" }); });
+				$('body').prepend(img);
+				orig.css({ opacity: "0.1" });
+				img.css(animInit).animate(animTarget, 300, 'swing', function() { orig.css({ opacity: "1" }); });
 
-  			// The cover slides up from below to cover the background user list.
-  			//var cover = $('<div></div>');
-  			//cover.css(animCoverInit);
-  			//$('body').prepend(cover);
-  			//cover.animate(animCoverTarget, 400, 'swing', function(){ });
+				// The cover slides up from below to cover the background user list.
+				//var cover = $('<div></div>');
+				//cover.css(animCoverInit);
+				//$('body').prepend(cover);
+				//cover.animate(animCoverTarget, 400, 'swing', function(){ });
 
-  			// Select by this class to remove elements once profile is loaded.
-  			img.addClass("transition-helper");
-  			//cover.addClass("profile-transition-helper");
+				// Select by this class to remove elements once profile is loaded.
+				img.addClass("transition-helper");
+				//cover.addClass("profile-transition-helper");
 
-  			// Navigate to profile page.
-  			$location.url(card.attr("href"));
+				// Navigate to profile page.
+				$location.url(card.attr("href"));
 			}
 		};
 	}

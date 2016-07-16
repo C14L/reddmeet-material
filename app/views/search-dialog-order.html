@@ -1,12 +1,13 @@
 <md-dialog aria-label="search settings">
-	<div class="inset"></div>
+	<div class="inset">Sort by</div>
 
 	<md-dialog-content layout="column" class="opts-selector">
-	  <div class="opts-list">
-  	 	<md-content md-ink-ripple flex ng-repeat="opt in vmForm.fOrderOpts">
-  	 		{{opt.label}}
-  	 	</md-content>
-	  </div>
+		<md-list flex>
+			<md-list-item ng-repeat="opt in vmForm.fOrderOpts">
+				<md-checkbox class="md-secondary" ng-model="opt.selected"></md-checkbox>
+  	 		<p>{{opt.label}}</p>
+			</md-list-item>
+		</md-list>
 	</md-dialog-content>
 
 	<md-dialog-actions layout="row">

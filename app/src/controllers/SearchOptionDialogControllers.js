@@ -12,7 +12,6 @@
         var vm = this;
         vm.fSexOpts = SearchResultsFactory.fSexOpts;
 
-
         vm.hide = function () {
             console.log('SearchOptionGenderDialogController dialog hide.')
             $mdDialog.hide();
@@ -49,9 +48,11 @@
     function SearchOptionSubredditsDialogController($mdDialog, AuthUserFactory, SearchResultsFactory) {
 
         var vm = this;
-        vm.fSrOpts = SearchResultsFactory.fSrOpts;
 
-        vm.fSr = vm.fSrOpts; // default select all
+        SearchResultsFactory.getSrOpts().then(function(li){
+            vm.fSrOpts = SearchResultsFactory.fSrOpts;
+
+        });
 
         vm.selectAll = function () {
             vm.fSr = vm.fSrOpts;

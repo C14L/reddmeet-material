@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp').controller('MainController', ['$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', MainController]);
+    angular.module('reddmeetApp').controller('MainController', ['$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', MainController]);
 
     /**
      * Control most of the app logic that happens independently of the current view.
      */
-    function MainController($mdDialog, $mdSidenav, $mdBottomSheet, $location, $log) {
+    function MainController($mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory) {
         var vm = this;
         vm.userLogout = userLogout;
         vm.toggleSidebar = toggleSidebar;
@@ -17,6 +17,13 @@
         vm.selectUser = selectUser;
         vm.makeContact = makeContact;
 
+        vm.srList = AuthUserFactory.getAuthUserSrList();
+
+        vm.go = function (url) {
+            $log.debug(url);
+            $location.path(url);
+        };
+
         function toggleSidebar() {
             $mdSidenav('left').toggle();
         };
@@ -25,22 +32,22 @@
             {
                 href: '#/map',
                 title: 'redditors map',
-                icon: 'dashboard'
-            },
-            {
-                href: '#/',
-                title: 'reddit mailbox',
-                icon: 'email'
+                icon: 'map'
             },
             {
                 href: '#/upvotes_sent',
-                title: 'upvotes you sent',
+                title: 'upvoted by you',
                 icon: 'arrow_upward'
             },
             {
                 href: '#/hidden',
-                title: 'hidden profiles',
+                title: 'downvoted by you',
                 icon: 'arrow_downward'
+            },
+            {
+                href: '#/',
+                title: 'your reddit inbox',
+                icon: 'email'
             },
             {
                 href: '#/stats',

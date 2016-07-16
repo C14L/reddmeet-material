@@ -79,8 +79,10 @@
 
 	<div class="messager">
 		<form>
-			<textarea ng-model="vm.messageText" placeholder="Write a message"></textarea>
-			<md-button ng-click="vm.doSendMessage()">send</md-button>
+			<textarea ng-model="vm.messageText" placeholder="send a message" focus-me="vm.isTextboxFocus" ng-keyup="$event.keyCode == 13 && vm.doSendMessage()"></textarea>
+			<div class="send-btn" ng-click="vm.doSendMessage()">
+				<md-icon>send</md-icon>
+			</div>
 		</form>
 		<div class="messages">
 			<div class="message" ng-repeat="message in vm.messages track by $index">

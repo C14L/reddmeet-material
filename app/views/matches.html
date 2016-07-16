@@ -4,14 +4,26 @@
   <md-tab id="tab1" md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
     <md-tab-label>
       <md-icon>inbox</md-icon>
-      <span hide-xs>upvotes inbox</span>
-      <md-tooltip hide-gt-xs>upvotes inbox</md-tooltip>
+      <span hide-xs>upvotes</span>
+      <md-tooltip hide-gt-xs>upvotes</md-tooltip>
     </md-tab-label>
     <md-tab-body>
-      <md-content layout-padding>
-        <p>upvotes inbox</p>
-        <p>{{vm.title}}</p>
-        <p>User results list. Use for all user list views. Its {{vm.ts}} ...</p>
+      <md-content>
+        <md-subheader class="md-no-sticky">
+          <span>Redditors who upvoted you</span>
+        </md-subheader>
+        <md-divider></md-divider>
+        <md-list flex ng-if="vm.userList.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userList track by $index" 
+          ng-click="mainctrl.go('/u/' + item.username)">
+            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.username }}</h3>
+              <h4>{{ item.profile.age }}</h4>
+              <p>{{ item.profile.accessed }}</p>
+            </div>
+          </md-list-item>
+        </md-list>
         <md-divider></md-divider>
         <md-item layout class="inset">
           <md-button layout layout-align="start center" class="md-primary">
@@ -29,8 +41,27 @@
       <md-tooltip hide-gt-xs>matches</md-tooltip>
     </md-tab-label>
     <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
-      <md-content flex layout-padding>
-        <p>Yoyoyoyo...</p>
+      <md-content>
+        <md-subheader class="md-no-sticky">
+          <span>Matches: you upvoted each other</span>
+        </md-subheader>
+        <md-divider></md-divider>
+        <md-list flex ng-if="vm.userList.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userList track by $index">
+            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.username }}</h3>
+              <h4>{{ item.profile.age }}</h4>
+              <p>{{ item.profile.accessed }}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+        <md-divider></md-divider>
+        <md-item layout class="inset">
+          <md-button layout layout-align="start center" class="md-primary">
+            More
+          </md-button>
+        </md-item>
       </md-content>
     </md-tab-body>
   </md-tab>
@@ -38,16 +69,32 @@
   <md-tab id="tab3">
     <md-tab-label>
       <md-icon>arrow_upward</md-icon>
-      <span hide-xs>upvotes sent</span>
-      <md-tooltip hide-gt-xs>upvotes sent</md-tooltip>
+      <span hide-xs>upvoted by you</span>
+      <md-tooltip hide-gt-xs>upvoted by you</md-tooltip>
     </md-tab-label>
     <md-tab-body md-swipe-left="tabs.next()" md-swipe-right="tabs.previous()">
-      <md-card flex layout-padding>
-        <md-card-content>
-          <h2>upvotes sent</h2>
-          <p>Wellllll theeeeeeeeeeen...</p>
-        </md-card-content>
-      </md-card>
+      <md-content>
+        <md-subheader class="md-no-sticky">
+          <span>Upvoted by you</span>
+        </md-subheader>
+        <md-divider></md-divider>
+        <md-list flex ng-if="vm.userList.length">
+          <md-list-item class="md-3-line" ng-repeat="item in vm.userList track by $index">
+            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.username }}</h3>
+              <h4>{{ item.profile.age }}</h4>
+              <p>{{ item.profile.accessed }}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+        <md-divider></md-divider>
+        <md-item layout class="inset">
+          <md-button layout layout-align="start center" class="md-primary">
+            More
+          </md-button>
+        </md-item>
+      </md-content>
     </md-tab-body>
   </md-tab>
 </md-tabs>

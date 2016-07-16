@@ -34,9 +34,11 @@
       </section>
 
 			<h2>Subreddits</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam doloremque odit nemo nisi assumenda, omnis ipsum voluptatum iusto placeat provident, fugit blanditiis molestias natus. Nulla dolores veritatis blanditiis, eum modi.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam doloremque odit nemo nisi assumenda, omnis ipsum voluptatum iusto placeat provident, fugit blanditiis molestias natus. Nulla dolores veritatis blanditiis, eum modi.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam doloremque odit nemo nisi assumenda, omnis ipsum voluptatum iusto placeat provident, fugit blanditiis molestias natus. Nulla dolores veritatis blanditiis, eum modi.</p>
+      <div class="sr-list">
+        <md-content md-ink-ripple flex ng-class="{active: opt.active}" ng-repeat="opt in mainctrl.srList">
+          {{opt.label}}
+        </md-content>
+      </div>
 
     </md-sidenav>
 
@@ -99,6 +101,7 @@
 
   <script src="/node_modules/jquery/dist/jquery.min.js"></script>
   <script src="/node_modules/moment/min/moment.min.js"></script>
+
   <script src="/node_modules/angular/angular.js"></script>
   <script src="/node_modules/angular-animate/angular-animate.js"></script>
   <script src="/node_modules/angular-route/angular-route.js"></script>
@@ -119,7 +122,12 @@
   <script src="/app/src/controllers/SearchOptionDialogControllers.js"></script>
   <script src="/app/src/controllers/ResultsController.js"></script>
 
-  <script src="/app/src/services.js"></script>
-  <script src="/app/src/components.js"></script>
+  <script src="/app/src/directives/FocusMe.js"></script>
+  <script src="/app/src/directives/UserListCardComponent.js"></script>
+  <script src="/app/src/directives/SrChipComponent.js"></script>
+
+  <script src="/app/src/services/SearchResultsFactory.js"></script>
+  <script src="/app/src/services/UserFactory.js"></script>
+
   <script src="/app/src/filter.js"></script>
 </html>

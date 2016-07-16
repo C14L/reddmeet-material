@@ -14,13 +14,13 @@
     function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location) {
         var vm = this;
         var apiUrl = API_BASE + '/api/v1/u/' + $routeParams.username + '.json';
+        var watcherMessageText = false;
 
         vm.fabOpen = false;
         vm.isShowSendMessage = false;
         vm.messages = [];
 
         $log.debug('Profile: ', apiUrl);
-        $log.debug('ProfileController called: ' + vm.ts);
 
         $http.get(apiUrl).then(function (response) {
             $log.debug('Received response: ', response);
@@ -52,11 +52,19 @@
 
         vm.closeMessenger = function () {
             // Switch profile view to message box view
-            vm.isShowSendMessage = !vm.isShowSendMessage;
+            vm.isShowSendMessage = false;
+            vm.isTextboxFocus = false;
+
+            if (watcherMessageText) watcherMessageText();
         }
         vm.openMessenger = function () {
             // Switch profile view to message box view
-            vm.isShowSendMessage = !vm.isShowSendMessage;
+            vm.isShowSendMessage = true;
+            vm.isTextboxFocus = true;
+
+            watcherMessageText = $scope.$watch('vm.messageText', (newVal, oldVal) => {
+                if (newVal) vm.messageText = newVal.replace('\n', '');
+            });
         }
         vm.doSendMessage = function () {
             // Post a message to the message queue
