@@ -56,7 +56,7 @@
 				<md-icon>arrow_downward</md-icon>
 			</div>
 		</div>
-		<div ng-if="vm.data.is_like" class="up-down like">
+		<div ng-if="vm.data.is_like && !vm.data.is_match" class="up-down like">
 			upvoted!
 			<md-button class="md-raised md-primary" ng-click="vm.openMessenger()">send a message</md-button>
 		</div>
@@ -64,11 +64,16 @@
 			downvoted :(
 		</div>
 		<div ng-if="vm.data.is_match" class="up-down match">
-			<md-button ng-click="vm.openMessenger()">send a message</md-button>
+			<strong>A MATCH!</strong>
+			<md-button class="md-raised md-primary" ng-click="vm.openMessenger()">send a message</md-button>
 		</div>
 		<div class="prev-next next" ng-click="vm.goPrevNext('next')">
 			<md-icon>arrow_right</md-icon>
 		</div>
+	</div>
+
+	<div ng-if="vm.data.is_match" class="md-padding match-explain">
+		<strong>You upvoted each other!</strong><br>Send a message to say hi!
 	</div>
 
 	<div class="more md-padding">

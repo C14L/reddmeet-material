@@ -273,6 +273,12 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
 .user-profile.show-send-message > .more {
     display: none;
 }
+.user-profile > .match-explain {
+    text-align: center;
+}
+.user-profile.show-send-message > .match-explain {
+    display: none;
+}
 
 .user-profile > .messager {
     display: none;
