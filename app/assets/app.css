@@ -3,7 +3,7 @@ html, body { background: #E9E9E9; }
 a { color: inherit; text-decoration: inherit; }
 
 /* http://www.paulirish.com/2012/box-sizing-border-box-ftw/ */
-html { box-sizing: border-box; } 
+html { box-sizing: border-box; }
 *, *:before, *:after { box-sizing: inherit; }
 
 /* Fix color inherit for icons */
@@ -26,7 +26,7 @@ md-sidenav > md-toolbar {
 }
 
 md-sidenav > md-toolbar h1 {
-    font-size: 32px; 
+    font-size: 32px;
     font-weight: normal;
     line-height: 48px;
     max-width: 100%;
@@ -55,7 +55,7 @@ md-sidenav > md-toolbar, md-sidenav > section a {
 
 /* Primary content area */
 
-/* In a user-list view, this is added to a user's 
+/* In a user-list view, this is added to a user's
    picture when the user card is clicked, as an
    intro animation to view a user profile. */
 .prepare-for-profile-view {
@@ -66,7 +66,7 @@ md-sidenav > md-toolbar, md-sidenav > section a {
 
 /* Select what Subreddits to include in search */
 .sr-list {
-    display: flex; 
+    display: flex;
     flex-wrap: wrap;
     font-size: 1rem;
 }
@@ -163,9 +163,9 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
 }
 
 
-/* 
+/*
 
-  User profile view 
+  User profile view
 
 */
 
@@ -204,11 +204,11 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
     transition: 0.75s ease-out;
 }
 .user-profile > .pnasl .common-subs-count {
-    /* box-shadow: inset 0 -40px 30px -15px rgba(121,134,203, 0.82); */ 
+    /* box-shadow: inset 0 -40px 30px -15px rgba(121,134,203, 0.82); */
     /* -> Indigo500 // 63,81,181, 0.82 Indigo500 #3F51B5 */
     color: white;
     font-size: 14px; line-height: 3rem;
-    margin: 8px -16px -16px -16px; padding: 0 16px; 
+    margin: 8px -16px -16px -16px; padding: 0 16px;
     background-color: rgba(0, 0, 0, 0.38);
 }
 .user-profile > .pnasl .created {
@@ -295,7 +295,7 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
 
 .user-profile .close-messager {
     display: none;
-    float: right; 
+    float: right;
     line-height: 3rem;
     margin: 8px -16px -16px 0; padding: 0 1rem;
 }
@@ -321,9 +321,43 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
     border-radius: 50%;
     margin: 4px; padding: 0;
 }
-.user-profile.show-send-message > .messager >  .messages {
+.user-profile.show-send-message > .messager > .messages {
+    display: flex;
+    flex-direction: column;
     height: calc(100vh - 56px - 48px - 78px);
+    margin: 0; padding: 4px;
     overflow: auto;
+}
+.user-profile.show-send-message > .messager > .messages > .message {
+    background-color: rgba(255, 255, 0, 1);
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+    color: rgba(0, 0, 0, 1);
+    margin: 4px; margin-left: 32px; padding: 8px;
+    position: relative;
+}
+.user-profile.show-send-message > .messager > .messages > .message::after {
+    border-width: 16px 0px 16px 32px;
+    border-color: transparent transparent transparent green;
+    content: '';
+    position: absolute; top: 8px; right: -32px;
+    width: 32px; height: 32px;
+}
+.user-profile.show-send-message > .messager > .messages > .message > .username {
+    display: none;
+}
+.user-profile.show-send-message > .messager > .messages > .message > .time {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 6px;
+}
+.user-profile.show-send-message > .messager > .messages > .message > .text {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 1);
+}
+.user-profile.show-send-message > .messager > .messages > .message.authuser {
+    background-color: rgba(255, 208, 255, 1);
+    margin-left: 4px; margin-right: 32px;
 }
 
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
@@ -384,7 +418,7 @@ md-card.user-list-card md-card-content p:nth-of-type(2) {
 */
 
 sr-chips {
-  display: flex; 
+  display: flex;
   flex-flow: row;
   flex-wrap: wrap;
   font-size: 1rem;
