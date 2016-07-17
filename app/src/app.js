@@ -106,7 +106,7 @@ window.API_BASE = "";
 	}]);
 
 
-	app.run(['$http', '$log', function reddmeetAppRun($http, $log) {
+	app.run(['$http', '$log', 'AuthUserFactory', function reddmeetAppRun($http, $log, AuthUserFactory) {
 		$http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
 		$http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
 		$http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };

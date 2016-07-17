@@ -65,12 +65,12 @@ md-sidenav > md-toolbar, md-sidenav > section a {
 
 
 /* Select what Subreddits to include in search */
-.active-sr-selector .sr-list {
+.active-sr-selector > .sr-list {
     display: flex; 
     flex-wrap: wrap;
     font-size: 1rem;
 }
-.active-sr-selector .sr-list md-content {
+.active-sr-selector > .sr-list > md-content {
     background: #3F51B5 /* -> Indigo500 */;
     color: white;
     cursor: pointer;
@@ -78,10 +78,12 @@ md-sidenav > md-toolbar, md-sidenav > section a {
     flex: 1 0 auto;
     margin: 0.5px; padding: 8px;
     text-align: center;
-}
-.active-sr-selector .sr-list md-content::not(.active) {
     opacity: 0.5;
     text-decoration: line-through;
+}
+.active-sr-selector > .sr-list > md-content.active {
+    opacity: 1;
+    text-decoration: none;
 }
 
 /* Above results display main Search options */

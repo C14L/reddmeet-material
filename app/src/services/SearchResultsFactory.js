@@ -2,30 +2,31 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .factory('SearchResultsFactory', ['$http', 'AuthUserFactory', SearchResultsFactory])
+        .factory('SearchResultsFactory', ['$log', '$http', 'AuthUserFactory', SearchResultsFactory])
         ;
 
-    function SearchResultsFactory($http, AuthUserFactory) {
+    function SearchResultsFactory($log, $http, AuthUserFactory) {
         var apiUrl = API_BASE + '/api/v1/results.json';
 
         // Store here the entire last loaded results list and the
         // last page number requested.
         var currentLastPage = 0;
         var currentResults = [];
+        var _srOpts = [];
 
         return {
 
-        	fSexOpts: [
+            fSexOpts: [
                 { id: 0, label: "everybody", selected: true },
                 { id: 1, label: "women who like men", selected: false },
-                { id: 2, label: "women who like women", selected: false  },
-                { id: 3, label: "women who like queer", selected: false  },
-                { id: 4, label: "men who like women", selected: false  },
-                { id: 5, label: "men who like men", selected: false  },
-                { id: 6, label: "men who like queer", selected: false  },
-                { id: 7, label: "queer who like women", selected: false  },
-                { id: 8, label: "queer who like men", selected: false  },
-                { id: 9, label: "queer who like queer", selected: false  },
+                { id: 2, label: "women who like women", selected: false },
+                { id: 3, label: "women who like queer", selected: false },
+                { id: 4, label: "men who like women", selected: false },
+                { id: 5, label: "men who like men", selected: false },
+                { id: 6, label: "men who like queer", selected: false },
+                { id: 7, label: "queer who like women", selected: false },
+                { id: 8, label: "queer who like men", selected: false },
+                { id: 9, label: "queer who like queer", selected: false },
             ],
 
             fDistanceOpts: [
@@ -50,16 +51,25 @@
             ],
 
             getSrOpts: function () {
-                return AuthUserFactory.getAuthUserSrList()
+                // The "subreddit options" is a list of dicts with a sr.label (str: subreddit title)
+                // and a sr.active (bool: actively use in search or not).
+                return Promise.resolve().then(function () {
+                    if (_srOpts.length) return _srOpts;
+
+                    return AuthUserFactory.getAuthUserSrList().then(function (li) {
+                        li.forEach(function (x) { _srOpts.push({ label: x, active: true }); });
+                        return _srOpts;
+                    });
+                });
             },
 
             resetResults: function () {
                 currentLastPage = 0;
                 currentResults = [];
             },
-            setSearchParams: function (searchParams) {
-                // Changing search optioins resets results list.
-                resetResults();
+            setSearchParam: function (param) {
+                this.resetResults();
+                $log.debug('SearchResultsFactory.setSearchParam: ', param);
 
                 //...TODO
             },
