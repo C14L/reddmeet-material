@@ -3,7 +3,7 @@
 
 	<md-dialog-content layout="column" class="active-sr-selector">
 	  <div class="sr-list">
-  	 	<md-content md-ink-ripple flex ng-class="{active: opt.active}" ng-repeat="opt in vmForm.fSrOpts" ng-click="opt.active = !opt.active">
+  	 	<md-content md-ink-ripple flex ng-class="{inactive: !opt.active}" ng-repeat="opt in vmForm.fSrOpts" ng-click="opt.active = !opt.active">
   	 		{{opt.label}}
   	 	</md-content>
 	  </div>

@@ -16,17 +16,9 @@
         vm.users = [];
         vm.selectUser = selectUser;
         vm.makeContact = makeContact;
+        vm.go = url => $location.path(url);
 
-        vm.srList = AuthUserFactory.getAuthUserSrList();
-
-        vm.go = function (url) {
-            $log.debug(url);
-            $location.path(url);
-        };
-
-        function toggleSidebar() {
-            $mdSidenav('left').toggle();
-        };
+        AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 
         vm.overflowItems = [
             {
@@ -81,19 +73,19 @@
                 icon: 'settings'
             }];
 
+        function toggleSidebar() {
+            $mdSidenav('left').toggle();
+        };
         function openMenu($mdOpenMenu, ev) {
             var originatorEv = ev;
             $mdOpenMenu(ev);
         };
-
         function userLogout() {
             $log.debug('Would now logout user.');
         }
-
         function selectUser(user) {
             vm.selected = angular.isNumber(user) ? $scope.users[user] : user;
         }
-
         function makeContact(selectedUser) {
             $mdBottomSheet.show({
                 controllerAs: "cp",

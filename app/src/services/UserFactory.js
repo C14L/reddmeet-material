@@ -2,32 +2,30 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .factory('AuthUserFactory', ['$http', AuthUserFactory])
-        .factory('UserFactory', ['$http', UserFactory])
+        .factory('AuthUserFactory', ['$http', '$log', AuthUserFactory])
+        .factory('UserFactory', ['$http', '$log', UserFactory])
         ;
 
-    function AuthUserFactory($http) {
+    function AuthUserFactory($http, $log) {
         // Load auth user data on init.
         var apiUrl = API_BASE + '/api/v1/authuser.json';
         var authUserData = null;
 
         var authUserPromise = $http.get(apiUrl).then(response => {
-            authUserData = response.data;
+            authUserData = response.data.authuser;
+            $log.debug('# Authuser data loaded.', authUserData);
         }).catch(error => {
-            console.log('Error loading auth user: ' + error.status + ' ' + error.statusText);
+            $log.debug('Error loading auth user: ' + error.status + ' ' + error.statusText);
         });
         
         return {
-            getAuthUser: function () {
-                authUserPromise.then(() => { return authUserData; });
-            },
-            getAuthUserSrList: function(){
-                authUserPromise.then(() => { return authUserData.subs; });
-            },
+            getUsername: () => authUserPromise.then(() => authUserData.username),
+            getAuthUser: () => authUserPromise.then(() => authUserData),
+            getAuthUserSrList: () => authUserPromise.then(() => authUserData.subs),
         };
     };
 
-    function UserFactory($http) {
+    function UserFactory($http, $log) {
         return {
             getViewUser: function (username) {
                 var apiUrl = API_BASE + '/api/v1/u/' + username + '.json';
