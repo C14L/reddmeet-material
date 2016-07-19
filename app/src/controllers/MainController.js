@@ -1,85 +1,82 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp').controller('MainController', ['$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', MainController]);
+    angular.module('reddmeetApp').controller('MainController', ['$timeout', '$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', MainController]);
 
     /**
      * Control most of the app logic that happens independently of the current view.
      */
-    function MainController($mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory) {
+    function MainController($timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory) {
         var vm = this;
         vm.userLogout = userLogout;
-        vm.toggleSidebar = toggleSidebar;
-        vm.openMenu = openMenu;
 
         vm.selected = null;
         vm.users = [];
         vm.selectUser = selectUser;
         vm.makeContact = makeContact;
-        vm.go = url => $location.path(url);
+        vm.toggleSidebar = () => $mdSidenav('left').toggle();
+        vm.openMenu = ($mdOpenMenu, ev) => $mdOpenMenu(ev);
+        vm.go = url => {
+            $timeout(() => $mdSidenav('left').close(), 300);
+            $location.path(url);
+            $log.debug('### go("' + url + '")');
+        };
 
         AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 
         vm.overflowItems = [
             {
-                href: '#/map',
+                href: '/map',
                 title: 'redditors map',
                 icon: 'map'
             },
-            {
-                href: '#/upvotes?sent',
+            /* {
+                href: '/upvotes?sent',
                 title: 'upvoted by you',
                 icon: 'arrow_upward'
             },
             {
-                href: '#/downvotes',
+                href: '/downvotes',
                 title: 'downvoted by you',
                 icon: 'arrow_downward'
-            },
+            }, */
             {
-                href: '#/',
+                href: '/',
                 title: 'your reddit inbox',
                 icon: 'email'
             },
             {
-                href: '#/stats',
+                href: '/stats',
                 title: 'site statistics',
                 icon: 'assessment'
             }];
         vm.sidebarItems = [
             {
-                href: '#/me/profile',
+                href: '/me/profile',
                 title: 'update profile basics',
                 icon: 'assignment_ind'
             },
             {
-                href: '#/me/pictures',
+                href: '/me/pictures',
                 title: 'update pictures',
                 icon: 'add_a_photo'
             },
             {
-                href: '#/me/location',
+                href: '/me/location',
                 title: 'update your location',
                 icon: 'my_location'
             },
             {
-                href: '#/me/subs',
+                href: '/me/subs',
                 title: 'update your subreddit list',
                 icon: 'playlist_add_check'
             },
             {
-                href: '#/me/account',
+                href: '/me/account',
                 title: 'account settings',
                 icon: 'settings'
             }];
 
-        function toggleSidebar() {
-            $mdSidenav('left').toggle();
-        };
-        function openMenu($mdOpenMenu, ev) {
-            var originatorEv = ev;
-            $mdOpenMenu(ev);
-        };
         function userLogout() {
             $log.debug('Would now logout user.');
         }
