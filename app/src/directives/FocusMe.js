@@ -1,8 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp')
-    .directive('focusMe', function($timeout) {
+    angular.module('reddmeetApp').service('focusMe', ['$timeout', function($timeout) {
         return {
             scope: { trigger: '=focusMe' },
             link: function(scope, element) {
@@ -16,5 +15,6 @@
                 });
             }
         };
-    });
+    }]);
+
 })();
