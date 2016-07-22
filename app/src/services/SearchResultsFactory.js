@@ -6,17 +6,17 @@
         ;
 
     function SearchResultsFactory($log, $http, AuthUserFactory) {
-        var apiUrl = API_BASE + '/api/v1/results.json';
+        var searchApiUrl = API_BASE + '/api/v1/search';
+        var apiUrl = API_BASE + '/api/v1/results';
 
         // Store here the entire last loaded results list and the
         // last page number requested.
         var currentLastPage = 0;
         var currentResults = [];
-        var _srOpts = [];
-
-        return {
-
-            fSexOpts: [
+        var _paramTr = { 'fSexOpts': 'f_sex', 'fDistanceOpts': 'f_distance', 
+                         'fOrderOpts': 'order_by', 'srOpts': 'sr-fav' };
+        var _searchOpts = {
+            'fSexOpts': [
                 { id: 0, label: "everybody", selected: true },
                 { id: 1, label: "women who like men", selected: false },
                 { id: 2, label: "women who like women", selected: false },
@@ -28,8 +28,7 @@
                 { id: 8, label: "queer who like men", selected: false },
                 { id: 9, label: "queer who like queer", selected: false },
             ],
-
-            fDistanceOpts: [
+            'fDistanceOpts': [
                 { id: 0, label: "worldwide", selected: true },
                 { id: 5000, label: "5000 km / 3100 miles", selected: false },
                 { id: 2000, label: "2000 km / 1250 miles", selected: false },
@@ -42,56 +41,101 @@
                 { id: 50, label: "50 km / 31 miles", selected: false },
                 { id: 20, label: "20 km / 12 miles", selected: false },
             ],
-
-            fOrderOpts: [
+            'fOrderOpts': [
                 { id: "-sr_count", label: "best matches", selected: true },
                 { id: "-accessed", label: "recently active", selected: false },
                 { id: "-date_joined", label: "newest members", selected: false },
                 { id: "-views_count", label: "most viewed", selected: false },
             ],
+        	'srOpts': [],
+        };
 
-            getSrOpts: function () {
+        return {
+            fSexOpts: _searchOpts['fSexOpts'], 
+
+            fDistanceOpts: _searchOpts['fDistanceOpts'], 
+
+            fOrderOpts: _searchOpts['fOrderOpts'], 
+
+            getSrOpts: function() {
                 // The "subreddit options" is a list of dicts with a sr.label (str: subreddit title)
                 // and a sr.active (bool: actively use in search or not).
-                return Promise.resolve().then(function () {
-                    if (_srOpts.length) return _srOpts;
+                return Promise.resolve().then(() => {
+                    if (_searchOpts['srOpts'].length) return _searchOpts['srOpts'];
 
-                    return AuthUserFactory.getAuthUserSrList().then(function (li) {
-                        li.forEach(function (x) { _srOpts.push({ label: x, active: true }); });
-                        return _srOpts;
+                    return AuthUserFactory.getAuthUserSrList().then(li => {
+                        li.forEach(x => _searchOpts['srOpts'].push({ label: x, active: true }));
+                        return _searchOpts['srOpts'];
                     });
                 });
             },
 
-            resetResults: function () {
+            resetResults: function() {
                 currentLastPage = 0;
                 currentResults = [];
             },
-            setSearchParam: function (param) {
-                this.resetResults();
-                $log.debug('SearchResultsFactory.setSearchParam: ', param);
 
-                //...TODO
+            setSearchParam: function(paramKey, paramVal) {
+                this.resetResults();
+                _searchOpts[paramKey] = paramVal;
+                // TODO: maybe persist in localStorage?
             },
-            getUserList: function () {
+
+            getSearchParamsString: function() {
+                // make a string "&sr-fav=1&f_distance=1000&f_sex=4&order_by=-sr_count"
+                // out of the selected params.
+                let ps = [];
+                for (const k in _searchOpts) {
+                    for (const i in _searchOpts[k]) {
+                        if (_searchOpts[k][i].selected) {
+                            ps.push(_paramTr[k] + '=' + encodeURIComponent(_searchOpts[k][i].id));
+                        }
+                    }
+                }
+                return ps.join('&');
+            },
+
+            getUserList: function() {
+                // let promise = Promise.resolve();
+
+                /* if (currentResults.length == 0) {
+                    // This is a first search request, so update the search buffer
+                    // on the server before requesting a list of results profiles.
+                    // POST api/v1/search
+                    promise = promise.then(() => {
+                        const _opts = {
+                            method: 'POST',
+                            headers: { 
+                                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                                "X-CSRFToken": get_cookie('csrftoken'), 
+                            },
+                            credentials: 'include', 
+                            body: this.getSearchParamsString(),
+                        };
+                        return fetch(searchApiUrl, _opts)
+                        .then(response => (response.status == 200) ? response.json() : Promise.reject())
+                        .catch(err => Promise.reject(err));
+                    });
+                } */
+
                 currentLastPage += 1;
-                let currentApiUrl = apiUrl + '?page=' + currentLastPage;
-                return $http.get(currentApiUrl).then(function (response) {
+                let currentApiUrl = apiUrl + '?page=' + currentLastPage + '&' + this.getSearchParamsString();
+                $log.debug('SearchResultsFactory.getUserList :: currentApiUrl == ', currentApiUrl);
+
+                //return promise.then(() => {
+                return $http.get(currentApiUrl).then(response => {
                     if (response.status == 200) {
                         currentResults = currentResults.concat(response.data.user_list);
-                        console.dir(currentResults);
-                        return currentResults;
+                        return currentResults; // only return previous results list
                     }
-                    console.error(response.status, response.statusText);
-                    return [];
-                }).catch(function (error) {
+                    return currentResults; // only return previous results list
+                }).catch(error => {
                     console.error('Network error');
-                    return [];
+                    return currentResults; // only return previous results list
                 });
+                //});
             },
         };
     };
-
-
 
 })();

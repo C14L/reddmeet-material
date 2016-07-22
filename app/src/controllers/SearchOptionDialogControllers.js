@@ -13,34 +13,33 @@
         vm.fSexOpts = SearchResultsFactory.fSexOpts;
 
         vm.hide = function () {
-            $log.debug('SearchOptionGenderDialogController dialog hide.')
+            $log.debug('SearchOptionGenderDialogController dialog hide.');
             $mdDialog.hide();
         };
         vm.cancel = function () {
-            $log.debug('SearchOptionGenderDialogController dialog cancel.')
+            $log.debug('SearchOptionGenderDialogController dialog cancel.');
             $mdDialog.cancel();
         };
         vm.answer = function (answer) {
-            $log.debug('SearchOptionGenderDialogController dialog returned: "' + answer + '".')
+            $log.debug('SearchOptionGenderDialogController dialog returned: ', answer);
             $mdDialog.hide(answer);
         };
     }
 
     function SearchOptionDistanceDialogController($log, $mdDialog, SearchResultsFactory) {
         var vm = this;
-
         vm.fDistanceOpts = SearchResultsFactory.fDistanceOpts;
 
         vm.hide = function () {
-            $log.debug('SearchOptionDistanceDialogController dialog hide.')
+            $log.debug('SearchOptionDistanceDialogController dialog hide.');
             $mdDialog.hide();
         };
         vm.cancel = function () {
-            $log.debug('SearchOptionDistanceDialogController dialog cancel.')
+            $log.debug('SearchOptionDistanceDialogController dialog cancel.');
             $mdDialog.cancel();
         };
         vm.answer = function (answer) {
-            $log.debug('SearchOptionDistanceDialogController dialog returned: "' + answer + '".')
+            $log.debug('SearchOptionDistanceDialogController dialog returned: ', answer);
             $mdDialog.hide(answer);
         };
     }
@@ -58,35 +57,34 @@
             vm.fSrOpts.forEach(item => item.active = false);
         }
         vm.hide = function () {
-            $log.debug('SearchSettingsDialogController dialog hide.')
+            $log.debug('SearchSettingsDialogController dialog hide.');
             $mdDialog.hide();
         };
         vm.cancel = function () {
-            $log.debug('SearchSettingsDialogController dialog cancel.')
+            $log.debug('SearchSettingsDialogController dialog cancel.');
             $mdDialog.cancel();
         };
         vm.answer = function (answer) {
-            $log.debug('SearchSettingsDialogController dialog returned: "' + answer + '".')
-            $log.debug('vm.fSrOpts', vm.fSrOpts.filter(x => x.active).map(x => x.label).join(', '));
+            $log.debug('SearchSettingsDialogController dialog returned: ', answer);
+            $log.debug('Labels vm.fSrOpts', vm.fSrOpts.filter(x => x.active).map(x => x.label).join(', '));
             $mdDialog.hide(answer);
         };
     };
 
     function SearchOptionOrderDialogController($log, $mdDialog, SearchResultsFactory) {
         var vm = this;
-
         vm.fOrderOpts = SearchResultsFactory.fOrderOpts;
 
         vm.hide = function () {
-            $log.debug('SearchOptionOrderDialogController dialog hide.')
+            $log.debug('SearchOptionOrderDialogController dialog hide.');
             $mdDialog.hide();
         };
         vm.cancel = function () {
-            $log.debug('SearchOptionOrderDialogController dialog cancel.')
+            $log.debug('SearchOptionOrderDialogController dialog cancel.');
             $mdDialog.cancel();
         };
         vm.answer = function (answer) {
-            SearchResultsFactory.setSearchParam(vm.fOrderOpts);
+            $log.debug('SearchOptionOrderDialogController dialog returned: ', answer);
             $mdDialog.hide(answer);
         };
     }

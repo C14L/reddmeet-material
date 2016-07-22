@@ -3,15 +3,15 @@
 
 	<md-dialog-content layout="column" class="opts-selector">
 		<md-list flex>
-  	 	<md-list-item ng-repeat="opt in vmForm.fDistanceOpts" ng-model="opt">
+  	 		<md-list-item ng-repeat="opt in vmForm.fDistanceOpts" ng-model="opt">
 				<md-checkbox class="md-secondary" ng-model="opt.selected"></md-checkbox>
-  	 		<p>{{ opt.label }}</p>
-  	 	</md-list-item>
+  	 			<p>{{ opt.label }}</p>
+			</md-list-item>
 		</md-list>
 	</md-dialog-content>
 
 	<md-dialog-actions layout="row">
 		<span flex></span>
-		<md-button ng-click="vmForm.answer('done!')" class="md-primary">Done</md-button>
+		<md-button ng-click="vmForm.answer(vmForm.fDistanceOpts)" class="md-primary">Done</md-button>
 	</md-dialog-actions>
 </md-dialog>
