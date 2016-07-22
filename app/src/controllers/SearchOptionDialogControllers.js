@@ -10,7 +10,7 @@
 
     function SearchOptionGenderDialogController($log, $mdDialog, SearchResultsFactory) {
         var vm = this;
-        vm.fSexOpts = SearchResultsFactory.fSexOpts;
+        vm.fSexOpts = SearchResultsFactory.getSearchParam('fSexOpts');
 
         vm.hide = function () {
             $log.debug('SearchOptionGenderDialogController dialog hide.');
@@ -28,7 +28,7 @@
 
     function SearchOptionDistanceDialogController($log, $mdDialog, SearchResultsFactory) {
         var vm = this;
-        vm.fDistanceOpts = SearchResultsFactory.fDistanceOpts;
+        vm.fDistanceOpts = SearchResultsFactory.getSearchParam('fDistanceOpts');
 
         vm.hide = function () {
             $log.debug('SearchOptionDistanceDialogController dialog hide.');
@@ -73,7 +73,7 @@
 
     function SearchOptionOrderDialogController($log, $mdDialog, SearchResultsFactory) {
         var vm = this;
-        vm.fOrderOpts = SearchResultsFactory.fOrderOpts;
+        vm.fOrderOpts = SearchResultsFactory.getSearchParam('fOrderOpts');
 
         vm.hide = function () {
             $log.debug('SearchOptionOrderDialogController dialog hide.');

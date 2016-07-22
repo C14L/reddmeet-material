@@ -74,13 +74,16 @@
                 currentLastPage = 0;
                 currentResults = [];
             },
-
+            getSearchParam: function(paramKey) {
+                _searchOpts[paramKey] = getLocalStorageObject(paramKey, _searchOpts[paramKey]);
+                return _searchOpts[paramKey];
+            },
             setSearchParam: function(paramKey, paramVal) {
                 this.resetResults();
+                setLocalStorageObject(paramKey, _searchOpts[paramKey]);
                 _searchOpts[paramKey] = paramVal;
-                // TODO: maybe persist in localStorage?
+                return true;
             },
-
             getSearchParamsString: function() {
                 // make a string "&sr-fav=1&f_distance=1000&f_sex=4&order_by=-sr_count"
                 // out of the selected params.

@@ -12,7 +12,7 @@
 			transitionToProfile: function(event) {
 				/* Find the clicked card object's image and animate if from its 
 				   original position and size to its position on the user's profile
-				   page. Careful: profiles are resonsive! On small screens, animate
+				   page. Profiles are responsive! On small screens, animate
 				   to the top and fill entire width. On larger screens, animate to 
 				   the top right side of the (not yet existing) profile container. */
 				var vw = $('body').width();
@@ -23,7 +23,7 @@
 				var start = orig.offset();
 				var img = orig.clone();
 
-				var animInit = { zIndex: "901", width: "150px", height: "150px", position: "fixed", top: start.top, left: start.left };
+				var animInit = { zIndex: "901", width: "150px", height: "150px", position: "fixed", top: start.top, left: start.left, willChange: "transform,opacity" };
 				// unused -- var animCoverInit = { backgroundColor: 'white', width: '100vw', height: '100vh', position: 'fixed', top: '100vh', left: '0', zIndex: '900', opacity: '1', borderTop: '56px solid transparent', 'boxSizing': 'border-box' };
 
 				var animTarget = { top: "56px", left: 0, width: "100vw", height: "100vw" };

@@ -29,13 +29,16 @@
             });
         }
         vm.setGenderSelectedDisplay = () => {
-            vm.genderSelectedDisplay = SearchResultsFactory.fSexOpts.filter(n => n.selected)[0].label || 'everybody';
+            let x = SearchResultsFactory.getSearchParam('fSexOpts');
+            vm.genderSelectedDisplay = x.filter(n => n.selected)[0].label || 'everybody';
         }
         vm.setDistanceSelectedDisplay = () => {
-            vm.distanceSelectedDisplay = SearchResultsFactory.fDistanceOpts.filter(n => n.selected)[0].label || 'worldwide';
+            let x = SearchResultsFactory.getSearchParam('fDistanceOpts');
+            vm.distanceSelectedDisplay = x.filter(n => n.selected)[0].label || 'worldwide';
         }
         vm.setOrderSelectedDisplay = () => {
-            vm.orderSelectedDisplay = SearchResultsFactory.fOrderOpts.filter(n => n.selected)[0].label || 'by best match';
+            let x = SearchResultsFactory.getSearchParam('fOrderOpts');
+            vm.orderSelectedDisplay = x.filter(n => n.selected)[0].label || 'by best match';
         }
         vm.setSrSelectedCount();
         vm.setGenderSelectedDisplay();
