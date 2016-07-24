@@ -42,13 +42,15 @@ gulp.task('tplcache', function () {
 
 gulp.task('views', () => gulp.src('app/views/**/*').pipe(gulp.dest('dist/views')));
 
+gulp.task('swjs', () => gulp.src('app/sw.js').pipe(gulp.dest('dist')));
+
 gulp.task('clean:dist', () => del.sync('dist'));
 
-gulp.task('build', callback => runSequence('clean:dist', ['index', 'views'], callback));
+gulp.task('build', callback => runSequence('clean:dist', ['index', 'views', 'swjs'], callback));
 
-gulp.task('build2', callback => runSequence('clean:dist', ['index', 'tplcache'], callback));
+gulp.task('build2', callback => runSequence('clean:dist', ['index', 'tplcache', 'swjs'], callback));
 
 gulp.task('watch', () => {
-    gulp.watch(['app/views/**/*.html', 'app/assets/**/*.css', 'app/src/**/*.js', 'app/index.html'], 
+    gulp.watch(['app/sw.js', 'app/views/**/*.html', 'app/assets/**/*.css', 'app/src/**/*.js', 'app/index.html'], 
                ['build']);
 });

@@ -51,11 +51,11 @@
         };
 
         return {
-            fSexOpts: _searchOpts['fSexOpts'], 
+            //fSexOpts: _searchOpts['fSexOpts'], 
 
-            fDistanceOpts: _searchOpts['fDistanceOpts'], 
+            //fDistanceOpts: _searchOpts['fDistanceOpts'], 
 
-            fOrderOpts: _searchOpts['fOrderOpts'], 
+            //fOrderOpts: _searchOpts['fOrderOpts'], 
 
             getSrOpts: function() {
                 // The "subreddit options" is a list of dicts with a sr.label (str: subreddit title)

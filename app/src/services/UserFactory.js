@@ -9,7 +9,13 @@
         // Load auth user data on init.
         var apiUrl = API_BASE + '/api/v1/authuser.json';
         var authUserData = null;
-        var authUserPromise = $http.get(apiUrl).then(response => authUserData = response.data.authuser);
+        var authUserPromise = $http.get(apiUrl).then(response => {
+            $log.debug('## response.data.authuser: ', response.data.authuser);
+            if (! response.data.authuser) {
+                window.location.href = '/';
+            }
+            authUserData = response.data.authuser
+        });
 
         return {
             getUsername: () => authUserPromise.then(() => authUserData.username),
