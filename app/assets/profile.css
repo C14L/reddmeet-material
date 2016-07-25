@@ -91,8 +91,12 @@
 
 .user-profile.show-send-message {
 }
+.user-profile.show-send-message .message-toolbar {
+    display: block;
+    position: fixed; top: 0; left: 0; right: 0;
+}
 .user-profile.show-send-message > .pnasl {
-    height: 48px;
+    height: 1px;
     overflow: hidden;
     transition: 0.5s ease-out;
 }
@@ -155,8 +159,6 @@
     margin: 4px; padding: 0;
 }
 .user-profile.show-send-message > .messager > .messages {
-    display: flex;
-    flex-direction: column;
     height: calc(100vh - 56px - 48px - 78px);
     margin: 0; padding: 4px;
     overflow: auto;
@@ -167,6 +169,7 @@
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
     color: rgba(0, 0, 0, 1);
     margin: 4px; margin-left: 32px; padding: 8px;
+    overflow: hidden;
     position: relative;
 }
 .user-profile.show-send-message > .messager > .messages > .message::after {

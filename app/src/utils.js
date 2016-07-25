@@ -68,8 +68,8 @@ function getLocalStorageObject(key, defaultValue) {
 	// Gets a string from localStorage, parses it as JSON, and returns the 
 	// resulting object. If the sting is not JSON, throws an error. If the 
 	// key does not exist in localStorage, returns null.
-	var val = getLocalStorageString(key, defaultValue);
-	return (val) ? JSON.parse(val) : {};
+	var val = getLocalStorageString(key, null);
+	return (val) ? JSON.parse(val) : defaultValue;
 }
 
 function setLocalStorageObject(key, val) {

@@ -89,6 +89,7 @@
 				<md-icon>send</md-icon>
 			</div>
 		</form>
+
 		<div class="messages">
 			<div class="message" ng-class="{authuser: msg.sender==vm.authuser.username}" ng-repeat="msg in vm.messages | orderBy:'-time' track by $index">
 				<div class="text">{{ msg.text }}</div>
@@ -102,6 +103,16 @@
 				<div class="username">{{ msg.sender }}</div>
 			</div>
 		</div>
+
+		<md-toolbar class="message-toolbar">
+	        <div class="md-toolbar-tools" tabIndex="-1">
+				<div>/u/{{ vm.data.view_user.username }}</div>
+				<div flex></div>
+				<md-button class="md-icon-button" ng-click="vm.closeMessenger()" aria-label="close">
+					<md-icon>close</md-icon>
+				</md-button>
+	        </div>
+		</md-toolbar>
 	</div>
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="profile-right" md-is-locked-open="$mdMedia('gt-lg')">
