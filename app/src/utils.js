@@ -77,3 +77,32 @@ function setLocalStorageObject(key, val) {
 	// converting it to a JSON string.
 	return setLocalStorageString(key, JSON.stringify(val));
 }
+
+function get_distance(lat1, lon1, lat2, lon2, unit='km') {
+	var R = 6371; // Radius of the earth in km
+	var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
+	var dLon = (lon2-lon1).toRad(); 
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+			Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+			Math.sin(dLon/2) * Math.sin(dLon/2); 
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c; // Distance in km
+
+	if (unit == 'km')
+		return d;
+	if (unit == 'm')
+		return d * 1000;
+	if (unit == 'mi')
+		return d * 0.621371;
+	if (unit == 'ft')
+		return d * 0.0003048;
+
+	throw new Error('Unknown unit in get_distance() "' + unit + '".');
+}
+
+/** Convert numeric degrees to radians */
+if (typeof(Number.prototype.toRad) === "undefined") {
+	Number.prototype.toRad = function() {
+		return this * Math.PI / 180;
+	}
+}

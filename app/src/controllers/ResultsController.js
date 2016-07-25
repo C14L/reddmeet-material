@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp').controller('ResultsController', ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', ResultsController]);
+    angular.module('reddmeetApp').controller('ResultsController', ['$log', '$mdDialog', '$mdBottomSheet', '$scope', 'SearchResultsFactory', 'AuthUserFactory', ResultsController]);
 
     /**
      * Display a list of users found with the current search settings.
      */
-    function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory) {
+    function ResultsController($log, $mdDialog, $mdBottomSheet, $scope, SearchResultsFactory, AuthUserFactory) {
         var vm = this;
         vm.title = "search results";
         vm.results = [];
@@ -70,9 +70,10 @@
         /**
          * Return the current user's distance to the supplied geolocation in kilometers.
          */
-        vm.getDistance = function(lat, lng) {
-            // TODO: Stub.
-            return 500;
+        vm.getDistance = (lat, lon) => {
+            if (lat && lon) {
+                return Math.floor(AuthUserFactory.getDistance(lat, lon)) + ' km';
+            }
         }
 
         /*

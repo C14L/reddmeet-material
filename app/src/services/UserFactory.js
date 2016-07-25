@@ -5,10 +5,13 @@
         .factory('UserFactory', ['$http', '$log', UserFactory])
         ;
 
+    /**
+     * Load auth user data on init.
+     */
     function AuthUserFactory($http, $log) {
-        // Load auth user data on init.
         var apiUrl = API_BASE + '/api/v1/authuser.json';
         var authUserData = null;
+        var authUserGeoloc = null;
         var authUserPromise = $http.get(apiUrl).then(response => {
             $log.debug('## response.data.authuser: ', response.data.authuser);
             if (! response.data.authuser) {
@@ -17,13 +20,23 @@
             authUserData = response.data.authuser
         });
 
+        /** 
+         * Use accurate location ONLY for distance calculation.
+         * This is NEVER added to the user's profile data.
+         */
+        window.navigator.geolocation.getCurrentPosition(pos => authUserGeoloc = pos);
+
         return {
             getUsername: () => authUserPromise.then(() => authUserData.username),
             getAuthUser: () => authUserPromise.then(() => authUserData),
             getAuthUserSrList: () => authUserPromise.then(() => authUserData.subs),
+            getDistance: (lat, lon) => get_distance(authUserGeoloc.coords.latitude, authUserGeoloc.coords.longitude, lat, lon),
         };
     };
 
+    /**
+     * Factory for regular user profiles.
+     */
     function UserFactory($http, $log) {
         var apiUrl = API_BASE + '/api/v1/u/' + username + '.json';
 
