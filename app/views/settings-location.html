@@ -1,1 +1,21 @@
-<h2>update your location</h2>
+<md-content class="md-padding" layout="column" layout-align="center">
+
+    <p>You location is automatically fuzzied, and only the approximate value is stored in your profile. Your precise location is not used.</p>
+
+    <md-select ng-model="vm.authuser.profile.fuzzy" placeholder="update your location">
+        <md-option ng-value="2">fuzzy by 2 km / 1.25 miles</md-option>
+        <md-option ng-value="5">fuzzy by 5 km / 3 miles</md-option>
+        <md-option ng-value="10">fuzzy by 10 km / 6 miles</md-option>
+        <md-option ng-value="20">fuzzy by 20 km / 12 miles</md-option>
+        <md-option ng-value="50">fuzzy by 50 km / 31 miles</md-option>
+        <md-option ng-value="100">fuzzy by 100 km / 62 miles</md-option>
+    </md-select>
+
+    <md-button ng-show="vm.showBtn" class="md-primary" ng-click="vm.save()">
+        update location
+    </md-button>
+
+    <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+</md-content>

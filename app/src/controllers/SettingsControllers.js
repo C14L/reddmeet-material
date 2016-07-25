@@ -4,7 +4,7 @@
 	    .controller('SettingsController', ['$log', SettingsController])
 		.controller('SettingsProfileController', ['$log', SettingsProfileController])
 		.controller('SettingsPicturesController', ['$log', SettingsPicturesController])
-		.controller('SettingsLocationController', ['$log', SettingsLocationController])
+		.controller('SettingsLocationController', ['$log', '$timeout', '$mdToast', 'AuthUserFactory', SettingsLocationController])
 		.controller('SettingsSubredditsController', ['$log', SettingsSubredditsController])
 		.controller('SettingsAccountController', ['$log', SettingsAccountController])
 		;
@@ -28,8 +28,25 @@
 		var vm = this;
 	}
 
-	function SettingsLocationController($log) {
+	function SettingsLocationController($log, $timeout, $mdToast, AuthUserFactory) {
 		var vm = this;
+		vm.showBtn = true;
+		vm.showSpinner = false;
+		vm.toast = () => $mdToast.show($mdToast.simple().textContent('Location saved.').position('bottom').hideDelay(800));
+
+		vm.save = event => {
+			vm.showBtn = false;
+			vm.showSpinner = true;
+			AuthUserFactory.saveProfile('fuzzy')
+			.then(response => vm.toast())
+			.catch(err => $log.debug(err))
+			.then(() => { 
+				vm.showBtn = true;
+				vm.showSpinner = false
+			});
+		};
+
+		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 	}
 
 	function SettingsSubredditsController($log) {

@@ -28,9 +28,20 @@
 
         return {
             getUsername: () => authUserPromise.then(() => authUserData.username),
+
             getAuthUser: () => authUserPromise.then(() => authUserData),
+
             getAuthUserSrList: () => authUserPromise.then(() => authUserData.subs),
+
             getDistance: (lat, lon) => get_distance(authUserGeoloc.coords.latitude, authUserGeoloc.coords.longitude, lat, lon),
+
+            saveProfile: (fieldName) => {
+                if (! authUserData) return; // Promise not yet fulfilled?
+                let data = {};
+                data['profile'] = {};
+                data['profile'][fieldName] = authUserData.profile[fieldName];
+                return $http.put(apiUrl, data);
+            },
         };
     };
 
