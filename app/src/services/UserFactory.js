@@ -27,6 +27,7 @@
         window.navigator.geolocation.getCurrentPosition(pos => authUserGeoloc = pos);
 
         return {
+
             getUsername: () => authUserPromise.then(() => authUserData.username),
 
             getAuthUser: () => authUserPromise.then(() => authUserData),
@@ -37,11 +38,23 @@
 
             saveProfile: (fieldName) => {
                 if (! authUserData) return; // Promise not yet fulfilled?
-                let data = {};
-                data['profile'] = {};
-                data['profile'][fieldName] = authUserData.profile[fieldName];
+                let data = { profile: {} };
+                if (typeof(fieldName) === 'string') fieldName = [fieldName];
+                fieldName.forEach(val => data['profile'][val] = authUserData.profile[val]);
+                $log.debug('### SENDING: ', data);
                 return $http.put(apiUrl, data);
             },
+
+            setProfile: (key, val) => { authUserData.profile[key] = val },
+
+            setFuzzyGeoloc: () => {
+                // Update fuzzy geo location values.
+                return await_fuzzy_geoloc(authUserData.profile['fuzzy']).then(coords => {
+                    authUserData.profile.lat = coords.lat;
+                    authUserData.profile.lng = coords.lng;
+                });
+            }
+
         };
     };
 

@@ -1,5 +1,4 @@
 <md-content class="md-padding" layout="column" layout-align="center">
-
     <p>You location is automatically fuzzied, and only the approximate value is stored in your profile. Your precise location is not used.</p>
 
     <md-select ng-model="vm.authuser.profile.fuzzy" placeholder="update your location">
@@ -18,4 +17,15 @@
     <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around">
       <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
+</md-content>
+
+<md-divider></md-divider>
+
+<md-content class="md-padding" layout="column" layout-align="center">
+    <p>Your fuzzied public location is:</p>
+    <ul>
+        <li>latitude: {{vm.authuser.profile.lat}}</li>
+        <li>longitude: {{vm.authuser.profile.lng}}</li>
+    </ul>
+    <p><a style="text-decoration: underline; color: blue;" href="https://www.google.com/maps/@{{vm.authuser.profile.lat}},{{vm.authuser.profile.lng}},17z">See on Google Maps...</a></p>
 </md-content>

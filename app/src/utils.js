@@ -78,6 +78,8 @@ function setLocalStorageObject(key, val) {
 	return setLocalStorageString(key, JSON.stringify(val));
 }
 
+// - - - calculate distances - - - - - - - - - - - - - - - - - - 
+
 function get_distance(lat1, lon1, lat2, lon2, unit='km') {
 	var R = 6371; // Radius of the earth in km
 	var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
@@ -105,4 +107,57 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 	Number.prototype.toRad = function() {
 		return this * Math.PI / 180;
 	}
+}
+
+// - - - fuzzied geolocation - - - - - - - - - - - - - - - - - - 
+
+function getRandom(min, max) {
+	// Return a random Float between min and max.
+	return Math.random() * (max - min) + min;
+}
+
+function fuzzyGeoloc(lat, lng, fuzzyKm) {
+	// Check if valid
+	if (!lat || !lng) throw "No valid geolocation coords found.";
+	// Fuzzy it by +/- x km, but we need that in degrees lat/lng.
+	var latOneDegInKm = 110.574; // km
+	var lngOneDegInKm = 111.320 * Math.cos(lat); // km
+	// Get the degrees for 5 km.
+	var latFuzzyDeg = fuzzyKm / latOneDegInKm;
+	var lngFuzzyDeg = fuzzyKm / lngOneDegInKm;
+	// Get a random number, (+ or -) for the degrees and add
+	// it to the geolocation.
+	var latRandomDeg = getRandom((latFuzzyDeg*(-1)), latFuzzyDeg);
+	var lngRandomDeg = getRandom((lngFuzzyDeg*(-1)), lngFuzzyDeg);
+	// Return the exacy lat/lng +/- the random degrees.
+	return {'lat':(lat + latRandomDeg), 'lng':(lng + lngRandomDeg)};
+}
+
+function await_fuzzy_geoloc(fuzzy) {
+	// Find user's geolocation, fuzzy it, and submit to profile.
+	// See http://diveintohtml5.info/geolocation.html
+	// fuzzy (km)
+	return new Promise(function(resolve, reject) {
+		if (!"geolocation" in navigator) {
+			reject(new Error("Your browser doesn't support geo location lookup."));
+		} else {
+			try {
+				// The callback gets a geolocation object and the time. Use only
+				// "loc.coords.latitude" and "loc.coords.longitude", but fuzzy it!
+				navigator.geolocation.getCurrentPosition((loc, timestamp) => {
+					// Fuzzy the geolocation with some +/- 5 kilometers. See
+					// http://stackoverflow.com/questions/1253499/simple-calculations-
+					//                            for-working-with-lat-lon-km-distance
+					// Approximation:
+					// - Latitude: 1 deg = 110.574 km
+					// - Longitude: 1 deg = 111.320 * cos(latitude) km
+					// Get geoloction from browser object.
+					fuzzyCoords = fuzzyGeoloc(loc.coords.latitude, loc.coords.longitude, fuzzy);
+					resolve(fuzzyCoords);
+				});
+			} catch(err) {
+				reject(new Error("Sorry, could not find your geolocation: " + err));
+			}
+		}
+	});
 }

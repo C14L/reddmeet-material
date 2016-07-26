@@ -1,1 +1,20 @@
-<h2>account settings</h2>
+<md-content class="md-padding" layout="column" layout-align="center">
+    <p>Do you prefer to see distances in kilometers or miles?</p>
+    <md-radio-group ng-model="vm.authuser.profile.pref_distance_unit" ng-change="vm.changed()">
+        <md-radio-button value="km" ng-disabled="vm.showSpinner">kilometers</md-radio-button>
+        <md-radio-button value="mi" ng-disabled="vm.showSpinner">miles</md-radio-button>
+        <md-progress-circular ng-if="vm.showSpinner" md-mode="indeterminate"></md-progress-circular>
+    </md-radio-group>
+</md-content>
+
+<md-divider></md-divider>
+
+<md-content class="md-padding" layout="column" layout-align="center">
+    <p>You can delete all votes you gave to other users. After that, you will not have upvoted or downvoted anybody.</p>
+    <md-button class="md-raised">delete all my votes</md-button>
+</md-content>
+
+<md-content class="md-padding" layout="column" layout-align="center">
+    <p>You can delete all your account data to delete all matches, upvotes, downvotes, and remove your username and photos from Reddmeet. This can **not** be undone!</p>
+    <md-button class="md-raised md-warn">delete account data</md-button>
+</md-content>
