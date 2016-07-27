@@ -1,4 +1,8 @@
-<div class="user-profile" ng-class="{'show-send-message': vm.isShowSendMessage}">
+<div ng-show="vm.isProfileLoading" class="user-profile-loading">
+	<md-progress-circular md-mode='indeterminate'></md-progress-circular>
+</div>
+
+<div ng-hide="vm.isProfileLoading" class="user-profile" ng-class="{'show-send-message': vm.isShowSendMessage, 'fade-to-left': vm.isFadeToLeft, 'fade-to-right': vm.isFadeToRight}">
 	<div class="pnasl">
 		<div class="votebox"></div>
 		<div class="pic" md-swipe-left="vm.goPrevNext('next')" md-swipe-right="vm.goPrevNext('prev')">
@@ -9,9 +13,6 @@
 			<div class="age-gender">
 				<span class="age">{{ vm.data.view_user.profile.age }}</span>,
 				<span class="gender">{{ vm.data.view_user.profile.gender }}</span>
-			</div>
-			<div class="close-messager" ng-click="vm.closeMessenger()">
-				<md-icon>close</md-icon>
 			</div>
 			<div class="common-subs-count" ng-click="vm.toggleRight()">
 				{{ vm.data.common_subs.length }} subs in common
@@ -30,16 +31,6 @@
 				<span am-time-ago="vm.data.view_user.profile.created | amParse:'YYYY-MM-DD'"></span>
 			</a>
 		</div>
-		<!--
-		<md-fab class="profilefab">
-			<md-button ng-if="!vm.data.is_like" aria-label="menu" class="md-fab md-warn">
-				<md-icon>arrow_upward</md-icon>
-			</md-button>
-			<md-button ng-if="vm.data.is_like" aria-label="menu" class="md-fab md-warn">
-				<md-icon>mail_outline</md-icon>
-			</md-button>
-		</md-fab>
-		-->
 	</div>
 
 	<div class="prev-next-up-down">

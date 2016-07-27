@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', '$mdSidenav', '$location', 'AuthUserFactory', 'MessagesFactory', ProfileController])
+        .controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', '$mdSidenav', '$location', 'AuthUserFactory', 'UserFactory', 'MessagesFactory', ProfileController])
         ;
 
     /**
@@ -10,9 +10,9 @@
      * add "edit" buttons to different parts, and have popups
      * with forms to change the values.
      */
-    function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, MessagesFactory) {
+    function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, UserFactory, MessagesFactory) {
         var vm = this;
-        var apiUrl = API_BASE + '/api/v1/u/' + $routeParams.username + '.json';
+        //var apiUrl = API_BASE + '/api/v1/u/' + $routeParams.username + '.json';
         var watcherMessageText = false;
 
         vm.fabOpen = false;
@@ -20,19 +20,19 @@
         vm.messages = []; // { time: '', text: '', sender: '', receiver: '' }
         vm.data = null;
         vm.authuser = null;
+        vm.isProfileLoading = true;  // to hide main profile view while loading
+        vm.isFadeToLeft = false;
+        vm.isFadeToRight = false;
 
         AuthUserFactory.getAuthUser().then(authuser => vm.authuser = authuser);
 
-        $http.get(apiUrl).then(response => {
+        UserFactory.getViewUser($routeParams.username).then(response => {
             vm.data = response.data;
-
+            vm.isProfileLoading = false;
             setTimeout(() => {
                 angular.element(".transition-helper").fadeOut();
                 $scope.$digest();
             }, 300);
-
-            $log.debug('Received response: ', response);
-            $log.debug('For viewUser ', vm.data.view_user);
         }).catch(response => {
             console.error(response.status, response.statusText);
             angular.element(".transition-helper").remove();
@@ -79,9 +79,20 @@
             vm.messageText = '';
         };
 	    vm.goPrevNext = d => {
-            let username = d == 'prev' ? vm.data.prev_user.username : vm.data.next_user.username;
-            $log.debug('## username: ' + username);
-            $location.path('/u/' + username);
+            if (d == 'next') {
+                vm.isFadeToLeft = true;
+                $timeout(() => {
+                    vm.isFadeToLeft = false;
+                    $location.path('/u/' + vm.data.next_user.username);
+                }, 300);
+            };
+            if (d == 'prev') {
+                vm.isFadeToRight = true;
+                $timeout(() => {
+                    vm.isFadeToRight = false;
+                    $location.path('/u/' + vm.data.prev_user.username);
+                }, 300);
+            };
         };
 
         // - - - Right sidenav - - - - - - - - - - - - - - - - -

@@ -7,7 +7,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         fetch(event.request).then(response => {
             if (response.status == 404) {
-                return fetch('/static/nopic.jpg');
+                if (event.request.url.toLowerCase().indexOf('.jpg') >= 0) {
+                    return fetch('/static/nopic.jpg');
+                }
             }
 
             return response;

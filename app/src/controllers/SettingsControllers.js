@@ -79,16 +79,36 @@
 
 	function SettingsAccountController($log, $mdToast, AuthUserFactory) {
 		var vm = this;
-		vm.showSpinner = false;
-		vm.toast = () => $mdToast.show($mdToast.simple().textContent('Unit change saved.').position('bottom').hideDelay(800));
 
-		vm.changed = event => {
-			vm.showSpinner = true;
-			$log.debug('### vm.authuser.profile.pref_distance_unit is now: ', vm.authuser.profile.pref_distance_unit);
+		vm.prefDistanceChanged = event => {
 			AuthUserFactory.saveProfile('pref_distance_unit')
-			.then(response => vm.toast())
-			.catch(err => $log.debug(err))
-			.then(() => vm.showSpinner = false);
+			.then(response => $mdToast.show($mdToast.simple().textContent('Unit change saved.').position('bottom').hideDelay(800)))
+			.catch(err => $log.debug(err));
+		};
+
+		vm.prefNotificationsChanged = event => {
+			AuthUserFactory.saveProfile('pref_receive_notification')
+			.then(response => $mdToast.show($mdToast.simple().textContent('Notification setting saved.').position('bottom').hideDelay(800)))
+			.catch(err => $log.debug(err));
+
+			navigator.serviceWorker.getRegistration()
+			.then(reg => reg.pushManager.getSubscription())
+			.then(sub => {
+				if (! sub) {
+					console.log('Subscribing to Push Manager...');
+					return reg.pushManager.subscribe({userVisibilityOnly: true}).then(sub => {
+						console.log('New Push subscription objet:', sub);
+						// TODO: SAVE sub OBJECT TO SERVER
+						// --> push_subscription = sub
+						return sub;
+					});
+				} else {
+					console.log('Subscription obejct found!');
+					return sub;
+				};
+			});
+
+
 		};
 
 		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);

@@ -1,10 +1,18 @@
 <md-content class="md-padding" layout="column" layout-align="center">
     <p>Do you prefer to see distances in kilometers or miles?</p>
-    <md-radio-group ng-model="vm.authuser.profile.pref_distance_unit" ng-change="vm.changed()">
+    <md-radio-group ng-model="vm.authuser.profile.pref_distance_unit" ng-change="vm.prefDistanceChanged()">
         <md-radio-button value="km" ng-disabled="vm.showSpinner">kilometers</md-radio-button>
         <md-radio-button value="mi" ng-disabled="vm.showSpinner">miles</md-radio-button>
-        <md-progress-circular ng-if="vm.showSpinner" md-mode="indeterminate"></md-progress-circular>
     </md-radio-group>
+</md-content>
+
+<md-divider></md-divider>
+
+<md-content class="md-padding" layout="column" layout-align="center">
+    <p>When you get a new message or upvote, get a notification on your phone.</p>
+    <md-switch ng-model="vm.authuser.profile.pref_receive_notification" aria-label="Notification switch" ng-change="vm.prefNotificationsChanged()">
+        Notifications <span ng-show="vm.authuser.profile.pref_receive_notification">en</span><span ng-show="!vm.authuser.profile.pref_receive_notification">dis</span>abled
+    </md-switch>
 </md-content>
 
 <md-divider></md-divider>

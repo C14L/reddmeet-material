@@ -13,7 +13,7 @@
         var authUserData = null;
         var authUserGeoloc = null;
         var authUserPromise = $http.get(apiUrl).then(response => {
-            $log.debug('## response.data.authuser: ', response.data.authuser);
+            $log.debug('## LOADING response.data.authuser: ', response.data.authuser);
             if (! response.data.authuser) {
                 window.location.href = '/';
             }
@@ -62,10 +62,12 @@
      * Factory for regular user profiles.
      */
     function UserFactory($http, $log) {
-        var apiUrl = API_BASE + '/api/v1/u/' + username + '.json';
-
         return {
-            getViewUser: username => $http.get(apiUrl).then(response => response.data.view_user),
+            getViewUser: username => {
+                $log.debug('## LOADING view user: ', username);
+                var apiUrl = API_BASE + '/api/v1/u/' + username + '.json';
+                return $http.get(apiUrl);
+            },
         };
     };
 

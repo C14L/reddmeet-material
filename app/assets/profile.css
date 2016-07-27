@@ -2,6 +2,24 @@
  * User profile view
  */
 
+.user-profile-loading {
+    display: flex; justify-content: center;
+    position: fixed; top: 150px; left: 0; right: 0;
+}
+
+.user-profile.fade-to-left {
+    will-change: transform opacity;
+    transition: transform 0.3s, opacity 0.2;
+    transform: translateX(-100vw);
+    opacity: 0;
+}
+.user-profile.fade-to-right {
+    will-change: transform opacity;
+    transition: transform 0.3s, opacity 0.2;
+    transform: translateX(100vw);
+    opacity: 0;
+}
+
 .user-profile {
     background-color: lightgray;
     min-height: calc(100vh - 56px);
@@ -130,16 +148,6 @@
     overflow: hidden;
 }
 
-.user-profile .close-messager {
-    display: none;
-    float: right;
-    line-height: 3rem;
-    margin: 8px -16px -16px 0; padding: 0 1rem;
-}
-.user-profile.show-send-message .close-messager {
-    display: block;
-}
-
 .user-profile.show-send-message > .messager > form {
     margin: 0; padding: 0;
     position: relative;
@@ -151,6 +159,7 @@
     border: 0; margin: 0; padding: 4px;
 }
 .user-profile.show-send-message > .messager > form .send-btn {
+    display: none; /* Probably don't use... */
     position: absolute; bottom: 0; right: 0;
     width: 48px; height: 48px;
     line-height: 48px; text-align: center;
@@ -159,7 +168,7 @@
     margin: 4px; padding: 0;
 }
 .user-profile.show-send-message > .messager > .messages {
-    height: calc(100vh - 56px - 48px - 78px);
+    height: calc(100vh - 56px - 78px);
     margin: 0; padding: 4px;
     overflow: auto;
 }
