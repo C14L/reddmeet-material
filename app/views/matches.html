@@ -15,7 +15,7 @@
         <md-divider></md-divider>
         <md-list flex ng-if="vm.userLists.upvotes_recv.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.upvotes_recv track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
@@ -47,7 +47,7 @@
         <md-divider></md-divider>
         <md-list flex ng-if="vm.userLists.matches.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.matches track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
@@ -79,7 +79,7 @@
         <md-divider></md-divider>
         <md-list flex ng-if="vm.userLists.upvotes_sent.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.upvotes_sent track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="{{ item.profile.pic }}?{{ $index }}" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
