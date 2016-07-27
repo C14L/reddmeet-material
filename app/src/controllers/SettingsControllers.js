@@ -81,34 +81,37 @@
 		var vm = this;
 
 		vm.prefDistanceChanged = event => {
+			let toast = $mdToast.simple().textContent('Unit change saved.').position('bottom').hideDelay(800);
+
 			AuthUserFactory.saveProfile('pref_distance_unit')
-			.then(response => $mdToast.show($mdToast.simple().textContent('Unit change saved.').position('bottom').hideDelay(800)))
+			.then(response => $mdToast.show(toast))
 			.catch(err => $log.debug(err));
 		};
 
 		vm.prefNotificationsChanged = event => {
-			AuthUserFactory.saveProfile('pref_receive_notification')
-			.then(response => $mdToast.show($mdToast.simple().textContent('Notification setting saved.').position('bottom').hideDelay(800)))
-			.catch(err => $log.debug(err));
-
-			navigator.serviceWorker.getRegistration()
-			.then(reg => reg.pushManager.getSubscription())
-			.then(sub => {
-				if (! sub) {
-					console.log('Subscribing to Push Manager...');
-					return reg.pushManager.subscribe({userVisibilityOnly: true}).then(sub => {
-						console.log('New Push subscription objet:', sub);
-						// TODO: SAVE sub OBJECT TO SERVER
-						// --> push_subscription = sub
-						return sub;
-					});
-				} else {
-					console.log('Subscription obejct found!');
-					return sub;
-				};
-			});
-
-
+			let toast = $mdToast.simple().textContent('Notification setting saved.').position('bottom').hideDelay(800);
+			
+			if (! AuthUserFactory.getProfile('pref_receive_notification')) {
+				// Disable, only store on server.
+				AuthUserFactory.saveProfile('pref_receive_notification')
+				.then(response => $mdToast.show(toast));
+			}
+			else if (AuthUserFactory.getProfile('gcm_subscription')) {
+				// Enable, but there is already a GSM subscription value.
+				AuthUserFactory.saveProfile('pref_receive_notification')
+				.then(response => $mdToast.show(toast));
+			}
+			else {
+				// Enable. First get new subscription to GCM, then store keys on server.
+				navigator.serviceWorker.getRegistration()
+				.then(reg => reg.pushManager.subscribe({userVisibleOnly: true}))
+				.then(sub => {
+					AuthUserFactory.setProfile('gcm_subscription', JSON.stringify(sub));
+					return AuthUserFactory.saveProfile(['pref_receive_notification', 'gcm_subscription']);
+				})
+				.then(response => $mdToast.show(toast))
+				.catch(err => $log.debug(err));
+			}
 		};
 
 		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);

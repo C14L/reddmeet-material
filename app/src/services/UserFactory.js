@@ -37,15 +37,18 @@
             getDistance: (lat, lon) => get_distance(authUserGeoloc.coords.latitude, authUserGeoloc.coords.longitude, lat, lon),
 
             saveProfile: (fieldName) => {
+                $log.debug('### PREPARE FOR fieldName:', fieldName);
                 if (! authUserData) return; // Promise not yet fulfilled?
                 let data = { profile: {} };
                 if (typeof(fieldName) === 'string') fieldName = [fieldName];
                 fieldName.forEach(val => data['profile'][val] = authUserData.profile[val]);
-                $log.debug('### SENDING: ', data);
+                $log.debug('### SENDING authUserData parts: ', data);
                 return $http.put(apiUrl, data);
             },
 
-            setProfile: (key, val) => { authUserData.profile[key] = val },
+            setProfile: (key, val) => { authUserData['profile'][key] = val },
+
+            getProfile: (key) => { return authUserData['profile'][key] },
 
             setFuzzyGeoloc: () => {
                 // Update fuzzy geo location values.

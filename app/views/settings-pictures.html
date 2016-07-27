@@ -1,1 +1,20 @@
-<h2>update pictures</h2>
+<md-content class="md-padding" layout="column" layout-align="center">
+
+    <p>Update your profile picture</p>
+
+    <md-button ng-show="vm.showBtn" class="md-primary" ng-click="vm.update()">
+        update subreddit list
+    </md-button>
+
+    <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+
+    <p></p>
+
+    <div class="sr-list">
+        <md-content md-ink-ripple flex ng-repeat="opt in vm.subs">
+            {{ opt }}
+        </md-content>
+    </div>
+</md-content>
