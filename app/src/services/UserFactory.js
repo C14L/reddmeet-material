@@ -10,14 +10,24 @@
      */
     function AuthUserFactory($http, $log) {
         var apiUrl = API_BASE + '/api/v1/authuser.json';
+        var pushNotificationApiUrl = API_BASE + '/api/v1/pushnotifications';
+
         var authUserData = null;
         var authUserGeoloc = null;
+
         var authUserPromise = $http.get(apiUrl).then(response => {
             $log.debug('## LOADING response.data.authuser: ', response.data.authuser);
-            if (! response.data.authuser) {
-                window.location.href = '/';
-            }
+
+            // no user loaded, then ask client to authenticate.
+            if (! response.data.authuser) window.location.href = '/';
+
+            // Cache response.
             authUserData = response.data.authuser
+
+            // Check if push notifications are enabled on this device.
+			navigator.serviceWorker.getRegistration()
+			.then(reg => reg.pushManager.getSubscription())
+			.then(sub => authUserData.profile.pref_receive_notification = !!sub);
         });
 
         /** 
@@ -27,6 +37,21 @@
         window.navigator.geolocation.getCurrentPosition(pos => authUserGeoloc = pos);
 
         return {
+            createPushNotificationEndpoint: sub => {
+                // adds the endpoint to the authuser's profile.
+                return $http.post(pushNotificationApiUrl, sub);
+            },
+            destroyPushNotificationEndpoint: sub => {
+                // deletes the endpoint from authuser's profile. Use $http() to be
+                // able to send body data with the DELETE request, see also
+                // http://stackoverflow.com/q/299628/5520354
+                return $http({
+                    url: pushNotificationApiUrl, 
+                    method: 'DELETE', 
+                    data: sub,
+                    headers: {"Content-Type": "application/json;charset=utf-8"}
+                });
+            },
 
             getUsername: () => authUserPromise.then(() => authUserData.username),
 

@@ -90,28 +90,36 @@
 
 		vm.prefNotificationsChanged = event => {
 			let toast = $mdToast.simple().textContent('Notification setting saved.').position('bottom').hideDelay(800);
+
+			// Check if there is an active subscription on the device.
+			navigator.serviceWorker.getRegistration()
+			.then(reg => reg.pushManager.getSubscription())
+			.then(sub => {
+				if (sub) {
+					// There is an active subscription on this device, disable it.
+					Promise.all([
+						AuthUserFactory.destroyPushNotificationEndpoint(sub),
+						sub.unsubscribe()
+					])
+					.then(responses => {
+						console.log('### Notifications disabled: ', sub);
+						$mdToast.show(toast);
+					});
+				}
+				else {
+					// Not subscription active, so create one.
+					// Get a new subscription to GCM, then store it on the server.
+					navigator.serviceWorker.getRegistration()
+					.then(reg => reg.pushManager.subscribe({userVisibleOnly: true}))
+					.then(sub => {
+						console.log('### Notifications enabled: ', sub);
+						AuthUserFactory.createPushNotificationEndpoint(sub);
+					})
+					.then(response => $mdToast.show(toast))
+					.catch(err => $log.debug(err));
+				}
+			});
 			
-			if (! AuthUserFactory.getProfile('pref_receive_notification')) {
-				// Disable, only store on server.
-				AuthUserFactory.saveProfile('pref_receive_notification')
-				.then(response => $mdToast.show(toast));
-			}
-			else if (AuthUserFactory.getProfile('gcm_subscription')) {
-				// Enable, but there is already a GSM subscription value.
-				AuthUserFactory.saveProfile('pref_receive_notification')
-				.then(response => $mdToast.show(toast));
-			}
-			else {
-				// Enable. First get new subscription to GCM, then store keys on server.
-				navigator.serviceWorker.getRegistration()
-				.then(reg => reg.pushManager.subscribe({userVisibleOnly: true}))
-				.then(sub => {
-					AuthUserFactory.setProfile('gcm_subscription', JSON.stringify(sub));
-					return AuthUserFactory.saveProfile(['pref_receive_notification', 'gcm_subscription']);
-				})
-				.then(response => $mdToast.show(toast))
-				.catch(err => $log.debug(err));
-			}
 		};
 
 		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
