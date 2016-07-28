@@ -11,7 +11,6 @@
     function AuthUserFactory($http, $log) {
         var apiUrl = API_BASE + '/api/v1/authuser.json';
         var pushNotificationApiUrl = API_BASE + '/api/v1/pushnotifications';
-
         var authUserData = null;
         var authUserGeoloc = null;
 
@@ -41,6 +40,7 @@
                 // adds the endpoint to the authuser's profile.
                 return $http.post(pushNotificationApiUrl, sub);
             },
+
             destroyPushNotificationEndpoint: sub => {
                 // deletes the endpoint from authuser's profile. Use $http() to be
                 // able to send body data with the DELETE request, see also
@@ -90,11 +90,29 @@
      * Factory for regular user profiles.
      */
     function UserFactory($http, $log) {
+        var viewUserData = null;
+        var voteApiUrlBase = API_BASE + '/api/v1/flag/';
+
         return {
+            createFlag: (vote, user) => {
+                return $http.post(voteApiUrlBase + vote + '/' + user.username);
+            },
+            
+            destroyFlag: (vote, user) => {
+                return $http.delete(voteApiUrlBase + vote + '/' + user.username);
+            },
+
             getViewUser: username => {
+                let promise = Promise.resolve();
+                if (viewUserData && viewUserData.view_user.username == username) {
+                    return promise.then(() => viewUserData);
+                }
                 $log.debug('## LOADING view user: ', username);
-                var apiUrl = API_BASE + '/api/v1/u/' + username + '.json';
-                return $http.get(apiUrl);
+                let url = API_BASE + '/api/v1/u/' + username + '.json';
+                return $http.get(url).then(response => {
+                    viewUserData = response.data;
+                    return viewUserData;
+                });
             },
         };
     };

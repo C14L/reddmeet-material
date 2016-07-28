@@ -27,7 +27,7 @@
         AuthUserFactory.getAuthUser().then(authuser => vm.authuser = authuser);
 
         UserFactory.getViewUser($routeParams.username).then(response => {
-            vm.data = response.data;
+            vm.data = response;
             vm.isProfileLoading = false;
             setTimeout(() => {
                 angular.element(".transition-helper").fadeOut();
@@ -39,17 +39,18 @@
         });
 
         vm.doVote = vote => {
-            if (vote == 'up') {
-                vm.data.is_like = true;
-                vm.data.is_nope = false;
-            } else
-            if (vote == 'down') {
-                vm.data.is_like = false;
-                vm.data.is_nope = true;
-            }
-
-            //... TODO send vote to server
+            UserFactory.createFlag(vote, vm.data.view_user).then(response => {
+                if (vote == 'like') {
+                    vm.data.is_like = true;
+                    vm.data.is_nope = false;
+                } else
+                if (vote == 'nope') {
+                    vm.data.is_like = false;
+                    vm.data.is_nope = true;
+                }
+            });
         };
+
         vm.closeMessenger = () => {
             // Switch profile view to message box view
             vm.isShowSendMessage = false;
@@ -57,6 +58,7 @@
 
             if (watcherMessageText) watcherMessageText();
         };
+
         vm.openMessenger = () => {
             // Switch profile view to message box view
             vm.isShowSendMessage = true;
@@ -69,6 +71,7 @@
             // Load initial messages when opening chat view.
             MessagesFactory.fetch().then(messages => vm.messages = messages); 
         };
+
         vm.doSendMessage = () => {
             // Post a message to the message queue
             vm.messages = MessagesFactory.post({

@@ -38,12 +38,12 @@
 			<md-icon>arrow_left</md-icon>
 		</div>
 		<div ng-if="!vm.data.is_like && !vm.data.is_nope" class="up-down up">
-			<div class="btn btn-up" ng-click="vm.doVote('up')">
+			<div class="btn btn-up" ng-click="vm.doVote('like')">
 				<md-icon>arrow_upward</md-icon>
 			</div>
 		</div>
 		<div ng-if="!vm.data.is_like && !vm.data.is_nope" class="up-down down">
-			<div class="btn btn-down" ng-click="vm.doVote('down')">
+			<div class="btn btn-down" ng-click="vm.doVote('nope')">
 				<md-icon>arrow_downward</md-icon>
 			</div>
 		</div>
