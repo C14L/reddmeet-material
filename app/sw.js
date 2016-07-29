@@ -1,6 +1,6 @@
 // Manual service worker setup
 
-const SW_VERSION = 'v0.1.5';
+const SW_VERSION = 'v0.1.6';
 const SW_LOG_PREFIX = '## SW '+SW_VERSION+' ## ';
 console.log(SW_LOG_PREFIX + 'Running Service Worker...');
 
@@ -10,8 +10,10 @@ self.addEventListener('fetch', event => {
 
     event.respondWith(
         fetch(event.request).then(response => {
-            if (response.status == 404) {
+            if (response.status !== 200) {
+                console.log(SW_LOG_PREFIX+' response.status: '+response.status);
                 if (event.request.url.toLowerCase().indexOf('.jpg') >= 0) {
+                    console.log(SW_LOG_PREFIX+' file ext is JPG.');
                     return fetch('/static/nopic.jpg');
                 }
             }
