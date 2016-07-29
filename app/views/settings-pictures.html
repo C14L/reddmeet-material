@@ -1,20 +1,24 @@
+
+<img ng-show="vm.pic" ng-src="{{vm.pic.resized.dataURL}}" style="width: 100vw; height: 100vw;">
+
+<img ng-hide="vm.pic" ng-src="/m/{{ mainctrl.authuser.username }}.jpg" alt="{{ mainctrl.authuser.username }}" style="width: 100vw; height: 100vw; max-width: 500px; max-height: 500px; background-color: #EEE; border: 0;">
+
 <md-content class="md-padding" layout="column" layout-align="center">
-
-    <p>Update your profile picture</p>
-
-    <md-button ng-show="vm.showBtn" class="md-primary" ng-click="vm.update()">
-        update subreddit list
+    <md-button class="md-primary" ng-click="">
+        <md-icon>photo</md-icon>
+        Upload picture
+    </md-button>
+    <md-button class="md-primary" ng-click="">
+        <md-icon>link</md-icon>
+        Link to picture
+    </md-button>
+    <md-button class="md-primary" ng-click="vm.destroyPic()">
+        <md-icon>delete</md-icon>
+        Delete picture
     </md-button>
 
-    <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around">
-      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-    </div>
+    <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
 
-    <p></p>
+    <input type="file" accept="image/*" image="vm.pic" resize-square="400" resize-quality="0.7" upload-target="{{ vm.uploadApiUrl }}" after-upload="vm.afterUpload()" before-upload="vm.beforeUpload()">
 
-    <div class="sr-list">
-        <md-content md-ink-ripple flex ng-repeat="opt in vm.subs">
-            {{ opt }}
-        </md-content>
-    </div>
 </md-content>

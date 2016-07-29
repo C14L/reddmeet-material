@@ -4,7 +4,7 @@ window.API_BASE = "";
 (function () {
 	'use strict';
 
-	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment']);
+	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment', 'NgPicUpload']);
 
 	app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider', 'amTimeAgoConfig', function reddmeetAppConfig($routeProvider, $locationProvider, $httpProvider, $mdThemingProvider, amTimeAgoConfig) {
 

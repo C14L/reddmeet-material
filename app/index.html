@@ -24,7 +24,7 @@
 
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
       <md-toolbar ng-click="mainctrl.go('/u/' + mainctrl.authuser.username)" md-ink-ripple class="md-tall md-hue-2">
-        <img ng-src="{{ mainctrl.authuser.profile.pics[0].url }}">
+        <img ng-src="/m/{{ mainctrl.authuser.username }}.jpg">
         <h1>{{ mainctrl.authuser.username }}</h1>
         <span flex></span>
       </md-toolbar>
@@ -129,6 +129,7 @@
   <script src="src/controllers/SearchOptionDialogControllers.js"></script>
   <script src="src/controllers/SrController.js"></script>
   <script src="src/controllers/StatsController.js"></script>
+  <script src="src/directives/NgPicUpload.js"></script>
   <script src="src/directives/FocusMe.js"></script>
   <script src="src/directives/SrChipComponent.js"></script>
   <script src="src/directives/UserListCardComponent.js"></script>

@@ -2,10 +2,15 @@
 
 	angular.module('reddmeetApp')
 	    .controller('SettingsController', ['$log', SettingsController])
+
 		.controller('SettingsProfileController', ['$log', SettingsProfileController])
-		.controller('SettingsPicturesController', ['$log', SettingsPicturesController])
+
+		.controller('SettingsPicturesController', ['$log', '$scope', '$http', SettingsPicturesController])
+
 		.controller('SettingsLocationController', ['$log', '$timeout', '$mdToast', 'AuthUserFactory', SettingsLocationController])
+
 		.controller('SettingsSubredditsController', ['$log', '$mdToast', 'AuthUserFactory', SettingsSubredditsController])
+
 		.controller('SettingsAccountController', ['$log', '$mdToast', 'AuthUserFactory', SettingsAccountController])
 		;
 
@@ -24,8 +29,33 @@
 		var vm = this;
 	}
 
-	function SettingsPicturesController($log) {
+	function SettingsPicturesController($log, $scope, $http) {
 		var vm = this;
+		vm.pic = null;
+		vm.uploadApiUrl = API_BASE + '/api/v1/authuser-picture';
+
+		// TODO: In NgPicUpload, fix resizing dimensions.
+		// TODO: Use upload md-buttin for upload and hide input[type=file].
+		// TODO: Enable upload by link. Download from source, resize, and upload to server.
+
+		vm.beforeUpload = () => {
+			$log.debug('### SettingsPicturesController.beforeUpload() called...');
+			// TODO: Show a spinner during upload! ###
+		}
+
+		vm.afterUpload = imageResult => {
+			$log.debug('### SettingsPicturesController.afterUpload() called...');
+			$log.debug('### ...and vm.pic changed to: ', vm.pic);
+			// TODO: add to authuser factory data! ###
+			// TODO: Hide spinner after upload! ###
+		};
+
+		vm.destroyPic = () => {
+			$http({ url: vm.uploadApiUrl, method: 'DELETE' })
+			.then(response => vm.pic = null)
+			.catch(err => $log.debug('Error while deleting picture!', err));
+			// TODO: remove from authuser factory data! ###
+		}
 	}
 
 	function SettingsLocationController($log, $timeout, $mdToast, AuthUserFactory) {
