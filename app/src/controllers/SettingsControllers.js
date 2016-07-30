@@ -5,7 +5,7 @@
 
 		.controller('SettingsProfileController', ['$log', SettingsProfileController])
 
-		.controller('SettingsPicturesController', ['$log', '$scope', '$http', SettingsPicturesController])
+		.controller('SettingsPicturesController', ['$log', '$scope', '$http', 'AuthUserFactory',SettingsPicturesController])
 
 		.controller('SettingsLocationController', ['$log', '$timeout', '$mdToast', 'AuthUserFactory', SettingsLocationController])
 
@@ -29,32 +29,65 @@
 		var vm = this;
 	}
 
-	function SettingsPicturesController($log, $scope, $http) {
+	function SettingsPicturesController($log, $scope, $http, AuthUserFactory) {
 		var vm = this;
 		vm.pic = null;
 		vm.uploadApiUrl = API_BASE + '/api/v1/authuser-picture';
+		vm.isLoading = false;
+		vm.isResizing = false;
+		vm.isTransfering = false;
+		vm.rand = '';
 
 		// TODO: In NgPicUpload, fix resizing dimensions.
 		// TODO: Use upload md-buttin for upload and hide input[type=file].
 		// TODO: Enable upload by link. Download from source, resize, and upload to server.
 
+		vm.triggerUpload = () => {
+			// Click the file select button.
+			let target = angular.element('#settings-picture-file-input')[0];
+			let event = new MouseEvent('click');
+			target.dispatchEvent(event);
+		}
+
 		vm.beforeUpload = () => {
 			$log.debug('### SettingsPicturesController.beforeUpload() called...');
-			// TODO: Show a spinner during upload! ###
+			vm.isLoading = true;
+			vm.isResizing = true;
+			vm.isTransfering = false;
+			$scope.$apply();
+		}
+
+		vm.afterResize = () => {
+			$log.debug('### SettingsPicturesController.afterResize() called...');
+			vm.isLoading = true;
+			vm.isResizing = false;
+			vm.isTransfering = true;
+			$scope.$apply();
 		}
 
 		vm.afterUpload = imageResult => {
 			$log.debug('### SettingsPicturesController.afterUpload() called...');
 			$log.debug('### ...and vm.pic changed to: ', vm.pic);
+			vm.isLoading = false;
+			vm.isResizing = false;
+			vm.isTransfering = false;
+			vm.pic = null;
+			vm.rand = getRandInt(1000, 9999);
+			$scope.$apply();
 			// TODO: add to authuser factory data! ###
-			// TODO: Hide spinner after upload! ###
 		};
 
 		vm.destroyPic = () => {
 			$http({ url: vm.uploadApiUrl, method: 'DELETE' })
-			.then(response => vm.pic = null)
+			.then(response => {
+				vm.pic = null;
+				vm.rand = getRandInt(1000, 9999);
+				// let url = '/m/' + AuthUserFactory.username + '.jpg';
+				// fetch('/m/' + AuthUserFactory.username + '.jpg'); // Refresh SW cache.
+				// TODO: Broadcast for refresh in mainctrl.
+				$scope.$apply();
+			})
 			.catch(err => $log.debug('Error while deleting picture!', err));
-			// TODO: remove from authuser factory data! ###
 		}
 	}
 

@@ -110,6 +110,10 @@ function getRandom(min, max) {
 	// Return a random Float between min and max.
 	return Math.random() * (max - min) + min;
 }
+function getRandInt(min, max) {
+	// Return a random Integer from min to max.
+	return Math.floor(Math.random() * (max - min) + min);
+}
 
 function fuzzyGeoloc(lat, lng, fuzzyKm) {
 	// Check if valid

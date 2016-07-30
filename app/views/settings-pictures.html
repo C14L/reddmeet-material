@@ -1,10 +1,15 @@
 
-<img ng-show="vm.pic" ng-src="{{vm.pic.resized.dataURL}}" style="width: 100vw; height: 100vw;">
+<div ng-if="vm.isLoading" style="width: 100vw; height: 100vw; max-width: 500px; max-height: 500px; display: flex; justify-content: center;">
+    <div ng-if="vm.isResizing">Resizing picture...</div>
+    <div ng-if="vm.isTransfering">Uploading picture...</div>
+</div>
 
-<img ng-hide="vm.pic" ng-src="/m/{{ mainctrl.authuser.username }}.jpg" alt="{{ mainctrl.authuser.username }}" style="width: 100vw; height: 100vw; max-width: 500px; max-height: 500px; background-color: #EEE; border: 0;">
+<img ng-if="!vm.isLoading && vm.pic" ng-src="{{vm.pic.resized.dataURL}}" style="width: 100vw; height: 100vw; max-width: 500px; max-height: 500px;">
+
+<img ng-if="!vm.isLoading && !vm.pic" ng-src="/m/{{ mainctrl.authuser.username }}.jpg?{{vm.rand}}" alt="{{ mainctrl.authuser.username }}" style="width: 100vw; height: 100vw; max-width: 500px; max-height: 500px; background-color: #EEE; border: 0;">
 
 <md-content class="md-padding" layout="column" layout-align="center">
-    <md-button class="md-primary" ng-click="">
+    <md-button class="md-primary" ng-click="vm.triggerUpload()">
         <md-icon>photo</md-icon>
         Upload picture
     </md-button>
@@ -19,6 +24,5 @@
 
     <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
 
-    <input type="file" accept="image/*" image="vm.pic" resize-square="400" resize-quality="0.7" upload-target="{{ vm.uploadApiUrl }}" after-upload="vm.afterUpload()" before-upload="vm.beforeUpload()">
-
+    <input type="file" accept="image/*" image="vm.pic" resize-square="400" resize-quality="0.7" upload-target="{{ vm.uploadApiUrl }}" after-upload="vm.afterUpload()" after-resize="vm.afterResize()" before-upload="vm.beforeUpload()" style="display:none" id="settings-picture-file-input">
 </md-content>

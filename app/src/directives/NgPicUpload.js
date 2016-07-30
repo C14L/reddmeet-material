@@ -85,13 +85,16 @@ angular.module('NgPicUpload', []).directive('image', ['$http', function($http) {
         restrict: 'A',
         scope: {
             image: '=',
+
             resizeMaxHeight: '@?',
             resizeMaxWidth: '@?',
             resizeSquare: '@?',
             resizeQuality: '@?',
             resizeType: '@?',
             uploadTarget: '@?', 
+
             beforeUpload: '&?',
+            afterResize: '&?',
             afterUpload: '&?',
         },
         link: function postLink(scope, element, attrs, ctrl) {
@@ -114,10 +117,7 @@ angular.module('NgPicUpload', []).directive('image', ['$http', function($http) {
 
             var doUpload = imageResult => {
                 // Upload the image to the URL in "scope.uploadTarget".
-                console.log('### SAVE FILE TO SERVER: ', imageResult.resized);
-                return $http
-                .put(scope.uploadTarget, { 'pic': imageResult.resized })
-                .then(response => imageResult);
+                return $http.put(scope.uploadTarget, { 'pic': imageResult.resized }).then(response => imageResult);
             }
 
             element.bind('change', event => {
@@ -126,10 +126,16 @@ angular.module('NgPicUpload', []).directive('image', ['$http', function($http) {
                     url: URL.createObjectURL(event.target.files[0])
                 };
 
+                scope.beforeUpload();
                 fileToDataURL(event.target.files[0])
-                .then(dataURL => { imageResult.dataURL = dataURL; return imageResult; })
-                .then(imageResult => doResizing(imageResult))
-                .then(imageResult => doUpload(imageResult))
+                .then(dataURL => {
+                    imageResult.dataURL = dataURL;
+                    return doResizing(imageResult);
+                })
+                .then(imageResult => {
+                    scope.afterResize();
+                    return doUpload(imageResult);
+                })
                 .then(imageResult => {
                     applyScope(imageResult);
                     scope.afterUpload();
