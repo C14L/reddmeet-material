@@ -7,8 +7,6 @@
     <meta name="description" content="">
     <title>Reddmeet - Meet Redditors</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
     <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css"/>
 
     <!--build:css assets/combined.css -->
@@ -53,18 +51,15 @@
 
           <div class="md-toolbar-item docs-tools" layout="row">
             <md-button class="md-icon-button" ng-click="mainctrl.go('/results')" aria-label="upvotes inbox">
-              <!-- <md-tooltip md-autohide md-direction="down">search results</md-tooltip> -->
               <md-icon>search</md-icon>
             </md-button>
 
             <md-button class="md-icon-button" ng-click="mainctrl.go('/upvotes')" aria-label="upvotes">
-              <!-- <md-tooltip md-autohide md-direction="down">matches</md-tooltip> -->
               <md-icon>folder_special</md-icon>
             </md-button>
 
-            <md-button class="md-icon-button" ng-click="mainctrl.go('/visitors')" aria-label="visited you">
-              <!-- <md-tooltip md-autohide md-direction="down">visited you</md-tooltip> -->
-              <md-icon>group</md-icon>
+            <md-button class="md-icon-button" ng-click="mainctrl.go('/chats')" aria-label="recent chats">
+              <md-icon>chat</md-icon>
             </md-button>
 
             <md-menu>
@@ -122,7 +117,7 @@
   <script src="src/app.js"></script>
   <script src="src/controllers/MainController.js"></script>
   <script src="src/controllers/MapController.js"></script>
-  <script src="src/controllers/MatchesControllers.js"></script>
+  <script src="src/controllers/ListsControllers.js"></script>
   <script src="src/controllers/ProfileController.js"></script>
   <script src="src/controllers/ResultsController.js"></script>
   <script src="src/controllers/SettingsControllers.js"></script>

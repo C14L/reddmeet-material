@@ -9,7 +9,6 @@
     function MainController($timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory) {
         var vm = this;
         vm.userLogout = userLogout;
-
         vm.selected = null;
         vm.users = [];
         vm.selectUser = selectUser;
@@ -25,57 +24,17 @@
         AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 
         vm.overflowItems = [
-            {
-                href: '/map',
-                title: 'redditors map',
-                icon: 'map'
-            },
-            /* {
-                href: '/upvotes?sent',
-                title: 'upvoted by you',
-                icon: 'arrow_upward'
-            },
-            {
-                href: '/downvotes',
-                title: 'downvoted by you',
-                icon: 'arrow_downward'
-            }, */
-            {
-                href: '/',
-                title: 'your reddit inbox',
-                icon: 'email'
-            },
-            {
-                href: '/stats',
-                title: 'site statistics',
-                icon: 'assessment'
-            }];
+            { href: '/visitors', title: 'visited you', icon: 'group' },
+            { href: '/map', title: 'redditors map', icon: 'map' },
+            { href: '/stats', title: 'site statistics', icon: 'assessment' },
+        ];
         vm.sidebarItems = [
-            {
-                href: '/me/profile',
-                title: 'update profile basics',
-                icon: 'assignment_ind'
-            },
-            {
-                href: '/me/pictures',
-                title: 'update pictures',
-                icon: 'add_a_photo'
-            },
-            {
-                href: '/me/location',
-                title: 'update your location',
-                icon: 'my_location'
-            },
-            {
-                href: '/me/subs',
-                title: 'update your subreddit list',
-                icon: 'playlist_add_check'
-            },
-            {
-                href: '/me/account',
-                title: 'account settings',
-                icon: 'settings'
-            }];
+            { href: '/me/profile', title: 'update profile basics', icon: 'assignment_ind' },
+            { href: '/me/pictures', title: 'update pictures', icon: 'add_a_photo' },
+            { href: '/me/location', title: 'update your location', icon: 'my_location' },
+            { href: '/me/subs', title: 'update your subreddit list', icon: 'playlist_add_check' },
+            { href: '/me/account', title: 'account settings', icon: 'settings' },
+        ];
 
         function userLogout() {
             $log.debug('Would now logout user.');

@@ -2,10 +2,28 @@
     'use strict';
 
     angular.module('reddmeetApp')
+        .controller('ChatsController', ['$log', '$http', ChatsController])
         .controller('MatchesController', ['$log', '$location', '$http', MatchesController])
         .controller('VisitsController', ['$log', '$http', VisitsController])
         .controller('DownvotesController', ['$log', '$http', DownvotesController])
         ;
+
+    /**
+     * Display most recent chat partners of auth user.
+     */
+    function ChatsController($log, $http) {
+        var apiUrl = API_BASE + '/api/v1/chats.json';
+        var vm = this;
+        vm.title = "Recent chats";
+        vm.userLists = { chats: [] };
+
+        $http.get(apiUrl).then(response => {
+            $log.debug('API response: ', response);
+            vm.userLists['chats'] = response.data.user_list;
+        }).catch(err => {
+            $log.error('Error: ', err);
+        });
+    }
 
     /**
      * Display three tabs with "upvotes received", "upvote matches", "upvotes sent".

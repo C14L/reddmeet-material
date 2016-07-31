@@ -34,7 +34,6 @@ window.API_BASE = "";
 				controllerAs: 'vm',
 				templateUrl: '/app/views/matches.html'
 			})
-
 			.when('/visitors', {
 				controller: 'VisitsController',
 				controllerAs: 'vm',
@@ -44,6 +43,11 @@ window.API_BASE = "";
 				controller: 'VisitsController',
 				controllerAs: 'vm',
 				templateUrl: '/app/views/visits.html'
+			})
+			.when('/chats', {
+				controller: 'ChatsController',
+				controllerAs: 'vm',
+				templateUrl: '/app/views/chats.html'
 			})
 
 			.when('/hidden', {
