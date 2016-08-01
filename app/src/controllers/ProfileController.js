@@ -17,7 +17,7 @@
 
         vm.fabOpen = false;
         vm.isShowSendMessage = false;
-        vm.messages = []; // { time: '', text: '', sender: '', receiver: '' }
+        vm.messages = []; // { created: '', msg: '', sender: '', receiver: '' }
         vm.data = null;
         vm.authuser = null;
         vm.isProfileLoading = true;  // to hide main profile view while loading
@@ -69,15 +69,15 @@
             });
 
             // Load initial messages when opening chat view.
-            MessagesFactory.fetch().then(messages => vm.messages = messages); 
+            MessagesFactory.fetch($routeParams.username).then(data => vm.messages = data.msg_list);
         };
 
         vm.doSendMessage = () => {
             // Post a message to the message queue
-            vm.messages = MessagesFactory.post({
-                text: vm.messageText,
-                sender: vm.authuser.username,
-                receiver: vm.data.view_user.username,
+            vm.messages = MessagesFactory.post(vm.messageText, vm.data.view_user.username)
+            .then(data => {
+                console.log('### doSendMessage response data: ', data);
+                vm.messages.push(data.msg_list)
             });
             vm.messageText = '';
         };
