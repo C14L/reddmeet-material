@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp').service('focusMe', ['$timeout', function($timeout) {
+    angular.module('reddmeetApp').directive('focusMe', ['$timeout', function($timeout) {
         return {
             scope: { trigger: '=focusMe' },
             link: function(scope, element) {
