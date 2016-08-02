@@ -90,6 +90,7 @@
 					<span class="is-sent-flag" ng-if="msg.is_sent">OK</span>
 					<span class="is-seen-flag" ng-if="!msg.is_seen">x</span>
 					<span class="is-seen-flag" ng-if="msg.is_seen">OK</span>
+					<span>-[{{ msg.sender }}]-</span>
 				</div>
 				<div class="username">{{ msg.sender }}</div>
 			</div>

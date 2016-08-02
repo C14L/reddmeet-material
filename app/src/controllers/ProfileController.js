@@ -12,17 +12,17 @@
      */
     function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, UserFactory, MessagesFactory) {
         var vm = this;
-        //var apiUrl = API_BASE + '/api/v1/u/' + $routeParams.username + '.json';
         var watcherMessageText = false;
 
         vm.fabOpen = false;
         vm.isShowSendMessage = false;
-        vm.messages = []; // { created: '', msg: '', sender: '', receiver: '' }
+        vm.messages = [];
         vm.data = null;
         vm.authuser = null;
-        vm.isProfileLoading = true;  // to hide main profile view while loading
+        vm.isProfileLoading = true;
         vm.isFadeToLeft = false;
         vm.isFadeToRight = false;
+        vm.isTextboxFocus = false;
 
         AuthUserFactory.getAuthUser().then(authuser => vm.authuser = authuser);
 
@@ -69,18 +69,15 @@
             });
 
             // Load initial messages when opening chat view.
-            MessagesFactory.fetch($routeParams.username).then(data => vm.messages = data.msg_list);
+            MessagesFactory.fetch($routeParams.username).then(messages => vm.messages = messages);
         };
 
         vm.doSendMessage = () => {
             // Post a message to the message queue
-            vm.messages = MessagesFactory.post(vm.messageText, vm.data.view_user.username)
-            .then(data => {
-                console.log('### doSendMessage response data: ', data);
-                vm.messages.push(data.msg_list)
-            });
+            MessagesFactory.post(vm.messageText, vm.data.view_user.username).then(messages => vm.messages = messages);
             vm.messageText = '';
         };
+
 	    vm.goPrevNext = d => {
             if (d == 'next') {
                 vm.isFadeToLeft = true;
