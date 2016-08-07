@@ -151,7 +151,7 @@ function await_fuzzy_geoloc(fuzzy) {
 					// - Latitude: 1 deg = 110.574 km
 					// - Longitude: 1 deg = 111.320 * cos(latitude) km
 					// Get geoloction from browser object.
-					fuzzyCoords = fuzzyGeoloc(loc.coords.latitude, loc.coords.longitude, fuzzy);
+					let fuzzyCoords = fuzzyGeoloc(loc.coords.latitude, loc.coords.longitude, fuzzy);
 					resolve(fuzzyCoords);
 				});
 			} catch(err) {

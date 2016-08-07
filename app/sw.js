@@ -5,7 +5,7 @@ const SW_VERSION = 'v0.1.32';
 const SW_LOG_PREFIX = '## SW '+SW_VERSION+' ## ';
 const SW_APP_CACHE = 'app-cache-'+SW_VERSION;
 const SW_IMG_CACHE = 'img-cache-'+SW_VERSION;
-const SW_ACTIVE = true;
+const SW_ACTIVE = true; // TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const SW_CACHE_URLS = [
     '/app/assets/material-icons-v17.woff',
     '/app/assets/Roboto/Roboto-Regular.ttf',
