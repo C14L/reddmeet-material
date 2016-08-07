@@ -20,6 +20,7 @@
     "angular-resource": "^1.5.0",
     "angular-route": "^1.5.0",
     "angular-sanitize": "^1.5.0",
+    "angular-websocket": "^2.0.1",
     "jquery": "^2.2.1",
     "moment": "^2.14.1",
     "sw-toolbox": "^3.2.1"

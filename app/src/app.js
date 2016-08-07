@@ -1,10 +1,11 @@
 
 window.API_BASE = "";
+window.WS_BASE = "ws://localhost:8000/api/v1/ws";
 
 (function () {
 	'use strict';
 
-	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment', 'NgPicUpload']);
+	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment', 'NgPicUpload', 'ngWebSocket']);
 
 	app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider', 'amTimeAgoConfig', function reddmeetAppConfig($routeProvider, $locationProvider, $httpProvider, $mdThemingProvider, amTimeAgoConfig) {
 

@@ -8,6 +8,8 @@
      */
     function MainController($timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory) {
         var vm = this;
+        vm.websocket = null;
+        vm.wsMessages = []; // Websocket messages 
         vm.userLogout = userLogout;
         vm.selected = null;
         vm.users = [];

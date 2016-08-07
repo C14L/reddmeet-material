@@ -1,18 +1,19 @@
 (function () { 'use strict';
 
     angular.module('reddmeetApp')
-        .factory('AuthUserFactory', ['$http', '$log', AuthUserFactory])
+        .factory('AuthUserFactory', ['$http', '$log', '$websocket', AuthUserFactory])
         .factory('UserFactory', ['$http', '$log', UserFactory])
         ;
 
     /**
      * Load auth user data on init.
      */
-    function AuthUserFactory($http, $log) {
+    function AuthUserFactory($http, $log, $websocket) {
         var apiUrl = API_BASE + '/api/v1/authuser.json';
         var pushNotificationApiUrl = API_BASE + '/api/v1/pushnotifications';
         var authUserData = null;
         var authUserGeoloc = null;
+        var authUserWebsocket = null;
 
         var authUserPromise = $http.get(apiUrl).then(response => {
             $log.debug('## LOADING response.data.authuser: ', response.data.authuser);
@@ -27,6 +28,25 @@
 			navigator.serviceWorker.getRegistration()
 			.then(reg => reg.pushManager.getSubscription())
 			.then(sub => authUserData.profile.pref_receive_notification = !!sub);
+
+            // Connect authenticated user to a websocket.
+            authUserWebsocket = $websocket(WS_BASE);
+            authUserWebsocket.onMessage(message => {
+                $log.debug('### $websocket ### Message received: ', message);
+                wsMessages.push(JSON.parse(message.data))
+            });
+            authUserWebsocket.onOpen(() => {
+                $log.debug('### $websocket ### Websocket opened!');
+                authUserData.wsConnected = true;
+            });
+            authUserWebsocket.onClose(() => {
+                $log.debug('### $websocket ### Websocket closed!');
+                authUserData.wsConnected = false;
+            });
+            authUserWebsocket.onError(() => {
+                $log.debug('### $websocket ### Websocket ERROR!');
+            });
+
         });
 
         /** 

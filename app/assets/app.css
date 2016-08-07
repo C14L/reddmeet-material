@@ -1,11 +1,11 @@
-@font-face { 
+/* @font-face { 
     font-family: 'Roboto'; 
     src: url('/app/assets/Roboto/Roboto-Regular.ttf') format('truetype'); 
-}
+} */
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-@font-face {
+/* @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
@@ -28,7 +28,7 @@
   direction: ltr;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-}
+} */
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -46,6 +46,10 @@ md-icon { color: inherit; }
 /* Toolbar area */
 
 .main-toolbar { /* z-index: 1001; <-- nope! */ }
+
+.main-toolbar .ws-connected { display: inline-block; margin-left: 16px; width: 4px; height: 4px; border-radius: 50%; background-color: rgba(127, 127, 0, 0.5); }
+
+.main-toolbar .ws-connected.online { background-color: rgba(255, 255, 0, 1); }
 
 /* Sidenav area */
 
