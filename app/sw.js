@@ -1,15 +1,12 @@
 // Manual service worker setup
 const BASE_URL = 'http://localhost:8000/app/index.html#';
 
-const SW_VERSION = 'v0.1.32';
+const SW_VERSION = 'v0.1.33';
 const SW_LOG_PREFIX = '## SW '+SW_VERSION+' ## ';
 const SW_APP_CACHE = 'app-cache-'+SW_VERSION;
 const SW_IMG_CACHE = 'img-cache-'+SW_VERSION;
-const SW_ACTIVE = true; // TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const SW_ACTIVE = false; // TODO: !!!
 const SW_CACHE_URLS = [
-    '/app/assets/material-icons-v17.woff',
-    '/app/assets/Roboto/Roboto-Regular.ttf',
-
     '/node_modules/angular-material/angular-material.css',
     '/node_modules/jquery/dist/jquery.min.js',
     '/node_modules/moment/min/moment.min.js',
@@ -20,6 +17,7 @@ const SW_CACHE_URLS = [
     '/node_modules/angular-route/angular-route.min.js',
     '/node_modules/angular-messages/angular-messages.min.js',
     '/node_modules/angular-material/angular-material.min.js',
+    '/node_modules/angular-websocket/dist/angular-websocket.min.js',
 
     '/app/assets/app.css',
     '/app/assets/profile.css',
@@ -135,7 +133,7 @@ if (SW_ACTIVE) {
         let title = '', args = {};
         
         if (data.notiftype == 'upvote') {
-            title = 'Upvote from @' + data.username;
+            title = 'Upvote from u/' + data.username;
             args = { 'body': 'Your profile on Reddmeet.com was upvoted!',
                      'icon': '/static/icon64.png',
                      'tag': 'reddmeet-upvote' };
@@ -147,7 +145,7 @@ if (SW_ACTIVE) {
                      'tag': 'reddmeet-match' };
         } else
         if (data.notiftype == 'message') {
-            title = 'Message from @' + data.username;
+            title = 'Message from u/' + data.username;
             args = { 'body': data.teaser,
                      'icon': '/static/icon64.png',
                      'tag': 'reddmeet-message' };
