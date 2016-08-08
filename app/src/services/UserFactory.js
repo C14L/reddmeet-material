@@ -11,9 +11,30 @@
     function AuthUserFactory($http, $log, $websocket) {
         var apiUrl = API_BASE + '/api/v1/authuser.json';
         var pushNotificationApiUrl = API_BASE + '/api/v1/pushnotifications';
-        var authUserData = null;
+        var authUserData = null;  // Buffer all of auth user's data here.
         var authUserGeoloc = null;
-        var authUserWebsocket = null;
+        var authUserWebsocket = null;  // The user's open websocket.
+        var wsMessages = [];  // Queue for received websocket messages.
+
+        var wsEstablishConnection = () => {
+            authUserWebsocket = $websocket(WS_BASE);
+
+            authUserWebsocket.onMessage(message => {
+                $log.debug('### $websocket ### Message received: ', message);
+                wsMessages.push(JSON.parse(message.data))
+            });
+            authUserWebsocket.onOpen(() => {
+                $log.debug('### $websocket ### Websocket opened!');
+                authUserData.wsConnected = true;
+            });
+            authUserWebsocket.onClose(() => {
+                $log.debug('### $websocket ### Websocket closed!');
+                authUserData.wsConnected = false;
+            });
+            authUserWebsocket.onError(() => {
+                $log.debug('### $websocket ### Websocket ERROR!');
+            });
+        }
 
         var authUserPromise = $http.get(apiUrl).then(response => {
             $log.debug('## LOADING response.data.authuser: ', response.data.authuser);
@@ -30,23 +51,7 @@
 			.then(sub => authUserData.profile.pref_receive_notification = !!sub);
 
             // Connect authenticated user to a websocket.
-            authUserWebsocket = $websocket(WS_BASE);
-            authUserWebsocket.onMessage(message => {
-                $log.debug('### $websocket ### Message received: ', message);
-                wsMessages.push(JSON.parse(message.data))
-            });
-            authUserWebsocket.onOpen(() => {
-                $log.debug('### $websocket ### Websocket opened!');
-                authUserData.wsConnected = true;
-            });
-            authUserWebsocket.onClose(() => {
-                $log.debug('### $websocket ### Websocket closed!');
-                authUserData.wsConnected = false;
-            });
-            authUserWebsocket.onError(() => {
-                $log.debug('### $websocket ### Websocket ERROR!');
-            });
-
+            wsEstablishConnection();
         });
 
         /** 
@@ -56,6 +61,19 @@
         window.navigator.geolocation.getCurrentPosition(pos => authUserGeoloc = pos);
 
         return {
+            sendChat: (receiver_id, msg) => {
+                // Send a chat message to another user.
+                if (!authUserData.wsConnected) wsEstablishConnection();
+
+                let payload = {
+                    'action': 'chat.receive',
+                    'message': msg,
+                    'receiver_id': receiver_id,
+                };
+                authUserWebsocket.send(payload);
+                $log.debug('### AuthUserFactory.sendChat with: ', payload);
+            },
+
             createPushNotificationEndpoint: sub => {
                 // adds the endpoint to the authuser's profile.
                 return $http.post(pushNotificationApiUrl, sub);

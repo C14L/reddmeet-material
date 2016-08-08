@@ -47,9 +47,9 @@ md-icon { color: inherit; }
 
 .main-toolbar { /* z-index: 1001; <-- nope! */ }
 
-.main-toolbar .ws-connected { display: inline-block; margin-left: 16px; width: 4px; height: 4px; border-radius: 50%; background-color: rgba(127, 127, 0, 0.5); }
+.ws-connected { display: inline-block; margin-left: 16px; width: 4px; height: 4px; border-radius: 50%; background-color: rgba(127, 127, 0, 0.5); }
 
-.main-toolbar .ws-connected.online { background-color: rgba(255, 255, 0, 1); }
+.ws-connected.online { background-color: rgba(255, 255, 0, 1); }
 
 /* Sidenav area */
 

@@ -74,7 +74,8 @@
 
         vm.doSendMessage = () => {
             // Post a message to the message queue
-            MessagesFactory.post(vm.messageText, vm.data.view_user.username).then(messages => vm.messages = messages);
+            AuthUserFactory.sendChat(vm.data.view_user.id, vm.messageText);
+            // MessagesFactory.post(vm.messageText, vm.data.view_user.username).then(messages => vm.messages = messages);
             vm.messageText = '';
         };
 

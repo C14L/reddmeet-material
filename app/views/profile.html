@@ -6,7 +6,7 @@
 	<div class="pnasl">
 		<div class="votebox"></div>
 		<div class="pic" md-swipe-left="vm.goPrevNext('next')" md-swipe-right="vm.goPrevNext('prev')">
-			<img src="/m/{{ vm.data.view_user.username }}.jpg">
+			<img ng-src="/m/{{ vm.data.view_user.username }}.jpg">
 		</div>
 		<div class="nasl">
 			<div class="username">{{ vm.data.view_user.username }}</div>
@@ -100,6 +100,10 @@
 	        <div class="md-toolbar-tools" tabIndex="-1">
 				<div>/u/{{ vm.data.view_user.username }}</div>
 				<div flex></div>
+				<span class="ws-connected" ng-class="{online: mainctrl.authuser.wsConnected}" aria-label="online status">
+					<md-tooltip ng-if="mainctrl.authuser.wsConnected">online</md-tooltip>
+					<md-tooltip ng-if="!mainctrl.authuser.wsConnected">offline</md-tooltip>
+				</span>
 				<md-button class="md-icon-button" ng-click="vm.closeMessenger()" aria-label="close">
 					<md-icon>close</md-icon>
 				</md-button>
