@@ -100,9 +100,9 @@
 	        <div class="md-toolbar-tools" tabIndex="-1">
 				<div>/u/{{ vm.data.view_user.username }}</div>
 				<div flex></div>
-				<span class="ws-connected" ng-class="{online: mainctrl.authuser.wsConnected}" aria-label="online status">
-					<md-tooltip ng-if="mainctrl.authuser.wsConnected">online</md-tooltip>
-					<md-tooltip ng-if="!mainctrl.authuser.wsConnected">offline</md-tooltip>
+				<span class="ws-connected" ng-class="{online: mainctrl.wsConnected}" aria-label="online status">
+					<md-tooltip ng-if="mainctrl.wsConnected">online</md-tooltip>
+					<md-tooltip ng-if="!mainctrl.wsConnected">offline</md-tooltip>
 				</span>
 				<md-button class="md-icon-button" ng-click="vm.closeMessenger()" aria-label="close">
 					<md-icon>close</md-icon>

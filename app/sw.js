@@ -38,7 +38,8 @@ const SW_CACHE_URLS = [
     '/app/src/directives/SrChipComponent.js',
     '/app/src/directives/UserListCardComponent.js',
     
-    '/app/src/services/MessagesFactory.js',
+    '/app/src/services/WsFactory.js',
+    '/app/src/services/ChatFactory.js',
     '/app/src/services/SearchResultsFactory.js',
     '/app/src/services/UserFactory.js',
 

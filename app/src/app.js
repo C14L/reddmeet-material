@@ -67,6 +67,11 @@ window.WS_BASE = "ws://localhost:8000/api/v1/ws";
 				controllerAs: 'vm',
 				templateUrl: '/app/views/profile.html'
 			})
+			.when('/chat/:username', {
+				controller: 'ChatController',
+				controllerAs: 'vm',
+				templateUrl: '/app/views/chat.html'
+			})
 
 			.when('/me/profile', {
 				controller: 'SettingsProfileController',

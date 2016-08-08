@@ -49,9 +49,9 @@
           </md-button>
 
           <h2 aria-label="open sidebar" hide-xs>reddmeet</h2>
-          <span class="ws-connected" ng-class="{online: mainctrl.authuser.wsConnected}" aria-label="online status">
-            <md-tooltip ng-if="mainctrl.authuser.wsConnected">online</md-tooltip>
-            <md-tooltip ng-if="!mainctrl.authuser.wsConnected">offline</md-tooltip>
+          <span class="ws-connected" ng-class="{online: mainctrl.wsConnected}" aria-label="online status">
+            <md-tooltip ng-if="mainctrl.wsConnected">online</md-tooltip>
+            <md-tooltip ng-if="!mainctrl.wsConnected">offline</md-tooltip>
           </span>
           <span flex></span>
 
@@ -135,7 +135,8 @@
   <script src="src/directives/FocusMe.js"></script>
   <script src="src/directives/SrChipComponent.js"></script>
   <script src="src/directives/UserListCardComponent.js"></script>
-  <script src="src/services/MessagesFactory.js"></script>
+  <script src="src/services/WsFactory.js"></script>
+  <script src="src/services/ChatFactory.js"></script>
   <script src="src/services/SearchResultsFactory.js"></script>
   <script src="src/services/UserFactory.js"></script>
   <script src="src/filter.js"></script>

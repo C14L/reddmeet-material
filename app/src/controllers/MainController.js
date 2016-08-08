@@ -1,17 +1,16 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp').controller('MainController', ['$timeout', '$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', MainController]);
+    angular.module('reddmeetApp').controller('MainController', ['$timeout', '$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', 'WsFactory', MainController]);
 
     /**
      * Control most of the app logic that happens independently of the current view.
      */
-    function MainController($timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory) {
+    function MainController($timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory, WsFactory) {
         var vm = this;
-        vm.websocket = null;
-        vm.wsMessages = []; // Websocket messages 
         vm.userLogout = userLogout;
         vm.selected = null;
+        vm.wsConnected = false;
         vm.users = [];
         vm.selectUser = selectUser;
         vm.makeContact = makeContact;
@@ -22,9 +21,6 @@
             $location.path(url);
             $log.debug('### go("' + url + '")');
         };
-
-        AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
-
         vm.overflowItems = [
             { href: '/visitors', title: 'visited you', icon: 'group' },
             { href: '/map', title: 'redditors map', icon: 'map' },
@@ -37,6 +33,15 @@
             { href: '/me/subs', title: 'update your subreddit list', icon: 'playlist_add_check' },
             { href: '/me/account', title: 'account settings', icon: 'settings' },
         ];
+
+        // WebSocket connected.
+        WsFactory.onOpen(() => vm.wsConnected = true);
+        // WebSocket disconnected.
+        WsFactory.onClose(() => vm.wsConnected = false);
+        WsFactory.onError(() => vm.wsConnected = false);
+
+        // Add auth user data to scope when promise resolved.
+        AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 
         function userLogout() {
             $log.debug('Would now logout user.');
