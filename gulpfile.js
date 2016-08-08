@@ -57,12 +57,13 @@ gulp.task('watch', () => {
 // - - - Build but don't bundle, JS files, so that SW can cache them. - - - - - - - - - - - - - - 
 
 gulp.task('devindex', () => gulp.src('app/index.html').pipe(gulp.dest('dist')));
+gulp.task('devmanifest', () => gulp.src('app/manifest.json').pipe(gulp.dest('dist')));
 
 gulp.task('jsprep', () => gulp.src('app/**/*.js').pipe(babel({presets: ['es2015']})).pipe(uglify().on('error', e => console.log(e))).pipe(gulp.dest('dist')));
 
 gulp.task('cssprep', () => gulp.src('app/**/*.css').pipe(cssnano()).pipe(gulp.dest('dist')));
 
-gulp.task('devbuild', callback => runSequence('clean:dist', ['jsprep', 'cssprep', 'views', 'swjs', 'devindex'], callback));
+gulp.task('devbuild', callback => runSequence('clean:dist', ['jsprep', 'cssprep', 'views', 'swjs', 'devindex', 'devmanifest'], callback));
 
 gulp.task('devwatch', () => {
     gulp.watch(['app/sw.js', 'app/views/**/*.html', 'app/assets/**/*.css', 'app/src/**/*.js', 'app/index.html'], ['devbuild']);
