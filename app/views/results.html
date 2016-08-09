@@ -1,4 +1,4 @@
-<md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="0" md-row-height="fit" style="height: 96px;">
+<md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="0" md-row-height="fit" style="height: 96px; overflow: hidden;">
 	<md-grid-tile md-ink-ripple ng-click="vm.showSearchOptionGender($event)" style="border-right: 1px solid rgba(0,0,0,0.12); border-bottom: 1px solid rgba(0,0,0,0.12);">
 		{{ vm.genderSelectedDisplay }}
 	</md-grid-tile>
@@ -27,7 +27,7 @@
 	</div>
 </div>
 
-<div ng-if="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list">
+<div ng-if="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list results-list">
 	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.profile.age }}" gender="{{ item.profile.sex_symbol }}" distance="{{ vm.getDistance(item.profile.lat, item.profile.lng) }}">
 	</user-list-card>
 

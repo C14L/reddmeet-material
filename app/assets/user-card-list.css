@@ -8,6 +8,10 @@
   min-height: 100vh;
   overflow: auto;
 }
+.user-card-list.results-list { /* main search results */
+    min-height: auto;
+    height: calc(100vh - 56px - 96px);
+}
 md-card.user-list-card {
     width: 140px;  /* 2 cards per row on "mobile S" 320px screen */
     overflow: hidden;
