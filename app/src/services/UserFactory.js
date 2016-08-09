@@ -24,9 +24,15 @@
             authUserData = response.data.authuser
 
             // Check if push notifications are enabled on this device.
-			navigator.serviceWorker.getRegistration()
+			return navigator.serviceWorker.getRegistration()
 			.then(reg => reg.pushManager.getSubscription())
-			.then(sub => authUserData.profile.pref_receive_notification = !!sub);
+			.then(sub => {
+                authUserData.profile.pref_receive_notification = !!sub;
+                $log.debug('# AuthUserFactory Push notification status:', authUserData.profile.pref_receive_notification);
+                $log.debug('# AuthUserFactory Push notification sub Object', sub);
+
+                return authUserData;
+            });
         });
 
         /** 
