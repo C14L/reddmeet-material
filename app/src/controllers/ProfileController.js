@@ -92,19 +92,24 @@
          * for rendering, but that should be okay, because the list 
          * is likely to be modified only occasionally, if at all.
          */
-        function addMessages(msg_list) {
-            if (msg_list) {
-                for (let i=0; i<msg_list.length; i++) {
-                    if ( ! isMsgAinListB(msg_list[i], vm.messages))
-                        vm.messages.push(msg_list[i]);
+        function addMessages(data) {
+            // The data objects must have an 'action' attribute, and that
+            // must begin with the string 'chat.'
+            $log.debug('addMessages() --> data == ', data);
+
+            if (!data.action || !data.action.startsWith('chat.'))
+                return;
+
+            if (data.msg_list) {
+                for (let i=0; i<data.msg_list.length; i++) {
+                    if ( ! isMsgAinListB(data.msg_list[i], vm.messages))
+                        vm.messages.push(data.msg_list[i]);
                 }
             }
             // Sort by latest message (largest ID) first.
             vm.messages.sort((a, b) => b.id - a.id);
             // Limit messages buffer to 100 last messages.
             while (vm.messages.length > 100) vm.messages.pop();
-
-            $log.debug('addMessages() --> vm.messages == ', vm.messages);
         }
 
         /**
@@ -149,8 +154,9 @@
             watcherMessageText = $scope.$watch('vm.messageText', (newVal, oldVal) => {
                 if (newVal) vm.messageText = newVal.replace('\n', '');
             });
-            // Load initial messages when opening chat view.
-            // ChatFactory.fetch($routeParams.username).then(messages => vm.messages = messages);
+            // When opening the chat, get an initial list.
+            let after = vm.messages[0] ? vm.messages[0]['id'] : '';
+            WsFactory.send({ 'action': 'chat.init', 'after': after, 'view_user': vm.data.view_user.username });
         };
 
         // - - - Right sidenav - - - - - - - - - - - - - - - - -
