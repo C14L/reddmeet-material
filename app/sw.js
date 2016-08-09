@@ -1,11 +1,14 @@
 // Manual service worker setup
 const BASE_URL = 'http://localhost:8000/app/index.html#';
 
-const SW_VERSION = 'v0.1.33';
+const SW_VERSION = 'v0.1.37';
+
 const SW_LOG_PREFIX = '## SW '+SW_VERSION+' ## ';
 const SW_APP_CACHE = 'app-cache-'+SW_VERSION;
 const SW_IMG_CACHE = 'img-cache-'+SW_VERSION;
-const SW_ACTIVE = false; // TODO: !!!
+const SW_ACTIVE = true; // Turn ServiceWorker on or off.
+const SW_SCRIPT_CACHE = false; // During dev do not cache scripts during install.
+
 const SW_CACHE_URLS = [
     '/node_modules/angular-material/angular-material.css',
     '/node_modules/jquery/dist/jquery.min.js',
@@ -98,9 +101,14 @@ if (SW_ACTIVE) {
     self.addEventListener('fetch', event => {
         let url = new URL(event.request.url);
         if (SW_CACHE_URLS.includes(url.pathname)) {
-            // App files, cache only, don't revalidate from network.
-            console.log(SW_LOG_PREFIX+' from app cache: '+event.request.url);
-            event.respondWith(caches.open(SW_APP_CACHE).then(cache => cache.match(event.request)));
+            if (SW_SCRIPT_CACHE) {
+                // App files, cache only, don't revalidate from network.
+                console.log(SW_LOG_PREFIX+' from app cache: '+event.request.url);
+                event.respondWith(caches.open(SW_APP_CACHE).then(
+                    cache => cache.match(event.request)));
+            } else {
+                console.log(SW_LOG_PREFIX+' app cache disabled (SW_SCRIPT_CACHE == false), serving static files from network.');
+            }
         } else
         if (event.request.url.toLowerCase().indexOf('.jpg') >= 0) {
             // Images files, from cache, then revalidate cache from network.
@@ -114,14 +122,16 @@ if (SW_ACTIVE) {
     });
 
     self.addEventListener('install', event => {
-        event.waitUntil(caches.open(SW_APP_CACHE).then(cache => cache.addAll(SW_CACHE_URLS)));
+        if (SW_SCRIPT_CACHE)
+            event.waitUntil(caches.open(SW_APP_CACHE).then(
+                cache => cache.addAll(SW_CACHE_URLS)));
 
-        // self.skipWaiting();
-        // console.log(SW_LOG_PREFIX+'Installed', event);
+        self.skipWaiting();
+        console.log(SW_LOG_PREFIX+'Installed version', SW_VERSION, event);
     });
 
     self.addEventListener('activate', event => {
-        // console.log(SW_LOG_PREFIX+'Activated', event);
+        console.log(SW_LOG_PREFIX+'Activated version', SW_VERSION, event);
 
         // TODO: Apparently, installing a new version of SW, also changes the 
         // ID for Push Notifications! Needs here to delete the old ID and set
