@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', '$mdSidenav', '$location', 'AuthUserFactory', 'UserFactory', 'WsFactory', ProfileController])
+        .controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', '$mdSidenav', '$location', 'AuthUserFactory', 'UserFactory', 'ChatFactory', ProfileController])
         ;
 
     /**
@@ -10,10 +10,13 @@
      * add "edit" buttons to different parts, and have popups
      * with forms to change the values.
      */
-    function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, UserFactory, WsFactory) {
-        var vm = this;
-        var watcherMessageText = false;
-        
+    function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, UserFactory, ChatFactory) {
+        let vm = this;
+        let watcherMessageText = false;
+        let onEventNewMessage = false;
+        let promiseViewUser = UserFactory.getViewUser($routeParams.username);
+        let promiseAuthUser = AuthUserFactory.getAuthUser();
+
         vm.fabOpen = false;
         vm.isShowSendMessage = false;
         vm.messages = [];  // chat messages
@@ -24,9 +27,9 @@
         vm.isFadeToRight = false;
         vm.isTextboxFocus = false;
 
-        AuthUserFactory.getAuthUser().then(authuser => vm.authuser = authuser);
-
-        UserFactory.getViewUser($routeParams.username).then(response => {
+        promiseAuthUser.then(authuser => vm.authuser = authuser);
+        
+        promiseViewUser.then(response => {
             vm.data = response;
             vm.isProfileLoading = false;
             setTimeout(() => {
@@ -77,63 +80,13 @@
         // - - - Chat window - - - - - - - - - - - - - - - - -
 
         /**
-         * Check if a message is in the list of messages.
-         */
-        function isMsgAinListB(a, b) {
-            for (let j=0; j<b.length; j++) {
-                if (b[j]['id'] === a['id']) return true;
-            }
-            return false;
-        }
-
-        /**
-         * Add new messages to existing messages array, avoiding 
-         * duplicates. This works directly on the list that is used
-         * for rendering, but that should be okay, because the list 
-         * is likely to be modified only occasionally, if at all.
-         */
-        function addMessages(data) {
-            // The data objects must have an 'action' attribute, and that
-            // must begin with the string 'chat.'
-            $log.debug('addMessages() --> data == ', data);
-
-            if (!data.action || !data.action.startsWith('chat.'))
-                return;
-
-            if (data.msg_list) {
-                for (let i=0; i<data.msg_list.length; i++) {
-                    if ( ! isMsgAinListB(data.msg_list[i], vm.messages))
-                        vm.messages.push(data.msg_list[i]);
-                }
-            }
-            // Sort by latest message (largest ID) first.
-            vm.messages.sort((a, b) => b.id - a.id);
-            // Limit messages buffer to 100 last messages.
-            while (vm.messages.length > 100) vm.messages.pop();
-        }
-
-        /**
          * Send a chat message from auth user to receiver (username)
          * via the open WebSocket channel.
          */
         vm.doSendMessage = () => {
-            let payload = {
-                'action': 'chat.receive',
-                'msg': vm.messageText,
-                'receiver': vm.data.view_user.username,
-                'after': '',
-                'is_sent': '',
-                'is_seen': '',
-            };
-            $log.debug('### ProfileController.doSendMessage()', payload);
-            WsFactory.send(payload);
+            ChatFactory.sendChat(vm.data.view_user.username, vm.messageText);
             vm.messageText = '';
         };
-
-        /**
-         * When messages are received, add them to the messages buffer.
-         */
-        WsFactory.onMessage(response => addMessages(JSON.parse(response.data)));
 
         /**
          * User activities: close messenger, open messagener.
@@ -143,6 +96,7 @@
             vm.isShowSendMessage = false;
             vm.isTextboxFocus = false;
 
+            if (onEventNewMessage) onEventNewMessage();
             if (watcherMessageText) watcherMessageText();
         };
 
@@ -150,13 +104,22 @@
             // Switch profile view to message box view
             vm.isShowSendMessage = true;
             vm.isTextboxFocus = true;
+
+            promiseViewUser.then(() => {
+                // When opening the chat, get an initial list.
+                let after = vm.messages[0] ? vm.messages[0]['id'] : 0;
+                ChatFactory.getInitialWithUser(vm.data.view_user.username, after);
+            });
+
             // Watch for and remove any newline characters.
             watcherMessageText = $scope.$watch('vm.messageText', (newVal, oldVal) => {
                 if (newVal) vm.messageText = newVal.replace('\n', '');
             });
-            // When opening the chat, get an initial list.
-            let after = vm.messages[0] ? vm.messages[0]['id'] : '';
-            WsFactory.send({ 'action': 'chat.init', 'after': after, 'view_user': vm.data.view_user.username });
+
+            onEventNewMessage = $scope.$on('chat:newmsg', (event, data) => {
+                console.log('ProfileController: event "chat:newmsg" received.');
+                vm.messages = ChatFactory.getChatWithUser(vm.data.view_user.username);
+            });
         };
 
         // - - - Right sidenav - - - - - - - - - - - - - - - - -

@@ -1,16 +1,34 @@
 (function () { 'use strict';
 
-    angular.module('reddmeetApp').factory('ChatFactory', [
-        'WsFactory', 
+    angular.module('reddmeetApp').service('ChatFactory', [
+        '$rootScope',
         '$http', 
         '$log', 
+        'AuthUserFactory',
+        'WsFactory', 
         ChatFactory]);
 
-    function ChatFactory(WsFactory, $http, $log) {
-        var apiUrlBase = API_BASE + '/api/v1/pms/';
-        var messages = [];  // Ordered chat messages buffer.
+    function ChatFactory($rootScope, $http, $log, AuthUserFactory, WsFactory) {
+        let self = this;
+        let authUsername = '';
 
-        function isMsgAinListB(a, b) {
+        self.newMessages = false; // Set true when new messages arrive, and false once they are read.
+        self.newChats = false;
+        self.messages = [];  // All chat messages between auth user and all other users.
+        self.chats = [];  // A list of past chats with other users.
+
+        // Set auth user's username.
+        AuthUserFactory.getAuthUser().then(authuser => authUsername = authuser.username);
+
+        // When messages are received, add them to the messages buffer.
+        WsFactory.onMessage(message => receiveMessages(message.data));
+
+        // When messages are received, add them to the messages buffer.
+        WsFactory.onMessage(message => receiveChats(message.data));
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        function _isMsgAinListB(a, b) {
             // Check if a message is in the list of messages.
             for (let j=0; j<b.length; j++) if (b[j]['id'] === a['id']) return true;
             return false;
@@ -20,25 +38,94 @@
          * Add new messages to existing messages buffer array, avoinding 
          * duplicates.
          */
-        function prepareMessages(msg_list) {
-            if (msg_list) {
-                for (let i=0; i<msg_list.length; i++) {
-                    if ( ! isMsgAinListB(msg_list[i], messages))
-                        messages.push(msg_list[i]);
+        function receiveMessages(dataText) {
+            let data = JSON.parse(dataText);
+            let len = 0;
+
+            if (!data.action || !data.action.startsWith('chat.'))
+                return;
+
+            if (data.msg_list.length > 0) {
+                len = data.msg_list.length;
+                for (let i=0; i<len; i++) {
+                    if ( ! _isMsgAinListB(data.msg_list[i], self.messages))
+                        self.messages.push(data.msg_list[i]);
                 }
+
+                // Sort by latest message (largest ID) first.
+                self.messages.sort((a, b) => b.id - a.id);
+                // Limit messages buffer to 100 last messages.
+                while (self.messages.length > 100) messages.pop();
+
+                self.newMessages = true;
+                $rootScope.$broadcast('chat:newmsg', len);
             }
-            // Sort by latest message (largest ID) first.
-            messages.sort((a, b) => b.id - a.id);
-            // Limit messages buffer to 100 last messages.
-            while (messages.length > 100) messages.pop();
-            return messages
+        }
+
+        /**
+         * Add new chats/conversations to the `chats` buffer, avoiding
+         * duplicates and sorted by "last message received" first.
+         */
+        function receiveChats(dataText) {
+            let data = JSON.parse(dataText);
+            let len = 0;
+
+            if (!data.action || !data.action.startsWith('chats.'))  // <-- TODO: on server!
+                return;
+
+            if (data.user_list.length > 0) {
+                len = data.user_list.length;
+                for (let i=0; i<len; i++) {
+                    if ( ! _isMsgAinListB(data.user_list[i], self.chats))
+                        self.chats.push(data.user_list[i]);
+                }
+
+                // Sort by latest message (largest ID) first.
+                self.chats.sort((a, b) => b.id - a.id);
+                // Limit chats buffer to 100 last chats.
+                while (self.chats.length > 100) chats.pop();
+
+                self.newChats = true;
+                $rootScope.$broadcast('chats:received', len);
+            }
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        /**
+         * Request a list of users that authuser had a chat with, ordered by the
+         * most recent message sent or received first."""
+         */
+        self.requestChats = function(after=0) {
+            after = after || 0;
+            WsFactory.send({ 'action': 'chats.init', 'after': after });
+        }
+
+        /**
+         * Return chat messages from buffer between auth user and `username`.
+         */
+        self.getChatWithUser = function(username) {
+            if (!self.newMessages) return [];
+            self.newMessages = false;
+            $log.debug('## ChatFactory.newMessages --> ', self.newMessages);
+            return self.messages.filter(a => (a.sender == authUsername && a.receiver == username) || (a.sender == username && a.receiver == authUsername));
+        }
+
+        /**
+         * Fetches an initial x messages between auth user and `username`. 
+         * If `after` is a message id, only messages with a larger id are
+         * returned.
+         */
+        self.getInitialWithUser = function(username, after=0) {
+            after = after || 0;
+            WsFactory.send({ 'action': 'chat.init', 'after': after, 'view_user': username });
         }
 
         /**
          * Send a chat message from auth user to receiver_id (a user id)
          * via the open WebSocket channel.
          */
-        function sendChat(receiver, msg) {
+        self.sendChat = function(receiver, msg) {
             let payload = {
                 'action': 'chat.receive',
                 'msg': msg,
@@ -51,18 +138,23 @@
             WsFactory.send(payload);
         }
 
-        // When messages are received, add them to the messages buffer.
-        WsFactory.onMessage(message => prepareMessages(message.data));
+        self.hasNewMessages = function() {
+            return self.newMessages;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        var apiUrlBase = API_BASE + '/api/v1/pms/';
 
         /**
          * Send a chat message from auth user to "receiver" (a username)
          * via a regular HTTP POST request.
          */
-        function sendChatHttp(msg, receiver) {
+        self.sendChatHttp = function(msg, receiver) {
             if ( ! msg) return; // Empty msg text, nothing is posted.
             if ( ! receiver) return; // Empty receiver, nothing is posted.
             const msgApiUrl = apiUrlBase + receiver;
-            const after = messages[0] ? messages[0]['id'] : '';
+            const after = self.messages[0] ? self.messages[0]['id'] : '';
             const data = { 'msg': msg, 'is_sent': false, 'is_seen': false, 'after': after };
             return $http.post(msgApiUrl, data).then(response => prepareMessages(response.data.msg_list));
         }
@@ -71,17 +163,23 @@
          * Fetch recent chat messages between auth user and "username" via
          * a regular HTTP GET request.
          */
-        function fetchChatHttp(username) {
-            const after = messages[0] ? messages[0]['id'] : '';
+        self.fetchChatHttp = function(username) {
+            const after = self.messages[0] ? self.messages[0]['id'] : '';
             const msgApiUrl = apiUrlBase + username + '?after=' + after;
             return $http.get(msgApiUrl).then(response => prepareMessages(response.data.msg_list));
         }
 
-        return {
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        /* return {
+            hasNewMessages: hasNewMessages,
+            getChatsList: getChatsList,
+            getChatWithUser: getChatWithUser,
+            getInitialWithUser: getInitialWithUser,
             sendChat: sendChat,
             post: sendChatHttp,
             fetch: fetchChatHttp,
-        };
+        }; */
     };
 
 })();

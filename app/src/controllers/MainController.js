@@ -1,17 +1,21 @@
 (function () {
     'use strict';
 
-    angular.module('reddmeetApp').controller('MainController', ['$timeout', '$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', 'WsFactory', MainController]);
+    angular.module('reddmeetApp').controller('MainController', ['$scope', '$timeout', '$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', 'WsFactory', 'ChatFactory', MainController]);
 
     /**
      * Control most of the app logic that happens independently of the current view.
      */
-    function MainController($timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory, WsFactory) {
-        var vm = this;
+    function MainController($scope, $timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory, WsFactory, ChatFactory) {
+        let vm = this;
+        let onEventNewMessage = false;
+        let onEventMessagesViewed = false;
+
         vm.userLogout = userLogout;
         vm.selected = null;
         vm.wsConnected = false;
         vm.users = [];
+        vm.newChatMessages = 0;
         vm.selectUser = selectUser;
         vm.makeContact = makeContact;
         vm.toggleSidebar = () => $mdSidenav('left').toggle();
@@ -33,6 +37,15 @@
             { href: '/me/subs', title: 'update your subreddit list', icon: 'playlist_add_check' },
             { href: '/me/account', title: 'account settings', icon: 'settings' },
         ];
+
+        onEventMessagesViewed = $scope.$on('chat:viewedmsg', (event, data) => {
+            console.log('MainController: event "chat:viewedmsg" received.');
+            vm.newChatMessages = 0;
+        });
+        onEventNewMessage = $scope.$on('chat:newmsg', (event, data) => {
+            console.log('MainController: event "chat:newmsg" received. data == ', data);
+            vm.newChatMessages = data;
+        });
 
         // WebSocket connected.
         WsFactory.onOpen(() => vm.wsConnected = true);

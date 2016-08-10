@@ -3,12 +3,12 @@
     <span>Recent chats</span>
   </md-subheader>
   <md-divider></md-divider>
-  <md-list flex ng-if="vm.userLists.chats.length">
-    <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.chats track by $index" ng-click="mainctrl.go('/u/' + item.username)">
+  <md-list flex ng-if="vm.chats">
+    <md-list-item class="md-2-line" ng-repeat="item in vm.chats track by $index" ng-click="mainctrl.go('/u/' + item.username)">
       <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
       <div class="md-list-item-text" layout="column">
         <h3>{{ item.username }}</h3>
-        <p>{{ item.chat.msgs[0] }}</p>
+        <p><span am-time-ago="item.latest"></span></p>
       </div>
     </md-list-item>
   </md-list>
