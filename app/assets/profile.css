@@ -24,6 +24,7 @@
     background-color: lightgray;
     min-height: calc(100vh - 56px);
     transition: 0.6s ease-in;
+    overflow-x: hidden;
 }
 .user-profile > .pnasl {
     position: relative;
@@ -146,6 +147,7 @@
     display: block;
     transition: 0.6s ease-in;
     overflow: hidden;
+    height: calc(100vh - 57px);
 }
 
 .user-profile.show-send-message > .messager > form {
