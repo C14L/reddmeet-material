@@ -4,12 +4,34 @@
     angular.module('reddmeetApp').controller('MainController', ['$scope', '$timeout', '$mdDialog', '$mdSidenav', '$mdBottomSheet', '$location', '$log', 'AuthUserFactory', 'WsFactory', 'ChatFactory', MainController]);
 
     /**
+     * Check some browser features and alert the user if a feature is not
+     * supported by their browser.
+     */
+    function featureCheckAndAlert() {
+        const tests = ['window.navigator.geolocation.getCurrentPosition'];
+
+        for (let t of tests) {
+            let parts = t.split('.');
+            for (let i=1; i<=parts.length; i++) {
+                let part = parts.slice(0, i).join('.');
+                if (eval('!' + part)) {
+                    console.log('## FEATURE MISSING ## '+part+' not found!');
+                } else {
+                    console.log('## FEATURE OKAY ## ' + part);
+                }
+            }
+        }
+    }
+
+    /**
      * Control most of the app logic that happens independently of the current view.
      */
     function MainController($scope, $timeout, $mdDialog, $mdSidenav, $mdBottomSheet, $location, $log, AuthUserFactory, WsFactory, ChatFactory) {
         let vm = this;
         let onEventNewMessage = false;
         let onEventMessagesViewed = false;
+
+        featureCheckAndAlert();
 
         vm.userLogout = userLogout;
         vm.selected = null;
