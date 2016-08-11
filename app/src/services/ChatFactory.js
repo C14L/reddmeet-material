@@ -51,7 +51,7 @@
                 len = data.msg_list.length;
 
                 for (let i=0; i<len; i++)
-                    if ( ! isAinListBbyC(data.msg_list[i], self.messages), 'id')
+                    if ( ! isAinListBbyC(data.msg_list[i], self.messages, 'id'))
                         self.messages.push(data.msg_list[i]);
 
                 // Sort by latest message (largest ID) first.
@@ -60,8 +60,10 @@
                 // Limit messages buffer to 100 last messages.
                 while (self.messages.length > 100) messages.pop();
 
-                self.newMessages = true;
+                self.newMessages = true;  // remember there are new messages.
                 $rootScope.$broadcast('chat:newmsg', len);
+
+                console.log('## receiveMessages(dataText) ## self.messages --> ', self.messages);
             }
         }
 
@@ -111,9 +113,12 @@
          */
         self.getChatWithUser = function(username) {
             if (!self.newMessages) return [];
-            self.newMessages = false;
-            $log.debug('## ChatFactory.newMessages --> ', self.newMessages);
-            return self.messages.filter(a => (a.sender == authUsername && a.receiver == username) || (a.sender == username && a.receiver == authUsername));
+            self.newMessages = false;  // all new messages read by controller.
+            return self.messages.filter(a => {
+                // filter to only the messages between authuser and viewuser.
+                return (a.sender == authUsername && a.receiver == username) || 
+                       (a.sender == username && a.receiver == authUsername)
+            });
         }
 
         /**
