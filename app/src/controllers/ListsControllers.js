@@ -13,11 +13,12 @@
      */
     function ChatsController($scope, $rootScope, ChatFactory) {
         let vm = this;
+        vm.isLoading = true;
         vm.title = "Recent messages";
         vm.chats = [];
         $scope.$on('chats:received', (event, data) => {
+            vm.isLoading = false;
             vm.chats = ChatFactory.chats;
-            console.log('# ChatsController: vm.chats == ', vm.chats);
         });
         $rootScope.$broadcast('chat:viewedmsg', null);
         ChatFactory.requestChats();
@@ -29,6 +30,7 @@
     function MatchesController($log, $location, $http) {
         var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
+        vm.isLoading = true;
         vm.tabs = { selectedIndex: 1 };
         vm.title = "Upvotes and Matches";
         vm.userLists = { matches: [], upvotes_sent: [], upvotes_recv: [] };
@@ -38,10 +40,11 @@
         $location.search().sent && (vm.tabs.selectedIndex = 2);
 
         for (let x in vm.userLists) {
-            $http.get(apiUrlTpl.replace('{}', x)).then(function(response){
-                $log.debug('API response: ', response);
+            $http.get(apiUrlTpl.replace('{}', x)).then(response => {
+                vm.isLoading = false;
                 vm.userLists[x] = response.data.user_list;
-            }).catch(function(error){
+            }).catch(error => {
+                vm.isLoading = false;
                 $log.error('Error: ', error);
             });
         };
@@ -53,15 +56,17 @@
     function VisitsController($log, $http) {
         var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
+        vm.isLoading = true;
         vm.tabs = { selectedIndex: 0 };
         vm.title = "Visits";
         vm.userLists = { visits: [], visitors: [] };
 
         for (let x in vm.userLists) {
-            $http.get(apiUrlTpl.replace('{}', x)).then(function(response){
-                $log.debug('API response: ', response);
+            $http.get(apiUrlTpl.replace('{}', x)).then(response => {
+                vm.isLoading = false;
                 vm.userLists[x] = response.data.user_list;
-            }).catch(function(error){
+            }).catch(error => {
+                vm.isLoading = false;
                 $log.error('Error: ', error);
             });
         };
@@ -73,15 +78,17 @@
     function DownvotesController($log, $http) {
         var apiUrlTpl = API_BASE + '/api/v1/{}.json';
         var vm = this;
+        vm.isLoading = true;
         vm.tabs = { selectedIndex: 0 };
         vm.title = "Visits";
         vm.userLists = { downvoted: [] };
 
         for (let x in vm.userLists) {
-            $http.get(apiUrlTpl.replace('{}', x)).then(function(response){
-                $log.debug('API response: ', response);
+            $http.get(apiUrlTpl.replace('{}', x)).then(response => {
+                vm.isLoading = false;
                 vm.userLists[x] = response.data.user_list;
-            }).catch(function(error){
+            }).catch(error => {
+                vm.isLoading = false;
                 $log.error('Error: ', error);
             });
         };

@@ -28,9 +28,11 @@
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        function _isMsgAinListB(a, b) {
-            // Check if a message is in the list of messages.
-            for (let j=0; j<b.length; j++) if (b[j]['id'] === a['id']) return true;
+        function isAinListBbyC(a, b, c) {
+            // Check if object A is in the list B of A-like objects, 
+            // by the property C. Return true if A[C] == B[i][C] exists 
+            // else return false.
+            for (let j=0; j<b.length; j++) if (b[j][c] === a[c]) return true;
             return false;
         }
 
@@ -47,13 +49,14 @@
 
             if (data.msg_list.length > 0) {
                 len = data.msg_list.length;
-                for (let i=0; i<len; i++) {
-                    if ( ! _isMsgAinListB(data.msg_list[i], self.messages))
+
+                for (let i=0; i<len; i++)
+                    if ( ! isAinListBbyC(data.msg_list[i], self.messages), 'id')
                         self.messages.push(data.msg_list[i]);
-                }
 
                 // Sort by latest message (largest ID) first.
                 self.messages.sort((a, b) => b.id - a.id);
+
                 // Limit messages buffer to 100 last messages.
                 while (self.messages.length > 100) messages.pop();
 
@@ -75,13 +78,15 @@
 
             if (data.user_list.length > 0) {
                 len = data.user_list.length;
-                for (let i=0; i<len; i++) {
-                    if ( ! _isMsgAinListB(data.user_list[i], self.chats))
-                        self.chats.push(data.user_list[i]);
-                }
 
-                // Sort by latest message (largest ID) first.
-                self.chats.sort((a, b) => b.id - a.id);
+                // Every user can only appear once in the `self.chats` list.
+                for (let i=0; i<len; i++)
+                    if ( ! isAinListBbyC(data.user_list[i], self.chats, 'username'))
+                        self.chats.push(data.user_list[i]);
+
+                // Sort by latest message first.
+                self.chats.sort((a, b) => b.latest - a.latest);
+
                 // Limit chats buffer to 100 last chats.
                 while (self.chats.length > 100) chats.pop();
 

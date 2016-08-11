@@ -1,4 +1,3 @@
-
 <md-tabs md-selected="vm.tabs.selectedIndex" md-dynamic-height md-center-tabs md-stretch-tabs="auto" md-border-bottom class="md-secondary" md-swipe-content md-no-pagination>
 
   <md-tab id="tab1">
@@ -13,9 +12,14 @@
           <span>Redditors who upvoted you</span>
         </md-subheader>
         <md-divider></md-divider>
+
+        <div ng-show="vm.isLoading && vm.tabs.selectedIndex==0" class="user-profile-loading">
+          <md-progress-circular md-mode='indeterminate'></md-progress-circular>
+        </div>
+
         <md-list flex ng-if="vm.userLists.upvotes_recv.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.upvotes_recv track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/m/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
@@ -23,12 +27,6 @@
             </div>
           </md-list-item>
         </md-list>
-        <md-divider></md-divider>
-        <md-item layout class="inset">
-          <md-button layout layout-align="start center" class="md-primary">
-            More
-          </md-button>
-        </md-item>
       </md-content>
     </md-tab-body>
   </md-tab>
@@ -45,9 +43,14 @@
           <span>Matches: you upvoted each other</span>
         </md-subheader>
         <md-divider></md-divider>
+
+        <div ng-show="vm.isLoading && vm.tabs.selectedIndex==1" class="user-profile-loading">
+          <md-progress-circular md-mode='indeterminate'></md-progress-circular>
+        </div>
+
         <md-list flex ng-if="vm.userLists.matches.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.matches track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/m/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
@@ -55,12 +58,6 @@
             </div>
           </md-list-item>
         </md-list>
-        <md-divider></md-divider>
-        <md-item layout class="inset">
-          <md-button layout layout-align="start center" class="md-primary">
-            More
-          </md-button>
-        </md-item>
       </md-content>
     </md-tab-body>
   </md-tab>
@@ -77,9 +74,14 @@
           <span>Upvoted by you</span>
         </md-subheader>
         <md-divider></md-divider>
+
+        <div ng-show="vm.isLoading && vm.tabs.selectedIndex==2" class="user-profile-loading">
+          <md-progress-circular md-mode='indeterminate'></md-progress-circular>
+        </div>
+
         <md-list flex ng-if="vm.userLists.upvotes_sent.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.upvotes_sent track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/m/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
@@ -87,12 +89,6 @@
             </div>
           </md-list-item>
         </md-list>
-        <md-divider></md-divider>
-        <md-item layout class="inset">
-          <md-button layout layout-align="start center" class="md-primary">
-            More
-          </md-button>
-        </md-item>
       </md-content>
     </md-tab-body>
   </md-tab>

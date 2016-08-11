@@ -2,7 +2,13 @@
   <md-subheader class="md-no-sticky">
     <span>Recent chats</span>
   </md-subheader>
+  
   <md-divider></md-divider>
+
+  <div ng-show="vm.isLoading" class="user-profile-loading">
+    <md-progress-circular md-mode='indeterminate'></md-progress-circular>
+  </div>
+  
   <md-list flex ng-if="vm.chats">
     <md-list-item class="md-2-line" ng-repeat="item in vm.chats track by $index" ng-click="mainctrl.go('/u/' + item.username)">
       <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
@@ -12,10 +18,4 @@
       </div>
     </md-list-item>
   </md-list>
-  <md-divider></md-divider>
-  <md-item layout class="inset">
-    <md-button layout layout-align="start center" class="md-primary">
-      More
-    </md-button>
-  </md-item>
 </md-content>
