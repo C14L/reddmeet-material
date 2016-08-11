@@ -14,11 +14,11 @@
         <md-divider></md-divider>
         <md-list flex ng-if="vm.userLists.visitors.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.visitors track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/m/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
-              <p>{{ item.profile.accessed }}</p>
+              <p><span am-time-ago="item.profile.accessed"></span></p>
             </div>
           </md-list-item>
         </md-list>
@@ -40,11 +40,11 @@
         <md-divider></md-divider>
         <md-list flex ng-if="vm.userLists.visits.length">
           <md-list-item class="md-3-line" ng-repeat="item in vm.userLists.visits track by $index" ng-click="mainctrl.go('/u/' + item.username)">
-            <img ng-src="/s/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
+            <img ng-src="/m/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
             <div class="md-list-item-text" layout="column">
               <h3>{{ item.username }}</h3>
               <h4>{{ item.profile.age }}</h4>
-              <p>{{ item.profile.accessed }}</p>
+              <p><span am-time-ago="item.profile.accessed"></span></p>
             </div>
           </md-list-item>
         </md-list>
