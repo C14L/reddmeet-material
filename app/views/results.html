@@ -28,7 +28,7 @@
 </div>
 
 <md-content ng-if="vm.results.length" layout="row" layout-align="center start" layout-wrap layout-fill class="user-card-list results-list">
-	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.profile.age }}" gender="{{ item.profile.sex_symbol }}" distance="{{ vm.getDistance(item.profile.lat, item.profile.lng) }}">
+	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.profile.age }}" gender="{{ item.profile.sex_symbol }}" distance="{{ item.distance }}">
 	</user-list-card>
 
 	<div ng-if="!vm.isLoading" style="clear: both; text-align: center; margin: 16px;">

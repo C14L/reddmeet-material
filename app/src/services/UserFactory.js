@@ -13,6 +13,7 @@
         var pushNotificationApiUrl = API_BASE + '/api/v1/pushnotifications';
         var authUserData = null;  // Buffer all of auth user's data here.
         var authUserGeoloc = null;
+        console.log('@@@ authUserGeoloc initialized with -> ', authUserGeoloc);
 
         var authUserPromise = $http.get(apiUrl).then(response => {
             $log.debug('## LOADING response.data.authuser: ', response.data.authuser);
@@ -39,7 +40,10 @@
          * Use accurate location ONLY for distance calculation.
          * This is NEVER added to the user's profile data.
          */
-        window.navigator.geolocation.getCurrentPosition(pos => authUserGeoloc = pos);
+        window.navigator.geolocation.getCurrentPosition(pos => {
+            authUserGeoloc = pos;
+            console.log('@@@ authUserGeoloc set to -> ', authUserGeoloc);
+        });
 
         return {
             createPushNotificationEndpoint: sub => {

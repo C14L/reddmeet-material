@@ -46,34 +46,37 @@
         vm.setOrderSelectedDisplay();
 
         /**
-         * Reads the current state of the search settings and fetches
-         * new search results from the SearchResults service.
-         * 
-         * Called every time a search setting is updated, to reflect the
-         * new setting in real-time.
-         */
-        vm.refreshResults = function (reset=false) {
-            vm.isLoading = true;
-
-            if (reset) {
-                SearchResultsFactory.resetResults();
-            }
-            
-            SearchResultsFactory.getUserList().then(function (user_list) {
-                console.log('## user_list reset? ', reset);
-                console.log('## user_list item count: ', user_list ? user_list.length : 0);
-                vm.isLoading = false;
-                vm.results = user_list;
-            });
-        }
-
-        /**
          * Return the current user's distance to the supplied geolocation in kilometers.
          */
         vm.getDistance = (lat, lon) => {
             if (lat && lon) {
                 return Math.floor(AuthUserFactory.getDistance(lat, lon)) + ' km';
             }
+        }
+
+        /**
+         * Reads the current state of the search settings and fetches
+         * new search results from the SearchResults service.
+         * 
+         * Called every time a search setting is updated, to reflect the
+         * new setting in real-time.
+         */
+        vm.refreshResults = reset => {
+            vm.isLoading = true;
+
+            if (reset) SearchResultsFactory.resetResults();
+            
+            SearchResultsFactory.getUserList().then(function (user_list) {
+                console.log('## user_list reset? ', reset);
+                console.log('## user_list item count: ', user_list ? user_list.length : 0);
+                vm.isLoading = false;
+                vm.results = user_list;
+
+                // Add distance between auth user and view_user to results list
+                for (let i=0, len=vm.results.length; i<len; i++) {
+                    vm.results[i].distance = vm.getDistance(vm.results[i].profile.lat, vm.results[i].profile.lng);
+                }
+            });
         }
 
         /*
