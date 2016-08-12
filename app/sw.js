@@ -48,7 +48,6 @@ const SW_CACHE_URLS = [
 
     '/app/src/app.js',
     '/app/src/filter.js',
-    '/app/src/PushNotifications.js',
     '/app/src/utils.js',
 
     '/app/index.html',
