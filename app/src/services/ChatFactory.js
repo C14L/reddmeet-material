@@ -62,8 +62,6 @@
 
                 self.newMessages = true;  // remember there are new messages.
                 $rootScope.$broadcast('chat:newmsg', len);
-
-                console.log('## receiveMessages(dataText) ## self.messages --> ', self.messages);
             }
         }
 
@@ -75,7 +73,7 @@
             let data = JSON.parse(dataText);
             let len = 0;
 
-            if (!data.action || !data.action.startsWith('chats.'))  // <-- TODO: on server!
+            if (!data.action || !data.action.startsWith('chats.'))
                 return;
 
             if (data.user_list.length > 0) {
@@ -87,7 +85,7 @@
                         self.chats.push(data.user_list[i]);
 
                 // Sort by latest message first.
-                self.chats.sort((a, b) => b.latest - a.latest);
+                self.chats.sort((a, b) => (b.latest < a.latest) ? '-1' : '1');
 
                 // Limit chats buffer to 100 last chats.
                 while (self.chats.length > 100) chats.pop();
@@ -178,19 +176,7 @@
             const msgApiUrl = apiUrlBase + username + '?after=' + after;
             return $http.get(msgApiUrl).then(response => prepareMessages(response.data.msg_list));
         }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-        /* return {
-            hasNewMessages: hasNewMessages,
-            getChatsList: getChatsList,
-            getChatWithUser: getChatWithUser,
-            getInitialWithUser: getInitialWithUser,
-            sendChat: sendChat,
-            post: sendChatHttp,
-            fetch: fetchChatHttp,
-        }; */
     };
-
+    
 })();
 
