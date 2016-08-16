@@ -1,3 +1,5 @@
+'use strict';
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/app/sw.js', { scope: '/app/' }).then(reg => {
 
@@ -48,9 +50,13 @@ function getLocalStorageString(itemKey, defaultValue) {
 	// Add a "defaultValue" to localStorage.getItem()
     var val = localStorage.getItem(itemKey);
 
-    if (val === null && defaultValue !== undefined) {
-        return defaultValue;
-    }
+	if (defaultValue !== undefined) {
+		// TODO: Ignore the string 'undefined', just in case some bug accidentially
+		//       wrote it to localStorage when really the variable was just undefined.
+		if (val === null || val === undefined || val === 'undefined') {
+			return defaultValue;
+		}
+	}
     return val;
 }
 
@@ -75,7 +81,8 @@ function setLocalStorageObject(key, val) {
 
 // - - - calculate distances - - - - - - - - - - - - - - - - - - 
 
-function get_distance(lat1, lon1, lat2, lon2, unit='km') {
+function get_distance(lat1, lon1, lat2, lon2, unit) {
+	unit = unit || 'km';
 	var R = 6371; // Radius of the earth in km
 	var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
 	var dLon = (lon2-lon1).toRad(); 
