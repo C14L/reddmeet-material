@@ -1,4 +1,4 @@
-test/
+test/e2e
 logs/*
 !.gitkeep
 node_modules/
