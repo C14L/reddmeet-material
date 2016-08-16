@@ -1,4 +1,4 @@
-(function(){ 'use strict;'
+(function(){ 'use strict';
 
 	angular.module('reddmeetApp')
 	    .controller('SettingsController', ['$log', SettingsController])

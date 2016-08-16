@@ -1,0 +1,43 @@
+<div class="chat-messager">
+
+    <md-toolbar class="chat-messager-toolbar">
+        <div class="md-toolbar-tools" tabIndex="-1">
+            <div>/u/{{ chat.username }}</div>
+            <div flex></div>
+            <span class="ws-connected" ng-class="{online: mainctrl.wsConnected}" aria-label="online status">
+                <md-tooltip ng-if="mainctrl.wsConnected">online</md-tooltip>
+                <md-tooltip ng-if="!mainctrl.wsConnected">offline</md-tooltip>
+            </span>
+            <md-button class="md-icon-button" ng-click="chat.closeMessenger()" aria-label="close">
+                <md-icon>close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <form>
+        <textarea ng-model="chat.messageText" placeholder="send a message" focus-me="chat.isTextboxFocus" ng-keyup="$event.keyCode == 13 && chat.doSendMessage()"></textarea>
+        <div class="send-btn" ng-click="chat.doSendMessage()">
+            <md-icon>send</md-icon>
+        </div>
+    </form>
+
+    <div ng-if="!chat.messages" ng-show="chat.isProfileLoading" class="user-profile-loading">
+        <md-progress-circular md-mode='indeterminate'></md-progress-circular>
+    </div>
+
+    <div ng-if="chat.messages" class="messages">
+        <div class="message" ng-class="{authuser: msg.sender!=chat.username}" ng-repeat="msg in chat.messages | orderBy:'-time' track by msg.id">
+            <div class="text">{{ msg.msg }}</div>
+            <div class="time">
+                <span am-time-ago="msg.created"></span>
+                <span class="is-sent-flag" ng-if="!msg.is_sent">x</span>
+                <span class="is-sent-flag" ng-if="msg.is_sent">OK</span>
+                <span class="is-seen-flag" ng-if="!msg.is_seen">x</span>
+                <span class="is-seen-flag" ng-if="msg.is_seen">OK</span>
+                <span>-[{{ msg.sender }}]-</span>
+            </div>
+            <div class="username">{{ msg.sender }}</div>
+        </div>
+    </div>
+
+</div>

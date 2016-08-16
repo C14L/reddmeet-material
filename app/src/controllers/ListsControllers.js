@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .controller('ChatsController', ['$scope', '$rootScope', 'ChatFactory', ChatsController])
+        .controller('ChatsController', ['$scope', '$mdDialog', '$mdMedia', '$rootScope', 'ChatFactory', ChatsController])
         .controller('MatchesController', ['$log', '$location', '$http', MatchesController])
         .controller('VisitsController', ['$log', '$http', VisitsController])
         .controller('DownvotesController', ['$log', '$http', DownvotesController])
@@ -11,7 +11,7 @@
     /**
      * Display most recent chat partners of auth user.
      */
-    function ChatsController($scope, $rootScope, ChatFactory) {
+    function ChatsController($scope, $mdDialog, $mdMedia, $rootScope, ChatFactory) {
         let vm = this;
         vm.isLoading = true;
         vm.title = "Recent messages";
@@ -22,6 +22,19 @@
         });
         $rootScope.$broadcast('chat:viewedmsg', null);
         ChatFactory.requestChats();
+
+        vm.openMessenger = function(username, event) {
+            $mdDialog.show({
+                controller: 'ChatDialogController',
+                controllerAs: 'chat',
+                templateUrl: 'views/chat.html',
+                locals: { username: username },
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: false,
+                fullscreen: ($mdMedia('sm') || $mdMedia('xs')),
+            });
+        };
     }
 
     /**

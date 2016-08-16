@@ -10,12 +10,13 @@
   </div>
   
   <md-list flex ng-if="vm.chats">
-    <md-list-item class="md-2-line" ng-repeat="item in vm.chats track by $index" ng-click="mainctrl.go('/u/' + item.username)">
+    <md-list-item class="md-2-line noright" ng-repeat="item in vm.chats track by $index" ng-click="mainctrl.go('/u/' + item.username)">
       <img ng-src="/m/{{ item.username }}.jpg" class="md-avatar" alt="{{ item.username }}">
       <div class="md-list-item-text" layout="column">
         <h3>{{ item.username }}</h3>
         <p><span am-time-ago="item.latest"></span></p>
       </div>
+      <md-icon class="md-secondary" ng-click="vm.openMessenger(item.username, $event)" aria-label="Chat">chat</md-icon>
     </md-list-item>
   </md-list>
 </md-content>

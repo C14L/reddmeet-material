@@ -101,7 +101,7 @@
          * Request a list of users that authuser had a chat with, ordered by the
          * most recent message sent or received first."""
          */
-        self.requestChats = function(after=0) {
+        self.requestChats = function(after) {
             after = after || 0;
             WsFactory.send({ 'action': 'chats.init', 'after': after });
         }
@@ -124,7 +124,7 @@
          * If `after` is a message id, only messages with a larger id are
          * returned.
          */
-        self.getInitialWithUser = function(username, after=0) {
+        self.getInitialWithUser = function(username, after) {
             after = after || 0;
             WsFactory.send({ 'action': 'chat.init', 'after': after, 'view_user': username });
         }

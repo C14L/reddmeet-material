@@ -50,13 +50,8 @@
         	'srOpts': [],
         };
 
-        return {
-            //fSexOpts: _searchOpts['fSexOpts'], 
-
-            //fDistanceOpts: _searchOpts['fDistanceOpts'], 
-
-            //fOrderOpts: _searchOpts['fOrderOpts'], 
-
+        return { 
+                       
             getSrOpts: function() {
                 // The "subreddit options" is a list of dicts with a sr.label (str: subreddit title)
                 // and a sr.active (bool: actively use in search or not).
@@ -74,19 +69,21 @@
                 currentLastPage = 0;
                 currentResults = [];
             },
+
             getSearchParam: function(paramKey) {
                 _searchOpts[paramKey] = getLocalStorageObject(paramKey, _searchOpts[paramKey]);
                 return _searchOpts[paramKey];
             },
+
             setSearchParam: function(paramKey, paramVal) {
                 this.resetResults();
                 setLocalStorageObject(paramKey, _searchOpts[paramKey]);
                 _searchOpts[paramKey] = paramVal;
                 return true;
             },
+
             getSearchParamsString: function() {
-                // make a string "&sr-fav=1&f_distance=1000&f_sex=4&order_by=-sr_count"
-                // out of the selected params.
+                // "&sr-fav=1&f_distance=1000&f_sex=4&order_by=-sr_count"
                 let ps = [];
                 for (const k in _searchOpts) {
                     for (const i in _searchOpts[k]) {
@@ -98,45 +95,18 @@
                 return ps.join('&');
             },
 
+            /**
+             * Fetch a list of users from the backend, using the currently set search params,
+             * append the resulting list to the current results list, and return the complete list.
+             */
             getUserList: function() {
-                // let promise = Promise.resolve();
-
-                /* if (currentResults.length == 0) {
-                    // This is a first search request, so update the search buffer
-                    // on the server before requesting a list of results profiles.
-                    // POST api/v1/search
-                    promise = promise.then(() => {
-                        const _opts = {
-                            method: 'POST',
-                            headers: { 
-                                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                                "X-CSRFToken": get_cookie('csrftoken'), 
-                            },
-                            credentials: 'include', 
-                            body: this.getSearchParamsString(),
-                        };
-                        return fetch(searchApiUrl, _opts)
-                        .then(response => (response.status == 200) ? response.json() : Promise.reject())
-                        .catch(err => Promise.reject(err));
-                    });
-                } */
-
                 currentLastPage += 1;
                 let currentApiUrl = apiUrl + '?page=' + currentLastPage + '&' + this.getSearchParamsString();
                 $log.debug('SearchResultsFactory.getUserList :: currentApiUrl == ', currentApiUrl);
 
-                //return promise.then(() => {
-                return $http.get(currentApiUrl).then(response => {
-                    if (response.status == 200) {
-                        currentResults = currentResults.concat(response.data.user_list);
-                        return currentResults; // only return previous results list
-                    }
-                    return currentResults; // only return previous results list
-                }).catch(error => {
-                    console.error('Network error');
-                    return currentResults; // only return previous results list
-                });
-                //});
+                return $http.get(currentApiUrl)
+                .then(response => (response.status == 200) ? currentResults.concat(response.data.user_list) : currentResults)
+                .catch(error => currentResults);
             },
         };
     };

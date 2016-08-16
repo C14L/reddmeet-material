@@ -2,24 +2,20 @@
     'use strict';
 
     angular.module('reddmeetApp')
-        .controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', '$mdSidenav', '$location', 'AuthUserFactory', 'UserFactory', 'ChatFactory', ProfileController])
-        ;
+        .controller('ProfileController', ['$log', '$http', '$scope', '$timeout', '$routeParams', '$mdSidenav', '$location', 'AuthUserFactory', 'UserFactory', 'ChatFactory', '$mdDialog', '$mdMedia', ProfileController]);
 
     /**
      * Display a user profile page. If its authuser's own page, 
      * add "edit" buttons to different parts, and have popups
      * with forms to change the values.
      */
-    function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, UserFactory, ChatFactory) {
+    function ProfileController($log, $http, $scope, $timeout, $routeParams, $mdSidenav, $location, AuthUserFactory, UserFactory, ChatFactory, $mdDialog, $mdMedia) {
         let vm = this;
-        let watcherMessageText = false;
-        let onEventNewMessage = false;
         let promiseViewUser = UserFactory.getViewUser($routeParams.username);
         let promiseAuthUser = AuthUserFactory.getAuthUser();
 
         vm.fabOpen = false;
         vm.isShowSendMessage = false;
-        vm.messages = [];  // chat messages
         vm.data = null;
         vm.authuser = null;
         vm.isProfileLoading = true;
@@ -79,46 +75,16 @@
 
         // - - - Chat window - - - - - - - - - - - - - - - - -
 
-        /**
-         * Send a chat message from auth user to receiver (username)
-         * via the open WebSocket channel.
-         */
-        vm.doSendMessage = () => {
-            ChatFactory.sendChat(vm.data.view_user.username, vm.messageText);
-            vm.messageText = '';
-        };
-
-        /**
-         * User activities: close messenger, open messagener.
-         */
-        vm.closeMessenger = () => {
-            // Switch profile view to message box view
-            vm.isShowSendMessage = false;
-            vm.isTextboxFocus = false;
-
-            if (onEventNewMessage) onEventNewMessage();
-            if (watcherMessageText) watcherMessageText();
-        };
-
-        vm.openMessenger = () => {
-            // Switch profile view to message box view
-            vm.isShowSendMessage = true;
-            vm.isTextboxFocus = true;
-
-            promiseViewUser.then(() => {
-                // When opening the chat, get an initial list.
-                let after = vm.messages[0] ? vm.messages[0]['id'] : 0;
-                ChatFactory.getInitialWithUser(vm.data.view_user.username, after);
-            });
-
-            // Watch for and remove any newline characters.
-            watcherMessageText = $scope.$watch('vm.messageText', (newVal, oldVal) => {
-                if (newVal) vm.messageText = newVal.replace('\n', '');
-            });
-
-            onEventNewMessage = $scope.$on('chat:newmsg', (event, data) => {
-                console.log('ProfileController: event "chat:newmsg" received.');
-                vm.messages = ChatFactory.getChatWithUser(vm.data.view_user.username);
+        vm.openMessenger = event => {
+            $mdDialog.show({
+                controller: 'ChatDialogController',
+                controllerAs: 'chat',
+                templateUrl: 'views/chat.html',
+                locals: { username: $routeParams.username },
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: false,
+                fullscreen: ($mdMedia('sm') || $mdMedia('xs')),
             });
         };
 
@@ -126,4 +92,5 @@
 
         vm.toggleRight = () => $mdSidenav('profile-right').toggle();
     };
+
 })();

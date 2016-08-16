@@ -33,25 +33,31 @@
 
         featureCheckAndAlert();
 
-        vm.userLogout = userLogout;
-        vm.selected = null;
-        vm.wsConnected = false;
-        vm.users = [];
-        vm.newChatMessages = 0;
-        vm.selectUser = selectUser;
+        vm.authuser = null;
         vm.makeContact = makeContact;
-        vm.toggleSidebar = () => $mdSidenav('left').toggle();
+        vm.newChatMessages = 0;
         vm.openMenu = ($mdOpenMenu, ev) => $mdOpenMenu(ev);
+        vm.selected = null;
+        vm.selectUser = selectUser;
+        vm.toggleSidebar = () => $mdSidenav('left').toggle();
+        vm.userLogout = userLogout;
+        vm.users = [];
+        vm.wsConnected = false;
+
+    	AuthUserFactory.getAuthUser().then(response => vm.authuser = response);
+
         vm.go = url => {
             $timeout(() => $mdSidenav('left').close(), 300);
             $location.path(url);
             $log.debug('### go("' + url + '")');
         };
+        
         vm.overflowItems = [
             { href: '/visitors', title: 'visited you', icon: 'group' },
             { href: '/map', title: 'redditors map', icon: 'map' },
             { href: '/stats', title: 'site statistics', icon: 'assessment' },
         ];
+        
         vm.sidebarItems = [
             { href: '/me/profile', title: 'update profile basics', icon: 'assignment_ind' },
             { href: '/me/pictures', title: 'update pictures', icon: 'add_a_photo' },
@@ -64,6 +70,7 @@
             console.log('MainController: event "chat:viewedmsg" received.');
             vm.newChatMessages = 0;
         });
+        
         onEventNewMessage = $scope.$on('chat:newmsg', (event, data) => {
             console.log('MainController: event "chat:newmsg" received. data == ', data);
             vm.newChatMessages = data;

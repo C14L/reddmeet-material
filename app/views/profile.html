@@ -73,44 +73,6 @@
 		</md-content>
 	</div>
 
-	<div class="messager">
-		<form>
-			<textarea ng-model="vm.messageText" placeholder="send a message" focus-me="vm.isTextboxFocus" ng-keyup="$event.keyCode == 13 && vm.doSendMessage()"></textarea>
-			<div class="send-btn" ng-click="vm.doSendMessage()">
-				<md-icon>send</md-icon>
-			</div>
-		</form>
-
-		<div class="messages">
-			<div class="message" ng-class="{authuser: msg.sender==vm.authuser.username}" ng-repeat="msg in vm.messages | orderBy:'-time' track by msg.id">
-				<div class="text">{{ msg.msg }}</div>
-				<div class="time">
-					<span am-time-ago="msg.created"></span>
-					<span class="is-sent-flag" ng-if="!msg.is_sent">x</span>
-					<span class="is-sent-flag" ng-if="msg.is_sent">OK</span>
-					<span class="is-seen-flag" ng-if="!msg.is_seen">x</span>
-					<span class="is-seen-flag" ng-if="msg.is_seen">OK</span>
-					<span>-[{{ msg.sender }}]-</span>
-				</div>
-				<div class="username">{{ msg.sender }}</div>
-			</div>
-		</div>
-
-		<md-toolbar class="message-toolbar">
-	        <div class="md-toolbar-tools" tabIndex="-1">
-				<div>/u/{{ vm.data.view_user.username }}</div>
-				<div flex></div>
-				<span class="ws-connected" ng-class="{online: mainctrl.wsConnected}" aria-label="online status">
-					<md-tooltip ng-if="mainctrl.wsConnected">online</md-tooltip>
-					<md-tooltip ng-if="!mainctrl.wsConnected">offline</md-tooltip>
-				</span>
-				<md-button class="md-icon-button" ng-click="vm.closeMessenger()" aria-label="close">
-					<md-icon>close</md-icon>
-				</md-button>
-	        </div>
-		</md-toolbar>
-	</div>
-
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="profile-right" md-is-locked-open="$mdMedia('gt-lg')">
 		<md-content>
 			<div ng-click="vm.toggleRight()" style="line-height: 48px; padding-left: 16px;">
