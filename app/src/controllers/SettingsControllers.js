@@ -1,32 +1,27 @@
 (function(){ 'use strict';
 
 	angular.module('reddmeetApp')
-	    .controller('SettingsController', ['$log', SettingsController])
 
-		.controller('SettingsProfileController', ['$log', SettingsProfileController])
+		.controller('SettingsProfileController', ['$log', 'AuthUserFactory', SettingsProfileController])
 
 		.controller('SettingsPicturesController', ['$log', '$scope', '$http', 'AuthUserFactory',SettingsPicturesController])
 
 		.controller('SettingsLocationController', ['$log', '$timeout', '$mdToast', 'AuthUserFactory', SettingsLocationController])
 
-		.controller('SettingsSubredditsController', ['$log', '$mdToast', 'AuthUserFactory', SettingsSubredditsController])
+		.controller('SettingsSubredditsController', ['$scope', '$log', '$timeout', '$mdToast', 'AuthUserFactory', 'WsFactory', SettingsSubredditsController])
 
 		.controller('SettingsAccountController', ['$log', '$mdToast', 'AuthUserFactory', SettingsAccountController])
 		;
 
-	/**
-	 * Display an account settings page.
-	 */
-	function SettingsController($log) {
+	function SettingsProfileController($log, AuthUserFactory) {
 		var vm = this;
-		vm.title = "account settings";
 		vm.ts = new Date( ).toISOString( );
 
-		$log.debug('SettingsController called: ' + vm.ts);
-	}
+		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 
-	function SettingsProfileController($log) {
-		var vm = this;
+		vm.open = (field, event) => {
+			console.log(field, event);
+		}
 	}
 
 	function SettingsPicturesController($log, $scope, $http, AuthUserFactory) {
@@ -118,26 +113,68 @@
 		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 	}
 
-	function SettingsSubredditsController($log, $mdToast, AuthUserFactory) {
+	function SettingsSubredditsController($scope, $log, $timeout, $mdToast, AuthUserFactory, WsFactory) {
 		var vm = this;
+		vm.authuser = null;
 		vm.showBtn = true;
 		vm.showSpinner = false;
-		vm.toast = () => $mdToast.show($mdToast.simple().textContent('Subreddit list updated.').position('bottom').hideDelay(800));
+		vm.showSmallSpinner = false;
 
-		vm.save = event => {
-			vm.showBtn = false;
-			vm.showSpinner = true;
+		vm.toastUpdated = () => $mdToast.show($mdToast.simple()
+			.textContent('Subreddit list updated.').position('bottom').hideDelay(800));
+		vm.toastSaved = () => $mdToast.show($mdToast.simple()
+			.textContent('Selection saved.').position('bottom').hideDelay(800));
 
-			/* AuthUserFactory.saveProfile('fuzzy')
-			.then(response => vm.toast())
-			.catch(err => $log.debug(err))
-			.then(() => { 
-				vm.showBtn = true;
-				vm.showSpinner = false
-			}); */
+		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
+
+		/**
+		 * Observe "vm.authuser.subs" and send only the updated subs item to the
+		 * server via WebSocket. No response expected, because the correct state
+		 * is already on the client.
+		 */
+		vm.toggleFavorite = (sub, event) => {
+			sub.is_favorite = !sub.is_favorite;
+            WsFactory.send({ 'action': 'authuser.sub', 'sub': JSON.stringify(sub) });
 		};
 
-		AuthUserFactory.getAuthUser().then(obj => vm.subs = obj.subs);
+		/**
+		 * That sets the data on the main authuser model, sends it to the server,
+		 * and then broadcasts a change in authuser profile, so that all subscribed
+		 * active scopes (mainly just "mainctrl") can get a fresh copy.
+		 */
+        vm.selectAll = () => {
+            WsFactory.send({ 'action': 'authuser.sub', '__all__': true });
+			vm.authuser.subs.forEach(obj => obj.is_favorite = true);
+			$rootScope.$broadcast('authuser:profile_change', null);
+		};
+
+        vm.selectNone = () => {
+            WsFactory.send({ 'action': 'authuser.sub', '__all__': false });
+			vm.authuser.subs.forEach(obj => obj.is_favorite = false);
+			$rootScope.$broadcast('authuser:profile_change', null);
+		};
+
+		/**
+		 * Persist deactivated selection.
+		 */
+		vm.save = () => {
+			vm.showSmallSpinner = true;
+			AuthUserFactory.subsSaveFavorites(vm.authuser.subs).then(() => {
+				vm.showSmallSpinner = false;
+				vm.toastSaved();
+			});
+		}
+
+		vm.update = () => {
+			vm.showBtn = false;
+			vm.showSpinner = true;
+			AuthUserFactory.subsUpdateFromReddit().then(() => {
+				vm.showSpinner = false;
+				vm.toastUpdated();
+				// Wait a bit before the user can press the button again.
+				$timeout(() => { vm.showBtn = true; }, 1000);
+			});
+		};
 	}
 
 	function SettingsAccountController($log, $mdToast, AuthUserFactory) {

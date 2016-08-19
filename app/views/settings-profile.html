@@ -1,9 +1,27 @@
-<h2>update profile basics</h2>
+<md-content class="md-padding" layout="column" layout-align="center">
+    <p>Keep your profile up to date. Your date of birth is never public, only your age and zodicas appear on your profile.</p>
+</md-content>
 
-here for / looking for
+<md-divider></md-divider>
 
-gender
+<md-list flex>
+    <md-list-item ng-click="vm.open('herefor', $event)">
+        <h3>here for</h3>
+        <p style="text-align: right">{{ vm.authuser.profile.herefor }}</p>
+    </md-list-item>
 
-birthday
+    <md-list-item ng-click="vm.open('gender', $event)">
+        <h3>gender</h3>
+        <p style="text-align: right">{{ vm.authuser.profile.sex }}</p>
+    </md-list-item>
 
-about text
+    <md-list-item ng-click="vm.open('dob', $event)">
+        <h3>birthday</h3>
+        <p style="text-align: right">{{ vm.authuser.profile.dob }}</p>
+    </md-list-item>
+
+    <md-list-item ng-click="vm.open('about', $event)">
+        <h3>about you</h3>
+        <p style="text-align: right">{{ vm.authuser.profile.about }}</p>
+    </md-list-item>
+</md-list>

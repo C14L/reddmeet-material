@@ -1,22 +1,40 @@
 <md-content class="md-padding" layout="column" layout-align="center">
 
-    <p>
-        This will fetch a up-to-date list of your subscribed subreddits.
-    </p>
-
-    <md-button ng-show="vm.showBtn" class="md-primary" ng-click="vm.update()">
+    <md-button ng-disabled="!vm.showBtn" class="md-primary" ng-click="vm.update()">
         update subreddit list
     </md-button>
+
+    <md-divider></md-divider>
+
+    <p>Update the list of subscribed subreddits. Click on a subreddit to unselect them fom search, so you can focus your searches to only the subreddits that are most important to you.</p>
 
     <div ng-if="vm.showSpinner" layout="row" layout-sm="column" layout-align="space-around">
       <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
 
-    <p></p>
+    <div ng-if="!vm.showSpinner" class="active-sr-selector">
+        <div layout="row">
+            <md-button class="md-icon-button" ng-click="vm.selectAll()">
+                <md-icon>done_all</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="vm.selectNone()">
+                <md-icon>clear</md-icon>
+            </md-button>
+            <!--
+            <span flex></span>
+            <md-button ng-if="!vm.showSmallSpinner" ng-click="vm.save()" class="md-primary">
+                Save
+            </md-button>
+            <md-progress-circular ng-if="vm.showSmallSpinner" md-mode="indeterminate" md-diameter="30"></md-progress-circular>
+            -->
+            </div>
 
-    <div class="sr-list">
-        <md-content md-ink-ripple flex ng-repeat="opt in vm.subs">
-            {{ opt }}
-        </md-content>
+        </div>
+        <div class="sr-list">
+            <md-content md-ink-ripple flex ng-class="{inactive: !opt.is_favorite}" 
+             ng-repeat="opt in vm.authuser.subs" ng-click="vm.toggleFavorite(opt, $event)">
+                {{opt.sr}}
+            </md-content>
+        </div>
     </div>
 </md-content>

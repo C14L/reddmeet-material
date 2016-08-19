@@ -1,39 +1,39 @@
 (function () { 'use strict';
 
     angular.module('reddmeetApp')
-        .factory('AuthUserFactory', ['$http', '$log', AuthUserFactory])
+        .factory('AuthUserFactory', ['$rootScope', '$http', '$log', AuthUserFactory])
         .factory('UserFactory', ['$http', '$log', UserFactory])
         ;
 
     /**
      * Load auth user data on init.
      */
-    function AuthUserFactory($http, $log, $websocket) {
+    function AuthUserFactory($rootScope, $http, $log, $websocket) {
         var apiUrl = API_BASE + '/api/v1/authuser.json';
+        var subsApiUrl = API_BASE + '/api/v1/authuser_subs.json';
         var pushNotificationApiUrl = API_BASE + '/api/v1/pushnotifications';
         var authUserData = null;  // Buffer all of auth user's data here.
         var authUserGeoloc = null;
-        console.log('@@@ authUserGeoloc initialized with -> ', authUserGeoloc);
 
         var authUserPromise = $http.get(apiUrl).then(response => {
-            $log.debug('## LOADING response.data.authuser: ', response.data.authuser);
+            $log.debug('# # # # LOADING Authuser --> response.data: ', response.data);
 
             // no user loaded, then ask client to authenticate.
             if (! response.data.authuser) window.location.href = '/';
 
             // Cache response.
-            authUserData = response.data.authuser
+            authUserData = response.data.authuser;
 
-            // Check if push notifications are enabled on this device.
-			return navigator.serviceWorker.getRegistration()
-			.then(reg => reg.pushManager.getSubscription())
-			.then(sub => {
-                authUserData.profile.pref_receive_notification = !!sub;
-                $log.debug('# AuthUserFactory Push notification status:', authUserData.profile.pref_receive_notification);
-                $log.debug('# AuthUserFactory Push notification sub Object', sub);
+            // Check if push notifications for this user are enabled on this device.
+			return navigator.serviceWorker.getRegistration();
+        })
+        .then(reg => reg.pushManager.getSubscription())
+        .then(sub => {
+            authUserData.profile.pref_receive_notification = !!sub;
+            $log.debug('# # # # AuthUserFactory Push notification status:', authUserData.profile.pref_receive_notification);
+            $log.debug('# # # # AuthUserFactory Push notification sub Object', sub);
 
-                return authUserData;
-            });
+            return authUserData;
         });
 
         /** 
@@ -51,16 +51,38 @@
                 return $http.post(pushNotificationApiUrl, sub);
             },
 
+            /**
+             * Delete the endpoint from authuser's profile. Use $http() to be
+             * able to send body data with the DELETE request, see also
+             * http://stackoverflow.com/q/299628/5520354
+             */
             destroyPushNotificationEndpoint: sub => {
-                // deletes the endpoint from authuser's profile. Use $http() to be
-                // able to send body data with the DELETE request, see also
-                // http://stackoverflow.com/q/299628/5520354
                 return $http({
                     url: pushNotificationApiUrl, 
                     method: 'DELETE', 
                     data: sub,
                     headers: {"Content-Type": "application/json;charset=utf-8"}
                 });
+            },
+
+            /**
+             * Ask the server to update the user's subreddit list from their reddit
+             * account, save it to the user's profile, and send it back here. Then
+             * update the global authuser object and broadcast a change event.
+             */
+            subsUpdateFromReddit: () => {
+                console.log('## ## ## AuthUserFactory.subsUpdateFromReddit() called! -- -- -- -- -- --- --');
+                return $http.put(subsApiUrl).then(response => {
+                    console.log('== == == == == response.data.subs --> ', response.data.subs);
+                    authUserData.subs = response.data.subs;
+                    $rootScope.$broadcast('authuser:profile_change', null);
+                });
+            },
+
+            subsSaveFavorites: subs => {                
+                console.log('-- -- -- -- subs --> ', subs);
+
+                return Promise.resolve();
             },
 
             getUsername: () => authUserPromise.then(() => authUserData.username),

@@ -30,6 +30,7 @@
         let vm = this;
         let onEventNewMessage = false;
         let onEventMessagesViewed = false;
+        let onEventAuthUserProfileChange = false;
 
         featureCheckAndAlert();
 
@@ -45,6 +46,11 @@
         vm.wsConnected = false;
 
     	AuthUserFactory.getAuthUser().then(response => vm.authuser = response);
+
+        onEventAuthUserProfileChange = $scope.$on('authuser:profile_change', (event, data) => {
+            console.log('## onEventAuthUserProfileChange received.');
+        	AuthUserFactory.getAuthUser().then(response => vm.authuser = response);
+        });
 
         vm.go = url => {
             $timeout(() => $mdSidenav('left').close(), 300);
