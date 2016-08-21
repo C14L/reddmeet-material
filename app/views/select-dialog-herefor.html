@@ -1,0 +1,17 @@
+<md-dialog aria-label="search settings">
+	<div class="inset">Here for</div>
+
+	<md-dialog-content layout="column" class="opts-selector">
+		<md-list flex>
+			<md-list-item ng-repeat="opt in vmForm.fHereForOpts" ng-model="opt">
+				<md-checkbox class="md-secondary" ng-model="opt.selected"></md-checkbox>
+				<p>{{ opt.label }}</p>
+			</md-list-item>
+		</md-list>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button ng-click="vmForm.answer(vmForm.fHereForOpts)" class="md-primary">Done</md-button>
+	</md-dialog-actions>
+</md-dialog>

@@ -6,6 +6,8 @@
         .controller('SearchOptionDistanceDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionDistanceDialogController])
         .controller('SearchOptionOrderDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionOrderDialogController])
         .controller('SearchOptionAgeDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionAgeDialogController])
+        .controller('HereForSelectDialogController', ['$log', '$mdDialog', 'fProfileOpts', 'AuthUserFactory', HereForSelectDialogController])
+        .controller('AboutSettingsDialogController', ['$log', '$mdDialog', 'about', AboutSettingsDialogController])
         ;
 
     function SearchOptionGenderDialogController($log, $mdDialog, SearchResultsFactory) {
@@ -80,6 +82,42 @@
             let answer = min + '-' + max;
             $log.debug('SearchOptionAgeDialogController dialog returned: ', answer);
             $mdDialog.hide(answer);
+        };
+    }
+
+    function HereForSelectDialogController($log, $mdDialog, fProfileOpts, AuthUserFactory) {
+        var vm = this;
+        vm.fHereForOpts = fProfileOpts.fHereForOpts;
+
+        vm.hide = function () {
+            $log.debug('HereForSelectDialogController dialog hide.');
+            $mdDialog.hide();
+        };
+        vm.cancel = function () {
+            $log.debug('HereForSelectDialogController dialog cancel.');
+            $mdDialog.cancel();
+        };
+        vm.answer = function (answer) {
+            $log.debug('HereForSelectDialogController dialog returned: ', answer);
+            $mdDialog.hide(answer);
+        };
+    }
+
+    function AboutSettingsDialogController($log, $mdDialog, about) {
+        let vm = this;
+        vm.about = about;
+
+        vm.hide = function () {
+            $log.debug('AboutSettingsDialogController dialog hide.');
+            $mdDialog.hide();
+        };
+        vm.cancel = function () {
+            $log.debug('AboutSettingsDialogController dialog cancel.');
+            $mdDialog.cancel();
+        };
+        vm.answer = function () {
+            $log.debug('AboutSettingsDialogController dialog returned: ', vm.about);
+            $mdDialog.hide(vm.about);
         };
     }
 

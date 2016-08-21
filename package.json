@@ -23,6 +23,7 @@
     "angular-websocket": "^2.0.1",
     "idb": "^1.1.1",
     "jquery": "^2.2.1",
+    "mdPickers": "^0.7.2",
     "moment": "^2.14.1",
     "sw-toolbox": "^3.2.1"
   },

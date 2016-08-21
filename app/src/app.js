@@ -5,7 +5,7 @@ window.WS_BASE = "ws://localhost:8000/api/v1/ws";
 (function () {
 	'use strict';
 
-	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment', 'NgPicUpload', 'ngWebSocket']);
+	var app = angular.module('reddmeetApp', ['ngMaterial', 'ngRoute', 'angularMoment', 'NgPicUpload', 'ngWebSocket', 'mdPickers']);
 
 	app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider', 'amTimeAgoConfig', function reddmeetAppConfig($routeProvider, $locationProvider, $httpProvider, $mdThemingProvider, amTimeAgoConfig) {
 
@@ -146,6 +146,25 @@ window.WS_BASE = "ws://localhost:8000/api/v1/ws";
 			{ id: "-accessed", label: "recently active", selected: false },
 			{ id: "-date_joined", label: "newest members", selected: false },
 			{ id: "-views_count", label: "most viewed", selected: false },
+		],
+		'fHereForOpts' : [
+			{ id: 1, label: 'someone to chat', selected: false },
+			{ id: 2, label: 'penpals', selected: false },
+			{ id: 3, label: 'hugs and nice words', selected: false },
+			{ id: 4, label: 'new friends', selected: false },
+			{ id: 5, label: 'sexy time', selected: false },
+			{ id: 6, label: 'dating', selected: false },
+			{ id: 7, label: 'serious dating', selected: false },
+			{ id: 8, label: 'a relationship', selected: false },
+			{ id: 9, label: 'marriage', selected: false },
+			{ id: 10, label: 'house+car+kids... now!', selected: false },
+			{ id: 11, label: 'just another cat', selected: false },
+			{ id: 12, label: 'my car keys', selected: false },
+			{ id: 13, label: 'world peace', selected: false },
+			{ id: 14, label: 'the grand unified theory', selected: false },
+			{ id: 15, label: 'this is getting ridiculous', selected: false },
+			{ id: 16, label: 'stahp!', selected: false },
+			{ id: 17, label: 'just a nice person', selected: false },
 		],
 		'srOpts': [],
 	});

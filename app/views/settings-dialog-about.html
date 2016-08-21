@@ -1,0 +1,15 @@
+<div class="settings-dialog-about">
+    <md-toolbar class="settings-dialog-about-toolbar">
+        <div class="md-toolbar-tools" tabIndex="-1">
+            <div>About yourself...</div>
+            <div flex></div>
+            <md-button class="md-icon-button" ng-click="vmDialog.answer()" aria-label="submit">
+                <md-icon>done</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <form>
+        <textarea ng-model="vmDialog.about" placeholder="About yourself..." focus-me="true" style="width: 100vw; height: calc(100vh - 56px); border: 0; padding: 4px; resize: none;"></textarea>
+    </form>
+</div>

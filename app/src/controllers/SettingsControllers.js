@@ -2,7 +2,7 @@
 
 	angular.module('reddmeetApp')
 
-		.controller('SettingsProfileController', ['$log', 'AuthUserFactory', SettingsProfileController])
+		.controller('SettingsProfileController', ['$log', '$mdDialog', '$mdMedia', '$mdpDatePicker', 'AuthUserFactory', SettingsProfileController])
 
 		.controller('SettingsPicturesController', ['$log', '$scope', '$http', 'AuthUserFactory',SettingsPicturesController])
 
@@ -13,7 +13,7 @@
 		.controller('SettingsAccountController', ['$log', '$mdToast', 'AuthUserFactory', SettingsAccountController])
 		;
 
-	function SettingsProfileController($log, AuthUserFactory) {
+	function SettingsProfileController($log, $mdDialog, $mdMedia, $mdpDatePicker, AuthUserFactory) {
 		var vm = this;
 		vm.ts = new Date( ).toISOString( );
 
@@ -21,6 +21,55 @@
 
 		vm.open = (field, event) => {
 			console.log(field, event);
+
+			if (field == 'gender') {
+				$mdDialog.show({
+					targetEvent: event,
+					templateUrl: 'views/search-dialog-gender.html',
+					controller: 'SearchOptionGenderDialogController',
+					controllerAs: 'vmForm'
+				}).then(li => {
+					console.log('showSearchOptionGender selected: ', li);
+				});
+			}
+			if (field == 'herefor') {
+				$mdDialog.show({
+					targetEvent: event,
+					templateUrl: 'views/select-dialog-herefor.html',
+					controller: 'HereForSelectDialogController',
+					controllerAs: 'vmForm'
+				}).then(li => {
+					console.log('selected: ', li);
+				});
+			}
+			if (field == 'dob') {
+				let currentDate = new Date(vm.authuser.profile.dob);
+				$mdpDatePicker(currentDate, {
+					targetEvent: event,
+				}).then(sel => {
+					vm.authuser.profile.dob = new Date(sel).toISOString().split('T')[0];
+					AuthUserFactory.setProfile('dob', vm.authuser.profile.dob);
+					AuthUserFactory.saveProfile('dob');
+				});
+			}
+			if (field == 'about') {
+				$mdDialog.show({
+					controller: 'AboutSettingsDialogController',
+					controllerAs: 'vmDialog',
+					templateUrl: 'views/settings-dialog-about.html',
+					locals: { about: vm.authuser.profile.about || '' },
+					parent: angular.element(document.body),
+					targetEvent: event,
+					clickOutsideToClose: false,
+					fullscreen: ($mdMedia('sm') || $mdMedia('xs')),
+				}).then(about => {
+					if (vm.authuser.profile.about != about) { // only if changed.
+						vm.authuser.profile.about = about;
+						AuthUserFactory.setProfile('about', about);
+						AuthUserFactory.saveProfile('about');
+					}
+				});
+			}
 		}
 	}
 
