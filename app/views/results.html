@@ -5,8 +5,8 @@
 	<md-grid-tile md-ink-ripple ng-click="vm.showSearchOptionDistance($event)" style="border-bottom: 1px solid rgba(0,0,0,0.12);">
 		{{ vm.distanceSelectedDisplay }}
 	</md-grid-tile>
-	<md-grid-tile md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionSubreddits($event)" style="border-right: 1px solid rgba(0,0,0,0.12);">
-		from {{ vm.srSelectedDisplay }} subs
+	<md-grid-tile md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionAge($event)" style="border-right: 1px solid rgba(0,0,0,0.12);">
+		{{ vm.ageSelectedDisplay }}
 	</md-grid-tile>
 	<md-grid-tile md-ink-ripple md-ink-ripple ng-click="vm.showSearchOptionOrder($event)">
 		{{ vm.orderSelectedDisplay }}
@@ -31,10 +31,10 @@
 	<user-list-card ng-repeat="item in vm.results track by $index" username="{{ item.username }}" age="{{ item.profile.age }}" gender="{{ item.profile.sex_symbol }}" distance="{{ item.distance }}">
 	</user-list-card>
 
-	<div ng-if="!vm.isLoading" style="clear: both; text-align: center; margin: 16px;">
-		<md-button ng-click="vm.refreshResults()" class="md-primary">more</md-button>
-	</div>
-	<div ng-if="vm.isLoading">
-		<md-progress-circular md-mode='indeterminate'></md-progress-circular>
+	<div style="clear: both; text-align: center; margin: 16px;">
+		<md-button ng-click="vm.refreshResults(true)" ng-disabled="vm.isLoading" class="md-primary">
+			<span ng-hide="vm.isLoading">more</span>
+			<span ng-show="vm.isLoading">loading...</span>
+		</md-button>
 	</div>
 </md-content>

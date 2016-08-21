@@ -8,7 +8,7 @@
 
 		.controller('SettingsLocationController', ['$log', '$timeout', '$mdToast', 'AuthUserFactory', SettingsLocationController])
 
-		.controller('SettingsSubredditsController', ['$scope', '$log', '$timeout', '$mdToast', 'AuthUserFactory', 'WsFactory', SettingsSubredditsController])
+		.controller('SettingsSubredditsController', ['$rootScope', '$log', '$timeout', '$mdToast', 'AuthUserFactory', 'WsFactory', SettingsSubredditsController])
 
 		.controller('SettingsAccountController', ['$log', '$mdToast', 'AuthUserFactory', SettingsAccountController])
 		;
@@ -113,7 +113,7 @@
 		AuthUserFactory.getAuthUser().then(obj => vm.authuser = obj);
 	}
 
-	function SettingsSubredditsController($scope, $log, $timeout, $mdToast, AuthUserFactory, WsFactory) {
+	function SettingsSubredditsController($rootScope, $log, $timeout, $mdToast, AuthUserFactory, WsFactory) {
 		var vm = this;
 		vm.authuser = null;
 		vm.showBtn = true;

@@ -5,7 +5,7 @@
         .controller('SearchOptionGenderDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionGenderDialogController])
         .controller('SearchOptionDistanceDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionDistanceDialogController])
         .controller('SearchOptionOrderDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionOrderDialogController])
-	    .controller('SearchOptionSubredditsDialogController', ['$log', '$mdDialog', 'AuthUserFactory', 'SearchResultsFactory', SearchOptionSubredditsDialogController])
+        .controller('SearchOptionAgeDialogController', ['$log', '$mdDialog', 'SearchResultsFactory', SearchOptionAgeDialogController])
         ;
 
     function SearchOptionGenderDialogController($log, $mdDialog, SearchResultsFactory) {
@@ -44,33 +44,6 @@
         };
     }
 
-    function SearchOptionSubredditsDialogController($log, $mdDialog, AuthUserFactory, SearchResultsFactory) {
-        var vm = this;
-
-        SearchResultsFactory.getSrOpts().then(function(li){
-            vm.fSrOpts = li;
-        });
-        vm.selectAll = function () {
-            vm.fSrOpts.forEach(item => item.active = true);
-        }
-        vm.selectNone = function () {
-            vm.fSrOpts.forEach(item => item.active = false);
-        }
-        vm.hide = function () {
-            $log.debug('SearchSettingsDialogController dialog hide.');
-            $mdDialog.hide();
-        };
-        vm.cancel = function () {
-            $log.debug('SearchSettingsDialogController dialog cancel.');
-            $mdDialog.cancel();
-        };
-        vm.answer = function (answer) {
-            $log.debug('SearchSettingsDialogController dialog returned: ', answer);
-            $log.debug('Labels vm.fSrOpts', vm.fSrOpts.filter(x => x.active).map(x => x.label).join(', '));
-            $mdDialog.hide(answer);
-        };
-    };
-
     function SearchOptionOrderDialogController($log, $mdDialog, SearchResultsFactory) {
         var vm = this;
         vm.fOrderOpts = SearchResultsFactory.getSearchParam('fOrderOpts');
@@ -85,6 +58,27 @@
         };
         vm.answer = function (answer) {
             $log.debug('SearchOptionOrderDialogController dialog returned: ', answer);
+            $mdDialog.hide(answer);
+        };
+    }
+
+    function SearchOptionAgeDialogController($log, $mdDialog, SearchResultsFactory) {
+        var vm = this;
+        vm.fAgeOpts = SearchResultsFactory.getSearchParam('fAgeOpts') || "18-99"; // e.g. "21-35"
+        vm.fAgeMin = vm.fAgeOpts.split('-')[0];
+        vm.fAgeMax = vm.fAgeOpts.split('-')[1];
+
+        vm.hide = function () {
+            $log.debug('SearchOptionAgeDialogController dialog hide.');
+            $mdDialog.hide();
+        };
+        vm.cancel = function () {
+            $log.debug('SearchOptionAgeDialogController dialog cancel.');
+            $mdDialog.cancel();
+        };
+        vm.answer = function (min, max) {
+            let answer = min + '-' + max;
+            $log.debug('SearchOptionAgeDialogController dialog returned: ', answer);
             $mdDialog.hide(answer);
         };
     }

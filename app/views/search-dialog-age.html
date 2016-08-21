@@ -1,0 +1,16 @@
+<md-dialog aria-label="search settings">
+	<div class="inset">Age</div>
+
+	<md-dialog-content layout="row" class="opts-selector">
+		Between
+		<input type="text" ng-model="vmForm.fAgeMin" size="2">
+		and
+		<input type="text" ng-model="vmForm.fAgeMax" size="2">
+		years old
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button ng-click="vmForm.answer(vmForm.fAgeMin, vmForm.fAgeMax)" class="md-primary">Done</md-button>
+	</md-dialog-actions>
+</md-dialog>
